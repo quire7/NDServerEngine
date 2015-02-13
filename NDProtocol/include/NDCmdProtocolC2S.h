@@ -1,0 +1,17 @@
+#ifndef __PROTOCOL_ND_CMD_PROTOCOL_C2S_H__
+#define __PROTOCOL_ND_CMD_PROTOCOL_C2S_H__
+
+
+//客户端向服务端发送的协议ID;
+enum eC2SCMDProtocolID
+{
+	CMDP_NDC2LS_Start		=	LOGIN_SERVER			+ 0x1000,
+
+	CMDP_NDC2LS_End			=	LOGIN_SERVER			+ 0x100F,
+	CMDP_NDC2GTWS_Start		=	GATEWAY_SERVER			+ 0x1000,
+	
+	CMDP_NDC2GTWS_End		=	GATEWAY_SERVER			+ 0x2000,
+};
+
+
+#endif

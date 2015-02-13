@@ -1,0 +1,12 @@
+#ifndef __PROTOCOL_ND_PROTOCOL_COMMON_MACROS_H__
+#define __PROTOCOL_ND_PROTOCOL_COMMON_MACROS_H__
+
+
+//协议传输最大层数;
+#ifndef ND_PROTOCOL_SEND_LAYER_MAXNUM
+#define ND_PROTOCOL_SEND_LAYER_MAXNUM		(2)
+#endif
+
+
+
+#endif

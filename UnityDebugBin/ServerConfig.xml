@@ -1,0 +1,122 @@
+﻿
+<ServerConfig>
+	
+	<SystemCfg>
+		<GameNameID>1</GameNameID>	<!--游戏名称ID-->
+		<CountryID>1</CountryID>		<!--运行游戏国家ID -->
+		<AgentID>1</AgentID>				<!--运行游戏运营ID-->
+		<GroupID>1</GroupID>				<!--运行游戏服务器组ID-->
+	</SystemCfg>
+	
+	<NDLoginServer>
+		<Count>1</Count>										<!--相应server总数目-->
+		<LS1>																<!--数字为serverid-->
+			<ListenIP>127.0.0.1</ListenIP>		<!--对外,外网IP-->
+			<ListenPort>5000</ListenPort>
+		</LS1>		
+	</NDLoginServer>
+	
+	<NDGatewayServer>
+		<Count>1</Count>
+		<GWS1>
+			<ListenIP>127.0.0.1</ListenIP>		<!--对外,外网IP-->
+			<ListenPort>5100</ListenPort>
+		</GWS1>
+		<Conn>
+			<Count>4</Count>
+			<Conn1>
+				<ServerName>NDWorldServer</ServerName>
+				<ServerID>1</ServerID>
+			</Conn1>
+			<Conn2>
+				<ServerName>NDGameServer</ServerName>
+			</Conn2>
+			<Conn3>
+				<ServerName>NDRoomServer</ServerName>
+			</Conn3>
+			<Conn4>
+				<ServerName>NDMessageServer</ServerName>
+				<ServerID>1</ServerID>
+			</Conn4>	
+		</Conn>	
+	</NDGatewayServer>
+		
+	<NDWorldServer>
+		<Count>1</Count>
+		<WS1>
+			<ListenIP>127.0.0.1</ListenIP>		<!--对内,内网IP-->
+			<ListenPort>5200</ListenPort>
+		</WS1>
+		<Conn>
+			<Count>1</Count>
+			<Conn1>
+				<ServerName>NDLoginServer</ServerName>
+				<ServerID>1</ServerID>
+			</Conn1>
+		</Conn>	
+	</NDWorldServer>
+	
+	<NDGameServer>
+		<Count>1</Count>
+		<GS1>
+			<ListenIP>127.0.0.1</ListenIP>		<!--对内,内网IP-->
+			<ListenPort>5300</ListenPort>
+		</GS1>
+		<Conn>
+			<Count>2</Count>
+			<Conn1>
+				<ServerName>NDWorldServer</ServerName>
+				<ServerID>1</ServerID>
+			</Conn1>
+			<Conn2>
+				<ServerName>NDRoomServer</ServerName>
+			</Conn2>
+		</Conn>		
+	</NDGameServer>
+	
+	<NDRoomServer>
+		<Count>1</Count>
+		<RS1>
+			<ListenIP>127.0.0.1</ListenIP>		<!--对内,内网IP-->
+			<ListenPort>5400</ListenPort>
+		</RS1>
+		<Conn>
+			<Count>1</Count>
+			<Conn1>
+				<ServerName>NDWorldServer</ServerName>
+				<ServerID>1</ServerID>
+			</Conn1>
+		</Conn>			
+	</NDRoomServer>
+	
+	<NDMessageServer>
+		<Count>1</Count>
+		<MSGS1>
+			<ListenIP>127.0.0.1</ListenIP>		<!--对内,内网IP-->
+			<ListenPort>5500</ListenPort>
+		</MSGS1>
+	</NDMessageServer>	
+
+	<NDDataServer>
+		<Count>1</Count>
+		<DS1>
+			<ListenIP>127.0.0.1</ListenIP>		<!--对内,内网IP-->
+			<ListenPort>5600</ListenPort>
+		</DS1>
+	</NDDataServer>	
+	
+	<DataBase>
+		<Count>1</Count>
+		<DB1>
+			<Host>127.0.0.1</Host>
+			<Port>3306</Port>
+			<DBName></DBName>
+			<User></User>
+			<Pwd></Pwd>
+			<Version></Version>
+		</DB1>
+	</DataBase>
+	
+	
+</ServerConfig>
+
