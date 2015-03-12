@@ -19,7 +19,8 @@ public:
 	NDBool	addRemoteServer( NDRemoteServerInfo* pRemoteServerInfo );
 	NDBool	removeRemoteServer( NDUint32 nSessionID );
 
-	NDRemoteServerInfo* getRemoteServerInfo( NDUint32 nSessionID );
+	NDRemoteServerInfo* getRemoteServerInfoBySessionID( NDUint32 nSessionID );
+	NDRemoteServerInfo* getRemoteServerInfoByServerID( NDUint16 nServerID );
 
 protected:
 	RemoteServerMap		m_remoteServerMap;

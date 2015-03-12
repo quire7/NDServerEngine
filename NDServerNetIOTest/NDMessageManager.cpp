@@ -20,9 +20,9 @@ NDMessageManager::~NDMessageManager(void)
 
 void NDMessageManager::RegisterMessage()
 {
-	m_pNDDataProcess->RegisterCallBack(1, &m_EchoCallBack);
+	m_pNDDataProcess->registerCallBack(1, &m_EchoCallBack);
 
-	m_pNDDataProcess->RegisterCallBack(CMDP_PING, &m_PingCallBack);
+	m_pNDDataProcess->registerCallBack(CMDP_PING, &m_PingCallBack);
 
 	//pServerNetIO.SetDisposeProtocol( NDSessionProtocolType_CLIENT2GT, 0, 2 );
 }

@@ -16,8 +16,8 @@ public:
 	NDIStreamImpl(NDByteBuffer& rByteBuf);
 	~NDIStreamImpl(void);
 
-	NDBool		Read( void* pChar, NDUint32 nSize );
-	NDUint32	GetTotalSize() const;
+	NDBool		read( void* pChar, NDUint32 nSize );
+	NDUint32	getTotalSize() const;
 
 private:
 	NDIStreamImpl(const NDIStreamImpl& other);

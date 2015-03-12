@@ -14,7 +14,7 @@ public:
 	NDLoginCallBack(void);
 	~NDLoginCallBack(void);
 
-	NDBool Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
 	//client ping protocol dispose;

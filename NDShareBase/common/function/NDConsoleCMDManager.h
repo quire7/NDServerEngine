@@ -23,6 +23,7 @@ _NDSHAREBASE_BEGIN
 class NDConsoleCommand
 {
 public:
+	virtual ~NDConsoleCommand()=0;
 	virtual NDBool	process( vector<string>& refStrVec ) = 0;
 };
 

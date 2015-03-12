@@ -20,7 +20,7 @@ NDDataProcess::~NDDataProcess(void)
 	m_CallBackMap.clear();
 }
 
-void NDDataProcess::RegisterCallBack( NDUint32 nProtocolID, NDProtocolCallBack *pNDCallBack )
+void NDDataProcess::registerCallBack( NDUint32 nProtocolID, NDProtocolCallBack *pNDCallBack )
 {
 #ifdef _DEBUG
 	CallBackMapIter iterFind = m_CallBackMap.find( nProtocolID );
@@ -41,20 +41,20 @@ void NDDataProcess::RegisterCallBack( NDUint32 nProtocolID, NDProtocolCallBack *
 #ifdef _DEBUG
 	else
 	{
-		NDLOG_ERROR( " [NDDataProcess::RegisterCallBack]  pNDCallBack is NULL! " )
+		NDLOG_ERROR( " [NDDataProcess::registerCallBack]  pNDCallBack is NULL! " )
 	}
 #endif
 }
 
-NDBool NDDataProcess::Process( NDIStream &rIStream )
+NDBool NDDataProcess::process( NDIStream &rIStream )
 {
 	NDProtocolHeader protocolHeader;
-	rIStream.Read( &protocolHeader, sizeof(NDProtocolHeader) );
+	rIStream.read( &protocolHeader, sizeof(NDProtocolHeader) );
 
-	return Process( rIStream, protocolHeader );
+	return process( rIStream, protocolHeader );
 }
 
-NDBool NDDataProcess::Process( NDIStream &rIStream, NDProtocolHeader& protocolHeader, NDBool bShowError )
+NDBool NDDataProcess::process( NDIStream &rIStream, NDProtocolHeader& protocolHeader, NDBool bShowError )
 {
 	NDBool bRet = NDFalse;
 
@@ -64,7 +64,7 @@ NDBool NDDataProcess::Process( NDIStream &rIStream, NDProtocolHeader& protocolHe
 		NDProtocolCallBack *pNDCallBack = iter->second;
 		if ( 0 != pNDCallBack )
 		{
-			bRet = pNDCallBack->Process( rIStream, protocolHeader );
+			bRet = pNDCallBack->process( rIStream, protocolHeader );
 		}
 #ifdef _DEBUG	
 		else
@@ -115,7 +115,7 @@ NDBool NDDataProcess::Process( NDIStream &rIStream, NDProtocolHeader& protocolHe
 	return bRet;
 }
 
-void NDDataProcess::RegisterProtocolIDName( NDUint32 nProtocolID, string strProtocolIDName )
+void NDDataProcess::registerProtocolIDName( NDUint32 nProtocolID, string strProtocolIDName )
 {
 #ifdef _DEBUG
 	ProtocolIDNameMapIter iterFind = m_ProtocolIDNameMap.find( nProtocolID );

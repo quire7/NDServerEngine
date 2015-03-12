@@ -181,13 +181,13 @@ NDBool NDSession::sendData( const NDByteBuffer& refMsgBuf )
 	if ( NULL == m_pSendDataMutex )	return NDFalse;
 	NDGuardLock locker( *m_pSendDataMutex );
 
-	NDUint32 nSendDataSize = refMsgBuf.GetDataSize();
+	NDUint32 nSendDataSize = refMsgBuf.getDataSize();
 	if ( 0 == nSendDataSize )
 	{
 		return NDFalse;
 	}
 
-	if ( nSendDataSize != m_pSendBuffer->WriteBuffer( refMsgBuf ) )
+	if ( nSendDataSize != m_pSendBuffer->writeBuffer( refMsgBuf ) )
 	{
 		return NDFalse;
 	}
@@ -209,7 +209,7 @@ NDBool NDSession::sendData( const char* pszBuf, NDUint32 nSize )
 	if ( NULL == m_pSendDataMutex )	return NDFalse;
 	NDGuardLock locker( *m_pSendDataMutex );
 
-	if ( nSize != m_pSendBuffer->WriteBuffer( pszBuf, nSize ) )
+	if ( nSize != m_pSendBuffer->writeBuffer( pszBuf, nSize ) )
 	{	
 		return NDFalse;
 	}
@@ -236,14 +236,14 @@ NDBool NDSession::handleRead()
 		handleClose();
 		return NDFalse;
 	}
-	if ( nCanRecvBytes > m_pRecvBuffer->GetSpaceSize() )
+	if ( nCanRecvBytes > m_pRecvBuffer->getSpaceSize() )
 	{	//重新分配空间;
-		m_pRecvBuffer->ReSet( m_pRecvBuffer->GetCapacitySize() + nCanRecvBytes );
+		m_pRecvBuffer->reSet( m_pRecvBuffer->getCapacitySize() + nCanRecvBytes );
 	}
 	
 	NDUint32 nRefRealRecvLen		= 0;
-	NDUint32 nRecvBufferDataSize	= m_pRecvBuffer->GetDataSize();
-	if ( NDFalse == m_pSocket->recv( ( m_pRecvBuffer->ReadBuffer() + nRecvBufferDataSize ) , nCanRecvBytes, nRefRealRecvLen ) )
+	NDUint32 nRecvBufferDataSize	= m_pRecvBuffer->getDataSize();
+	if ( NDFalse == m_pSocket->recv( ( m_pRecvBuffer->readBuffer() + nRecvBufferDataSize ) , nCanRecvBytes, nRefRealRecvLen ) )
 	{
 		if ( 0 == nRefRealRecvLen )
 		{	//优雅关闭SOCKET的条件;
@@ -259,7 +259,7 @@ NDBool NDSession::handleRead()
 	if ( nRefRealRecvLen > 0 )
 	{
 		m_nRecvPacketBytes += nRefRealRecvLen;
-		m_pRecvBuffer->SetWriteBufSize( nRefRealRecvLen );
+		m_pRecvBuffer->setWriteBufSize( nRefRealRecvLen );
 
 		parseRecvData();
 	}
@@ -278,7 +278,7 @@ NDBool NDSession::handleWrite()
 	if ( NULL == m_pSendDataMutex )	return NDFalse;
 	NDGuardLock locker( *m_pSendDataMutex );
 
-	NDUint32 nSendBufferSize = m_pSendBuffer->GetDataSize();
+	NDUint32 nSendBufferSize = m_pSendBuffer->getDataSize();
 	if ( 0 == nSendBufferSize )
 	{
 		unregisterWriteEvent();
@@ -291,7 +291,7 @@ NDBool NDSession::handleWrite()
 		nSendBufferSize = m_nSocketSendBuf;
 	}
 	
-	if ( NDFalse == m_pSocket->send( m_pSendBuffer->ReadBuffer(), nSendBufferSize, nSendBufferSize ) )
+	if ( NDFalse == m_pSocket->send( m_pSendBuffer->readBuffer(), nSendBufferSize, nSendBufferSize ) )
 	{
 		//先关闭SEND通道;
 		shutdownSendPipe();
@@ -300,9 +300,9 @@ NDBool NDSession::handleWrite()
 
 	if ( nSendBufferSize > 0 )
 	{
-		m_pSendBuffer->SetReadBufSize( nSendBufferSize );
+		m_pSendBuffer->setReadBufSize( nSendBufferSize );
 
-		if ( 0 == m_pSendBuffer->GetDataSize() )
+		if ( 0 == m_pSendBuffer->getDataSize() )
 		{
 			unregisterWriteEvent();
 		}
@@ -561,7 +561,7 @@ NDBool NDSession::registerWriteEvent()
 {
 	if ( NULL == m_pSocket || NDFalse == m_bAlive || NDFalse == m_bSendPipe || NULL == m_pSendBuffer )	return NDFalse;
 
-	NDUint32 nSendBufferSize = m_pSendBuffer->GetDataSize();
+	NDUint32 nSendBufferSize = m_pSendBuffer->getDataSize();
 	if ( 0 == nSendBufferSize )
 	{
 		return NDFalse;
@@ -581,7 +581,7 @@ NDBool NDSession::unregisterWriteEvent()
 {
 	if ( NULL == m_pSocket || NDFalse == m_bAlive || NDFalse == m_bSendPipe || NULL == m_pSendBuffer )	return NDFalse;
 
-	NDUint32 nSendBufferSize = m_pSendBuffer->GetDataSize();
+	NDUint32 nSendBufferSize = m_pSendBuffer->getDataSize();
 	if ( 0 != nSendBufferSize )
 	{
 		return NDFalse;

@@ -19,9 +19,27 @@ endforeach()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/commonImpl)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/mysql)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/zlib)
 
+#包含c文件;
+set(zlib_c_path ${CMAKE_CURRENT_SOURCE_DIR}/commonImpl/zlib)
+SET(SRC_C ${zlib_c_path}/adler32.c
+					${zlib_c_path}/compress.c
+					${zlib_c_path}/crc32.c
+					${zlib_c_path}/deflate.c
+					${zlib_c_path}/gzclose.c
+					${zlib_c_path}/gzlib.c
+					${zlib_c_path}/gzread.c
+					${zlib_c_path}/gzwrite.c
+					${zlib_c_path}/inflate.c
+					${zlib_c_path}/infback.c
+					${zlib_c_path}/inftrees.c
+					${zlib_c_path}/inffast.c
+					${zlib_c_path}/trees.c
+					${zlib_c_path}/uncompr.c
+					${zlib_c_path}/zutil.c)
 #包含cpp文件;
-SET(SRCS ${CMAKE_CURRENT_SOURCE_DIR}/linux/NDShareBaseLinuxAll.cpp)
+SET(SRC_CPP ${CMAKE_CURRENT_SOURCE_DIR}/linux/NDShareBaseLinuxAll.cpp)
 
 
 MESSAGE(STATUS "this is BINARY dir: " ${NDShareBase_BINARY_DIR})
@@ -35,11 +53,11 @@ SET(CMAKE_CXX_COMPILER g++)
 SET(CMAKE_CXX_FLAGS -Wall)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../DebugBin/lib)
 
-LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/dep/lib)
+#LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/dep/lib)
 
-ADD_LIBRARY(NDShareBase STATIC ${SRCS})
+ADD_LIBRARY(NDShareBase STATIC ${SRC_C} ${SRC_CPP})
 
-TARGET_LINK_LIBRARIES(NDShareBase GMemPool mysqlclient)
+#TARGET_LINK_LIBRARIES(NDShareBase GMemPool mysqlclient)
 
 ENDIF(UNIX)
 

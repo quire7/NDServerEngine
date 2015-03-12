@@ -13,10 +13,10 @@ using namespace NDShareBase;
 class EchoCallBack : public NDProtocolCallBack
 {
 public:
-	NDBool Process( NDIStream& rIStream , NDProtocolHeader& rNDProtocolHeader )
+	NDBool process( NDIStream& rIStream , NDProtocolHeader& rNDProtocolHeader )
 	{
 		NDEchoProtocol echoProtocol;
-		if ( NDFalse == echoProtocol.Deserialize(rIStream) )
+		if ( NDFalse == echoProtocol.deserialize(rIStream) )
 		{
 			return NDFalse;
 		}

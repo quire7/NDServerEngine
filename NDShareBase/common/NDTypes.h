@@ -236,6 +236,9 @@ typedef double          NDFloat64;
 **  A type for representing the size of objects. 
 ************************************************************************/
 #ifndef	NDSize
+#ifdef LINUX
+#include <sys/types.h>
+#endif
 typedef size_t			NDSize;
 #endif
 
@@ -337,7 +340,7 @@ typedef unsigned int	NDGroup;
 #endif
 
 #ifndef FD_SETSIZE
-#define	FD_SETSIZE				(8092)
+#define	FD_SETSIZE				(8192)
 #endif
 
 #ifdef	WIN32

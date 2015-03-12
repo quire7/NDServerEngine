@@ -26,7 +26,7 @@ _NDSHAREBASE_BEGIN
 		for( itType it = (container).begin(), iterEnd = (container).end(); it != iterEnd; ++it )
 #endif
 
-//IsEqualUnary used, for example:
+//IsObjEqualUnary used, for example:
 //struct Corps
 //{
 //public:
@@ -63,13 +63,13 @@ public:
 	}
 };
 
-//IsPtrEqualUnary used, for example:
+//IsObjEqualUnary used, for example:
 //int temp = 3;
 //CorpsPtrVec corpsPtrVec;
-//CorpsPtrVecIter iterFind2 = find_if( corpsPtrVec.begin(), corpsPtrVec.end(), IsPtrEqualUnary<int, Corps>( temp, &Corps::GetCorpsID ) );
-
+//CorpsPtrVecIter iterFind2 = find_if( corpsPtrVec.begin(), corpsPtrVec.end(), IsObjEqualUnary<int, Corps*>( temp, &Corps::GetCorpsID ) );
+//序列容器的指针特例化;
 template< typename TValue, typename TClass >
-class IsPtrEqualUnary : public unary_function< const TClass*, bool >
+class IsObjEqualUnary<TValue, TClass*> : public unary_function< const TClass*, bool >
 {
 public:
 	typedef TValue	(TClass::*PMemFun)() const ;
@@ -78,7 +78,7 @@ private:
 	PMemFun		m_pPMemFun;
 
 public:
-	IsPtrEqualUnary( TValue nValue, PMemFun pPMemFun ): m_value( nValue ), m_pPMemFun( pPMemFun ) {};
+	IsObjEqualUnary( TValue nValue, PMemFun pPMemFun ): m_value( nValue ), m_pPMemFun( pPMemFun ) {};
 
 	bool	operator()( const TClass* pTC  ) const
 	{
@@ -86,31 +86,56 @@ public:
 	}
 };
 
-
-//PtrGreatCmp used, for example:
-//std::sort_heap( corpsPtrVec.begin(), corpsPtrVec.end(), PtrGreatCmp<int, Corps>(&Corps::GetCorpsID) );
-
-template< typename TValue, typename TClass >
-class PtrGreatCmp : public binary_function< const TClass*, const TClass*, bool >
+//关联容器的指针的特例化;
+template< typename TValue, typename TPairKey, typename TPairValue >
+class IsObjEqualUnary<TValue, std::pair<TPairKey, TPairValue*> >
+	: public unary_function<std::pair<TPairKey, TPairValue*>, bool >
 {
 public:
-	typedef TValue	(TClass::*PMemFun)() const ;
+	typedef TValue	(TPairValue::*PMemFun)() const ; //声明成public是为了构造函数中PMemFun类型能让外部知道是什么;
 private:
+	TValue		m_value;
 	PMemFun		m_pPMemFun;
 
 public:
-	PtrGreatCmp( PMemFun pPMemFun ): m_pPMemFun( pPMemFun ) {};
+	IsObjEqualUnary( TValue nValue, PMemFun pPMemFun ): m_value( nValue ), m_pPMemFun( pPMemFun ) {};
 
-	bool	operator()( const TClass* pLHS, const TClass* pRHS ) const
+	bool	operator()( const std::pair<TPairKey, TPairValue*>& refTC  ) const
 	{
-		return ( (pLHS->*m_pPMemFun)() > (pRHS->*m_pPMemFun)() );
+		TPairValue* pTPairValue = refTC.second;
+		if ( NULL == pTPairValue )
+		{
+			return false;
+		}
+		return ( (pTPairValue->*m_pPMemFun)() == m_value );
+	}
+};
+
+//关联容器的对象的特例化;
+template< typename TValue, typename TPairKey, typename TPairValue >
+class IsObjEqualUnary<TValue, std::pair<TPairKey, TPairValue> >
+	: public unary_function<std::pair<TPairKey, TPairValue>, bool >
+{
+public:
+	typedef TValue	(TPairValue::*PMemFun)() const ; //声明成public是为了构造函数中PMemFun类型能让外部知道是什么;
+private:
+	TValue		m_value;
+	PMemFun		m_pPMemFun;
+
+public:
+	IsObjEqualUnary( TValue nValue, PMemFun pPMemFun ): m_value( nValue ), m_pPMemFun( pPMemFun ) {};
+
+	bool	operator()( const std::pair<TPairKey, TPairValue>& refTC  ) const
+	{
+		return ( ((refTC.second).*m_pPMemFun)() == m_value );
 	}
 };
 
 
+
+
 //ObjGreatCmp used, for example:
 //std::sort_heap( corpsVec.begin(), corpsVec.end(), ObjGreatCmp<int, Corps>(&Corps::GetCorpsID) );
-
 template< typename TValue, typename TClass >
 class ObjGreatCmp : public binary_function< TClass, TClass, bool >
 {
@@ -125,6 +150,26 @@ public:
 	bool	operator()( const TClass& refLHS, const TClass& refRHS ) const
 	{
 		return ( (refLHS.*m_pPMemFun)() > (refRHS.*m_pPMemFun)() );
+	}
+};
+
+//序列容器的指针特例化;
+//ObjGreatCmp used, for example:
+//std::sort_heap( corpsPtrVec.begin(), corpsPtrVec.end(), ObjGreatCmp<int, Corps*>(&Corps::GetCorpsID) );
+template< typename TValue, typename TClass >
+class ObjGreatCmp<TValue, TClass*> : public binary_function< const TClass*, const TClass*, bool >
+{
+public:
+	typedef TValue	(TClass::*PMemFun)() const ;
+private:
+	PMemFun		m_pPMemFun;
+
+public:
+	ObjGreatCmp( PMemFun pPMemFun ): m_pPMemFun( pPMemFun ) {};
+
+	bool	operator()( const TClass* pLHS, const TClass* pRHS ) const
+	{
+		return ( (pLHS->*m_pPMemFun)() > (pRHS->*m_pPMemFun)() );
 	}
 };
 

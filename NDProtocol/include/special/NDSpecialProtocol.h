@@ -9,13 +9,13 @@ public:
 	NDPingProtocol() : NDProtocol( CMDP_PING ) {}
 	~NDPingProtocol() {}
 
-	NDBool Serialize( NDOStream& rOStream )
+	NDBool serialize( NDOStream& rOStream )
 	{
-		rOStream.Write( (void*)&m_unProtocolID, sizeof(m_unProtocolID) );
+		rOStream.write( (void*)&m_unProtocolID, sizeof(m_unProtocolID) );
 		return NDTrue;
 	}
 
-	NDBool Deserialize( NDIStream&  )
+	NDBool deserialize( NDIStream&  )
 	{	
 		//rIStream;	//为了消除 warning C4100:"name" :未引用的形参;
 		return NDTrue;
@@ -29,13 +29,13 @@ public:
 	NDDisconnectNtyProtocol() : NDProtocol( CMDP_DISCONNECT_NOTIFY ) {}
 	~NDDisconnectNtyProtocol() {}
 
-	NDBool Serialize( NDOStream& rOStream )
+	NDBool serialize( NDOStream& rOStream )
 	{
-		rOStream.Write( (void*)&m_unProtocolID, sizeof(m_unProtocolID) );
+		rOStream.write( (void*)&m_unProtocolID, sizeof(m_unProtocolID) );
 		return NDTrue;
 	}
 
-	NDBool Deserialize( NDIStream&  )
+	NDBool deserialize( NDIStream&  )
 	{
 		//rIStream;	//为了消除 warning C4100:"name" :未引用的形参;
 		return NDTrue;

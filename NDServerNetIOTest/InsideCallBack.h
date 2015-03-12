@@ -17,7 +17,7 @@ using namespace NDShareBase;
 class PingCallBack : public NDProtocolCallBack
 {
 public:
-	NDBool Process( NDIStream&, NDProtocolHeader& rNDProtocolHeader )
+	NDBool process( NDIStream&, NDProtocolHeader& rNDProtocolHeader )
 	{
 		NDServerSession* pServerSession = (NDServerSession*)NDSessionManager::getInstance()->findServerSession( rNDProtocolHeader.m_nSessionID );
 		if ( NULL == pServerSession )

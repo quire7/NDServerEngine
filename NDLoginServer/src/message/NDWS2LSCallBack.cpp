@@ -19,7 +19,7 @@ NDWS2LSCallBack::~NDWS2LSCallBack(void)
 {
 }
 
-NDBool NDWS2LSCallBack::Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
+NDBool NDWS2LSCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
 	NDBool bRet = NDFalse;
 
@@ -43,13 +43,13 @@ NDBool NDWS2LSCallBack::Process( NDIStream& rIStream, NDProtocolHeader& protocol
 //NDBool NDWS2LSCallBack::c2lLoadFactorNtyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 //{
 //	NDCS2L_LoadFactor_Nty loadFactorNty;
-//	if ( NDFalse == loadFactorNty.Deserialize( rIStream ) )
+//	if ( NDFalse == loadFactorNty.deserialize( rIStream ) )
 //	{
 //		NDTOTAL_LOG_ERROR( " [NDC2LCallBack::c2lLoadFactorNtyDispose] NDC2L_LoadFactor_Nty deserialize failed! " )
 //		return NDFalse;
 //	}
 //
-//	NDWorld* pWorld =  dynamic_cast<NDWorld*>( sNDLoginServer.worldManager()->getRemoteServerInfo( protocolHeader.m_nSessionID ) );
+//	NDWorld* pWorld =  dynamic_cast<NDWorld*>( sNDLoginServer.worldManager()->getRemoteServerInfoBySessionID( protocolHeader.m_nSessionID ) );
 //	if ( NULL ==  pWorld )
 //	{
 //		NDTOTAL_LOG_ERROR( " [NDC2LCallBack::c2lLoadFactorNtyDispose] NDWorld find failed! " )
@@ -67,9 +67,9 @@ NDBool NDWS2LSCallBack::Process( NDIStream& rIStream, NDProtocolHeader& protocol
 //NDBool NDWS2LSCallBack::c2lPlayerOfflineNtyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 //{
 //	NDCS2L_PlayerOffline_Nty playerOfflineNty;
-//	if ( NDFalse == playerOfflineNty.Deserialize( rIStream ) )
+//	if ( NDFalse == playerOfflineNty.deserialize( rIStream ) )
 //	{
-//		NDTOTAL_LOG_ERROR( " [NDC2LCallBack::c2lPlayerOfflineNtyDispose] NDC2L_PlayerOffline_Nty Deserialize is failed! " )
+//		NDTOTAL_LOG_ERROR( " [NDC2LCallBack::c2lPlayerOfflineNtyDispose] NDC2L_PlayerOffline_Nty deserialize is failed! " )
 //		return NDFalse;
 //	}
 //

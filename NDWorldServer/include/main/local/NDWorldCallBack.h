@@ -1,5 +1,5 @@
-#ifndef __WORLDSERVER_ND_LOGIN_CALL_BACK_H__
-#define __WORLDSERVER_ND_LOGIN_CALL_BACK_H__
+#ifndef __WORLDSERVER_ND_WORLD_CALL_BACK_H__
+#define __WORLDSERVER_ND_WORLD_CALL_BACK_H__
 
 #include "NDPreCompiler.h"
 
@@ -14,7 +14,7 @@ public:
 	NDWorldCallBack(void);
 	~NDWorldCallBack(void);
 
-	NDBool Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
 	//client ping protocol dispose;

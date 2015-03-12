@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
  *	命令字定义规则:;
- *	const int command = value;
+ *	const NDUint32 m_unProtocolID = value;
  *	value取值为协义流向的最终目标类型 (SERVERTYPE) + n.;
  *	n取值范围:0~0x000FFFFF.;
  *	 定义规范:	以16进制方式递增，0~0xF保留;
@@ -26,6 +26,7 @@
 
 enum eToLoginServerCMDProtocolID
 {
+	////NDWorldServer向NDLoginServer发送的协议号;
 	CMDP_NDWS2LS_Start								=	LOGIN_SERVER		+ 0x010,
 	CMDP_NDWS2LS_Register_Req,						//WS向LS发送注册请求;
 	CMDP_NDWS2LS_LoadFactor_Nty,					//WS向LS发送GTWS的LoadFactor;
@@ -35,28 +36,90 @@ enum eToLoginServerCMDProtocolID
 
 enum eToGateWayServerCMDProtocolID
 {
-	CMDP_NDWS2GTWS_Start							=	GATEWAY_SERVER		+ 0x010,
-	CMDP_NDWS2GTWS_End								=	GATEWAY_SERVER		+ 0x020,
+	//NDGameServer向NDGatewayServer发送的协议号;
+	CMDP_NDGS2GTWS_Start							=	GATEWAY_SERVER		+ 0x010,
+	CMDP_NDGWS2GS_Register_Res,
+	CMDP_NDGS2GTWS_End								=	GATEWAY_SERVER		+ 0x300,
+
+	//NDRoomServer向NDGatewayServer发送的协议号;
+	CMDP_NDRS2GTWS_Start							=	GATEWAY_SERVER		+ 0x301,
+	CMDP_NDGWS2RS_Register_Res,
+	CMDP_NDRS2GTWS_End								=	GATEWAY_SERVER		+ 0x500,
 };
 
 enum eToWorldServerCMDProtocolID
 {
+	//NDLoginServer向NDWorldServer发送的协议号;
 	CMDP_NDLS2WS_Start								=	WORLD_SERVER		+ 0x010,
 	CMDP_NDLS2WS_Register_Res,						//WS向LS发送注册请求返回;
-
 	CMDP_NDLS2WS_End								=	WORLD_SERVER		+ 0x020,
+
+	//NDGameServer向NDWorldServer发送的协议号;
+	CMDP_NDGS2WS_Start								=	WORLD_SERVER		+ 0x021,
+	CMDP_NDGS2WS_Register_Req,
+	CMDP_NDGS2WS_End								=	WORLD_SERVER		+ 0x090,
+
+	//NDRoomServer向NDWorldServer发送的协议号;
+	CMDP_NDRS2WS_Start								=	WORLD_SERVER		+ 0x091,
+	CMDP_NDRS2WS_Register_Req,
+	CMDP_NDRS2WS_End								=	WORLD_SERVER		+ 0x0C0,
+	
 };
 
 enum eToGameServerCMDProtocolID
 {
+	//NDWorldServer向NDGameServer发送的协议号;
 	CMDP_NDWS2GS_Start								=	GAME_SERVER			+ 0x010,
+	CMDP_NDGS2WS_Register_Res,						
 	CMDP_NDWS2GS_End								=	GAME_SERVER			+ 0x020,
+
+	//NDDataServer向NDGameServer发送的协议号;
+	CMDP_NDDS2GS_Start								=	GAME_SERVER			+ 0x021,
+	CMDP_NDGS2DS_Register_Res,						
+	CMDP_NDDS2GS_End								=	GAME_SERVER			+ 0x090,
+	
+	//NDRoomServer向NDGameServer发送的协议号;
+	CMDP_NDRS2GS_Start								=	GAME_SERVER			+ 0x091,
+	CMDP_NDRS2GS_Register_Req,					
+	CMDP_NDRS2GS_End								=	GAME_SERVER			+ 0x0C0,
+
+	//NDGatewayServer向NDGameServer发送的协议号;
+	CMDP_NDGWS2GS_Start								=	GAME_SERVER			+ 0x0C1,
+	CMDP_NDGWS2GS_Register_Req,
+	CMDP_NDGWS2GS_End								=	GAME_SERVER			+ 0x300,
+};
+
+
+enum eToRoomServerCMDProtocolID
+{
+	//NDWorldServer向NDRoomServer发送的协议号;
+	CMDP_NDWS2RS_Start								=	ROOM_SERVER			+ 0x010,
+	CMDP_NDRS2WS_Register_Res,						
+	CMDP_NDWS2RS_End								=	ROOM_SERVER			+ 0x020,
+
+	//NDGameServer向NDRoomServer发送的协议号;
+	CMDP_NDGS2RS_Start								=	ROOM_SERVER			+ 0x021,
+	CMDP_NDRS2GS_Register_Res,						
+	CMDP_NDGS2RS_End								=	ROOM_SERVER			+ 0x090,
+	
+	//NDGatewayServer向NDRoomServer发送的协议号;
+	CMDP_NDGWS2RS_Start								=	ROOM_SERVER			+ 0x091,
+	CMDP_NDGWS2RS_Register_Req,						
+	CMDP_NDGWS2RS_End								=	ROOM_SERVER			+ 0x200,
+	
 };
 
 enum eToDBServerCMDProtocolID
 {
+	//NDWorldServer向NDDataServer发送的协议号(有必要让WS去连接DS吗？);
 	CMDP_NDWS2DB_Start								=	DB_SERVER			+ 0x010,
 	CMDP_NDWS2DB_End								=	DB_SERVER			+ 0x020,
+
+	//NDGameServer向NDDataServer发送的协议号;
+	CMDP_NDGS2DS_Start								=	DB_SERVER			+ 0x021,
+	CMDP_NDGS2DS_Register_Req,
+	CMDP_NDGS2DS_End								=	DB_SERVER			+ 0x090,
+	
 };
 
 

@@ -113,13 +113,13 @@ void NDServerTask::taskProcess()
 
 void NDServerTask::disposeMessage( NDByteBuffer& rMsgBuf )
 {
-	NDUint32 nSize = rMsgBuf.GetDataSize();
+	NDUint32 nSize = rMsgBuf.getDataSize();
 	if ( (nSize > 0) && (NULL != m_pProcess) )
 	{
 		NDIStreamImpl istreamImpl( rMsgBuf );
 		if ( NULL != m_pProcess )
 		{
-			m_pProcess->Process( istreamImpl );
+			m_pProcess->process( istreamImpl );
 		}
 	}
 }

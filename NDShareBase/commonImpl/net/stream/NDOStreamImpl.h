@@ -15,8 +15,8 @@ public:
 	NDOStreamImpl(NDByteBuffer& rByteBuf);
 	~NDOStreamImpl(void);
 
-	NDBool		Write( const void* pChar, NDUint32 nSize );
-	NDUint32	GetTotalSize() const;
+	NDBool		write( const void* pChar, NDUint32 nSize );
+	NDUint32	getTotalSize() const;
 
 private:
 	NDOStreamImpl( const NDOStreamImpl& other );

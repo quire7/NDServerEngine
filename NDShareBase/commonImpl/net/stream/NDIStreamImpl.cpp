@@ -13,19 +13,19 @@ NDIStreamImpl::~NDIStreamImpl(void)
 {
 }
 
-NDBool NDIStreamImpl::Read( void* pChar, NDUint32 nSize )
+NDBool NDIStreamImpl::read( void* pChar, NDUint32 nSize )
 {
 	if ( (NULL == pChar) || (nSize <= 0) )
 	{
 		return NDFalse;
 	}
 
-	return m_rByteBuf.ReadIntactBuffer( (char*)pChar, nSize );
+	return m_rByteBuf.readIntactBuffer( (char*)pChar, nSize );
 }
 
-NDUint32 NDIStreamImpl::GetTotalSize() const
+NDUint32 NDIStreamImpl::getTotalSize() const
 {
-	return m_rByteBuf.GetDataSize();
+	return m_rByteBuf.getDataSize();
 }
 
 _NDSHAREBASE_END

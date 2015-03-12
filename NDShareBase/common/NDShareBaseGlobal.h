@@ -591,7 +591,7 @@ ND_INLINE static NDInt64 NDShareBaseGlobal::swap64(NDInt64 p) { return nd_bswap_
 
 #else
 #define ND_EXCEPTION_PROTECTED_BEGIN()									try {
-#define ND_EXCEPTION_PROTECTED_CATCH( szDumpPath, NDPTHREADFUN )		} catch( NDShareBaseGlobal::generateDump( szDumpPath, NULL ) ) { NDPTHREADFUN(NULL); }
+#define ND_EXCEPTION_PROTECTED_CATCH( szDumpPath, NDPTHREADFUN )		} catch(...) { NDShareBaseGlobal::generateDump( szDumpPath, NULL ); NDPTHREADFUN(NULL); }
 
 #endif
 

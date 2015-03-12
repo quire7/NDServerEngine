@@ -9,7 +9,7 @@
 #include "file/NDLog.h"
 
 #include "net/process/NDDataProcess.h"
-#include "function/NDConsoleCMDManager.h "
+#include "function/NDConsoleCMDManager.h"
 
 #include "event/timerEvent/NDTimerEventManager.h"
 

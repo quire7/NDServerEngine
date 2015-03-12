@@ -6,6 +6,7 @@
 #include <Windows.h>
 #endif
 
+#include <signal.h>
 
 #include "NDLogServer.h"
 
@@ -44,7 +45,7 @@ int mainWapper( int argc, char** argv )
 
 	if( !SetConsoleCtrlHandler( (PHANDLER_ROUTINE)handlerRoutine, TRUE ) ) 
 	{
-		//NDTOTAL_LOG_ERROR( " SetConsoleCtrlHandler failed! " )
+		//NDLOG_ERROR( " SetConsoleCtrlHandler failed! " )
 		return 1;
 	}
 #endif
@@ -70,68 +71,58 @@ int mainWapper( int argc, char** argv )
 
 void exceptionDispose( void *pParam )
 {
-	//NDTOTAL_LOG_ERROR( " exception has generated! " )
-	//sNDLoginServer.logMgr()->flush();
+	//NDLOG_ERROR( " exception has generated! " )
+	refNDLogServer->release();
 }
 
 #ifdef	WIN32
 //»Øµ÷º¯Êý;
 BOOL WINAPI handlerRoutine( DWORD dwCtrlType )
 {
+	NDLogServer* pLogServer = NDLogServer::getSingletonPtr();
+	if ( NULL == pLogServer )
+	{
+		return FALSE;
+	}
+
 	switch( dwCtrlType )
 	{
 	case CTRL_C_EVENT:
-		//NDTOTAL_LOG_WARNGING( " CTRL_C_EVENT " )
+		//NDLOG_WARNGING( " CTRL_C_EVENT " )
 		break;
 	case CTRL_BREAK_EVENT:
-		//NDTOTAL_LOG_WARNGING( " CTRL_BREAK_EVENT " )
+		//NDLOG_WARNGING( " CTRL_BREAK_EVENT " )
 		break;
 	case CTRL_CLOSE_EVENT:
-		//NDTOTAL_LOG_WARNGING( " CTRL_CLOSE_EVENT " )
+		//NDLOG_WARNGING( " CTRL_CLOSE_EVENT " )
 		break;
 	case CTRL_LOGOFF_EVENT:
-		//NDTOTAL_LOG_WARNGING( " CTRL_LOGOFF_EVENT " )
+		//NDLOG_WARNGING( " CTRL_LOGOFF_EVENT " )
 		break;
 	case CTRL_SHUTDOWN_EVENT:
-		//NDTOTAL_LOG_WARNGING( " CTRL_SHUTDOWN_EVENT " )
+		//NDLOG_WARNGING( " CTRL_SHUTDOWN_EVENT " )
 		break;
 	default:
-		//NDTOTAL_LOG_WARNGING( " default " )
+		//NDLOG_WARNGING( " default " )
 		break;
 	}
 
+	pLogServer->release();
+	
+	SAFE_DELETE( pLogServer )
 
 	return TRUE;
 }
 #endif
 
 ////////////////////////////////////////////////////////////////////////
-NDLogServer::NDLogServer() : m_pNDShareLogCacheSMUPool ( new NDShareMemoryUnitPool<NDShareLogCacheSMU>() )
+NDLogServer::NDLogServer() :m_bQuit( NDTrue ), m_pNDShareLogCacheSMUPool ( new NDShareMemoryUnitPool<NDShareLogCacheSMU>() )
 {
 	m_NDLogFileInfoMap.clear();
 }
 
 NDLogServer::~NDLogServer()
 {
-	for ( NDLogFileInfoMapIter iter = m_NDLogFileInfoMap.begin(), iterEnd = m_NDLogFileInfoMap.end();
-							   iter != iterEnd;
-							   ++iter )
-	{
-		NDLogFileInfo* pNDLogFileInfo = iter->second;
-		if ( NULL == pNDLogFileInfo )
-		{
-			continue;
-		}
-
-		pNDLogFileInfo->m_file.close();
-
-		delete pNDLogFileInfo;
-	}
-	if ( NULL != m_pNDShareLogCacheSMUPool )
-	{
-		delete m_pNDShareLogCacheSMUPool;
-		m_pNDShareLogCacheSMUPool = NULL;
-	}
 }
 
 NDBool NDLogServer::newStaticManager()
@@ -172,12 +163,36 @@ NDBool NDLogServer::init()
 		return NDFalse;
 	}
 
+	m_bQuit = NDFalse;
+
+	regSignalFunction();
+
 	return NDTrue;
 }
 
 NDBool NDLogServer::release()
 {
 	delStaticManager();
+
+	for ( NDLogFileInfoMapIter iter = m_NDLogFileInfoMap.begin(), iterEnd = m_NDLogFileInfoMap.end();
+								iter != iterEnd;
+								++iter )
+	{
+		NDLogFileInfo* pNDLogFileInfo = iter->second;
+		if ( NULL == pNDLogFileInfo )
+		{
+			continue;
+		}
+
+		pNDLogFileInfo->m_file.close();
+
+		delete pNDLogFileInfo;
+	}
+	if ( NULL != m_pNDShareLogCacheSMUPool )
+	{
+		delete m_pNDShareLogCacheSMUPool;
+		m_pNDShareLogCacheSMUPool = NULL;
+	}
 
 	return NDTrue;
 }
@@ -244,7 +259,7 @@ NDBool NDLogServer::loop()
 
 		NDShareBaseGlobal::sleep2( 3000 );
 
-	} while (TRUE);
+	} while ( !m_bQuit );
 
 	return NDTrue;
 }
@@ -324,6 +339,24 @@ void NDLogServer::checkLogFileInfo()
 
 		++iter;
 	}
+}
+
+
+void NDLogServer::termHandlerDispose()
+{
+	m_bQuit = NDTrue;
+}
+
+void termHandler(int)
+{
+	refNDLogServer->termHandlerDispose();
+}
+
+NDBool NDLogServer::regSignalFunction()
+{
+	signal( SIGTERM, termHandler );
+
+	return NDTrue;
 }
 
 

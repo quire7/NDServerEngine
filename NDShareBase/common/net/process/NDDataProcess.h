@@ -34,7 +34,7 @@ class NDProtocolCallBack
 {
 public:
 	virtual ~NDProtocolCallBack(){}
-	virtual NDBool Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader ) = 0;
+	virtual NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader ) = 0;
 };
 
 
@@ -45,13 +45,13 @@ public:
 	NDDataProcess(void);
 	virtual ~NDDataProcess(void);
 
-	void RegisterCallBack( NDUint32 nProtocolID, NDProtocolCallBack *pNDCallBack );
+	void registerCallBack( NDUint32 nProtocolID, NDProtocolCallBack *pNDCallBack );
 	//just for show error start;
-	void RegisterProtocolIDName( NDUint32 nProtocolID, string strProtocolIDName );
+	void registerProtocolIDName( NDUint32 nProtocolID, string strProtocolIDName );
 	//just for show error end;
 
-	virtual NDBool Process( NDIStream &rIStream );
-	virtual NDBool Process( NDIStream &rIStream, NDProtocolHeader& protocolHeader, NDBool bShowError = NDTrue );
+	virtual NDBool process( NDIStream &rIStream );
+	virtual NDBool process( NDIStream &rIStream, NDProtocolHeader& protocolHeader, NDBool bShowError = NDTrue );
 
 
 
@@ -75,8 +75,8 @@ private:
 
 #ifndef NDRegisterCallBackMACRO
 #define NDRegisterCallBackMACRO( pDProcess, nProtocolID, pNDCallBack )	\
-		pDProcess->RegisterProtocolIDName( nProtocolID, #nProtocolID );	\
-		pDProcess->RegisterCallBack( nProtocolID, pNDCallBack );
+		pDProcess->registerProtocolIDName( nProtocolID, #nProtocolID );	\
+		pDProcess->registerCallBack( nProtocolID, pNDCallBack );
 #endif
 
 

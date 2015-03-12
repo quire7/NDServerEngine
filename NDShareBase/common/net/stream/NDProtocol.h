@@ -25,10 +25,10 @@ public:
 	NDProtocol( NDUint32 unProtocolID ) : m_unProtocolID( unProtocolID ) {}
 
 	virtual ~NDProtocol(){}
-	virtual NDBool Serialize( NDOStream& rOStream ) = 0;
-	virtual NDBool Deserialize( NDIStream& rIStream ) = 0;
+	virtual NDBool serialize( NDOStream& rOStream ) = 0;
+	virtual NDBool deserialize( NDIStream& rIStream ) = 0;
 
-	virtual void   Clear() {};								// whether must have or not
+	virtual void   clear() {};								// whether must have or not
 
 private:
 	NDProtocol(const NDProtocol& other);

@@ -35,8 +35,15 @@ NDBool NDShareMemory::createShareMemory( NDSM_KEY nKey, NDUint32 nSize )
 	m_bCreate = NDTrue;
 #if LINUX
 	//key = ftok(keybuf,'w'); 
-	m_NDSMHandle =  shmget( nKey, nSize, IPC_CREAT|IPC_EXCL|0666 ); 
-	printf( "handle = %d ,key = %d ,error: %d \r\n", m_NDSMHandle, nKey, errno );
+	m_NDSMHandle =  shmget( nKey, nSize, IPC_CREAT|IPC_EXCL|0666 );
+	if ( 17 == errno )
+	{
+		printf( "handle = %d, key = %u, error: %d(shared memory already exists). \r\n", m_NDSMHandle, nKey, errno );
+	}
+	else
+	{
+		printf( "handle = %d, key = %u, error: %d \r\n", m_NDSMHandle, nKey, errno );
+	}
 	return (INVALID_SM_HANDLE != m_NDSMHandle );
 
 #elif WIN32
@@ -69,7 +76,7 @@ NDBool NDShareMemory::openShareMemory( NDSM_KEY nKey, NDUint32 nSize )
 #if LINUX
 	//key = ftok(keybuf,'w'); 
 	m_NDSMHandle =   shmget( nKey, nSize,0 );
-	printf( "handle = %d ,key = %d ,error: %d \r\n", m_NDSMHandle, nKey, errno );
+	printf( "handle = %d, key = %u, error: %d \r\n", m_NDSMHandle, nKey, errno );
 	return (INVALID_SM_HANDLE != m_NDSMHandle );
 
 #elif WIN32

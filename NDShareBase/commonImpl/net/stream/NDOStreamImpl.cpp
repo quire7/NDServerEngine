@@ -13,19 +13,19 @@ NDOStreamImpl::~NDOStreamImpl(void)
 {
 }
 
-NDBool NDOStreamImpl::Write( const void* pChar, NDUint32 nSize )
+NDBool NDOStreamImpl::write( const void* pChar, NDUint32 nSize )
 {
 	if ( (NULL == pChar) || (nSize <= 0) )
 	{
 		return 0;
 	}
 
-	return ( nSize == m_rByteBuf.WriteBuffer( (const char*)pChar, nSize ) );
+	return ( nSize == m_rByteBuf.writeBuffer( (const char*)pChar, nSize ) );
 }
 
-NDUint32 NDOStreamImpl::GetTotalSize() const
+NDUint32 NDOStreamImpl::getTotalSize() const
 {
-	return m_rByteBuf.GetDataSize();
+	return m_rByteBuf.getDataSize();
 }
 
 _NDSHAREBASE_END

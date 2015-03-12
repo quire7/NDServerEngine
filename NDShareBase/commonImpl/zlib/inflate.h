@@ -57,7 +57,7 @@ typedef enum {
 
     (most modes can go to BAD or MEM on error -- not shown for clarity)
 
-    Process header:
+    process header:
         HEAD -> (gzip) or (zlib) or (raw)
         (gzip) -> FLAGS -> TIME -> OS -> EXLEN -> EXTRA -> NAME -> COMMENT ->
                   HCRC -> TYPE
@@ -73,7 +73,7 @@ typedef enum {
                 LEN -> LENEXT or LIT or TYPE
                 LENEXT -> DIST -> DISTEXT -> MATCH -> LEN
                 LIT -> LEN
-    Process trailer:
+    process trailer:
         CHECK -> LENGTH -> DONE
  */
 

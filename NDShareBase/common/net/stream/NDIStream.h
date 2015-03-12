@@ -18,13 +18,13 @@ class NDIStream
 {
 public:
 	virtual ~NDIStream() {}
-	virtual NDBool		Read( void* pChar, NDUint32 nSize ) = 0;
-	virtual NDUint32	GetTotalSize() const = 0;
+	virtual NDBool		read( void* pChar, NDUint32 nSize ) = 0;
+	virtual NDUint32	getTotalSize() const = 0;
 };
 
 #ifndef NDISTREAM_READ
 #define NDISTREAM_READ( stream, pvoid, size )\
-		if ( NDFalse == stream.Read( (void*)(pvoid), size ) )\
+		if ( NDFalse == stream.read( (void*)(pvoid), size ) )\
 		{\
 			return NDFalse;\
 		}

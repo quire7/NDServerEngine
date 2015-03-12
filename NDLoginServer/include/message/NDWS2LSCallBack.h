@@ -9,7 +9,7 @@ public:
 	NDWS2LSCallBack(void);
 	~NDWS2LSCallBack(void);
 
-	NDBool Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
 	//NDBool c2lLoadFactorNtyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );

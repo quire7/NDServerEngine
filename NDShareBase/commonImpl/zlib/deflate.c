@@ -1734,7 +1734,7 @@ local block_state deflate_slow(s, flush)
     IPos hash_head;          /* head of hash chain */
     int bflush;              /* set if current block must be flushed */
 
-    /* Process the input block. */
+    /* process the input block. */
     for (;;) {
         /* Make sure that we always have enough lookahead, except
          * at the end of the input file. We need MAX_MATCH bytes

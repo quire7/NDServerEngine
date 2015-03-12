@@ -3,7 +3,7 @@
 
 #include "protocol/NDWorldToNDLogin/NDWS2LS_Register.h"
 
-#include "main/remote/NDWorldServerInfo.h"
+#include "main/remote/NDRemoteWorldServerInfo.h"
 #include "main/local/NDLoginServer.h"
 
 
@@ -17,7 +17,7 @@ NDS2SRegisterCallBack::~NDS2SRegisterCallBack(void)
 {
 }
 
-NDBool NDS2SRegisterCallBack::Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
+NDBool NDS2SRegisterCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
 	NDBool bRet = NDFalse;
 
@@ -41,13 +41,13 @@ NDBool NDS2SRegisterCallBack::Process( NDIStream& rIStream, NDProtocolHeader& pr
 NDBool NDS2SRegisterCallBack::c2lRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
 	NDWS2LS_Register_Req registerReq;
-	if ( NDFalse == registerReq.Deserialize(rIStream) )
+	if ( NDFalse == registerReq.deserialize(rIStream) )
 	{
 		NDLOG_ERROR( " [NDS2SRegisterCallBack::c2lRegisterReqDispose] NDC2L_Register_Req deserialize failed! " )
 		return NDFalse;
 	}
 
-	NDWorldServerInfo* pWorld =  new NDWorldServerInfo;
+	NDRemoteWorldServerInfo* pWorld =  new NDRemoteWorldServerInfo;
 	if ( NULL ==  pWorld )
 	{
 		NDLOG_ERROR( " [NDS2SRegisterCallBack::c2lRegisterReqDispose] new NDWorld failed! " )
@@ -85,7 +85,7 @@ NDBool NDS2SRegisterCallBack::c2lRegisterReqDispose( NDIStream& rIStream, NDProt
 //NDBool NDS2SRegisterCallBack::l2aRegisterResDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 //{
 //	NDL2A_Register_Res response;
-//	if ( NDFalse == response.Deserialize( rIStream ) )
+//	if ( NDFalse == response.deserialize( rIStream ) )
 //	{
 //		NDLOG_ERROR( " [NDS2SRegisterCallBack::l2aRegisterResDispose] NDL2A_Register_Res deserialize failed! " )
 //		return NDFalse;

@@ -1,7 +1,7 @@
 #include "local/NDXmlConfigServerCommon.h"
 
 #include "NDCLibFun.h"
-#include "NDShareBaseGlobal.h "
+#include "NDShareBaseGlobal.h"
 #include "database/NDMysqlConst.h"
 
 #include "tinyxml/tinyxml.h"
@@ -279,7 +279,7 @@ NDBool NDXmlConfigServerCommon::readAppInfoXmlCfgCommonContent( const TiXmlEleme
 				return NDFalse;
 			}
 
-			for ( NDUint32 j = 1; j < (NDUint32)nCountValue; ++j )
+			for ( NDUint32 j = 1; j <= (NDUint32)nCountValue; ++j )
 			{
 				refConnInfoBaseAttribute.nServerID = j;
 				if ( !readAppChildInfoXmlCfgCommonContent( pChildElement, refConnInfoBaseAttribute ) )

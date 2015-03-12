@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include "main/remote/NDWorldServerInfo.h"
+#include "main/remote/NDRemoteWorldServerInfo.h"
 
 #include "main/local/NDLoginServer.h"
 
@@ -18,7 +18,7 @@ NDLoginCallBack::~NDLoginCallBack(void)
 {
 }
 
-NDBool NDLoginCallBack::Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
+NDBool NDLoginCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
 	NDBool bRet = NDFalse;
 
@@ -57,21 +57,21 @@ NDBool NDLoginCallBack::pingProtocolDispose( NDIStream& rIStream, NDProtocolHead
 
 NDBool NDLoginCallBack::disconnectNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
-	NDRemoteServerInfo* pWorldServerInfo = sNDLoginServer.worldManager()->getRemoteServerInfo( protocolHeader.m_nSessionID );
-	if ( NULL != pWorldServerInfo )
+	NDRemoteServerInfo* pRemoteServerInfo = sNDLoginServer.worldManager()->getRemoteServerInfoBySessionID( protocolHeader.m_nSessionID );
+	if ( NULL != pRemoteServerInfo )
 	{	//dispose NDWorldServer offline;
-		NDWorldServerInfo* pWorld			= dynamic_cast<NDWorldServerInfo*>(pWorldServerInfo);
-		const NDSocketAddress& rNetAddress	= pWorld->getNetAddress();
+		NDRemoteWorldServerInfo* pWorldServerInfo	= dynamic_cast<NDRemoteWorldServerInfo*>(pRemoteServerInfo);
+		const NDSocketAddress& rNetAddress	= pWorldServerInfo->getNetAddress();
 
 		ostringstream& oStr = sNDLoginServer.getostringstream();
 		oStr<< " "
-			<< pWorld->getServerName()				<< "("
+			<< pWorldServerInfo->getServerName()	<< "["
 			<< rNetAddress.getIP()					<< ":"
-			<< rNetAddress.getPort()				<< ")"
-			<< "(WorldName:"
-			<< pWorld->getWorldName()				<< ")"
-			<< "(WorldID:"
-			<< pWorld->getWorldID()					<< ")"
+			<< rNetAddress.getPort()				<< "]"
+			<< "[WorldName:"
+			<< pWorldServerInfo->getWorldName()		<< "]"
+			<< "[WorldID:"
+			<< pWorldServerInfo->getWorldID()		<< "]"
 			<< " offline! ";
 		string oStrTemp( oStr.str() );
 		NDLOG_ERROR( oStrTemp.c_str() )

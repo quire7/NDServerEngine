@@ -22,6 +22,10 @@
 #include "function/NDConsoleCMDManager.h"
 #include "function/NDRefCounted.h"
 
+//STL extend header;
+#include "stl/NDSTLExtend.h"
+#include "stl/NDSortedVector.h"
+
 //用using避免使用完全限定名;
 using NDShareBase::NDProtocolHeader;
 using NDShareBase::NDProtocolCallBack;
@@ -34,6 +38,9 @@ using NDShareBase::g_bConsole;
 using NDShareBase::g_pFileLogManager;
 using NDShareBase::g_pSMLogManager;
 
+using NDShareBase::IsObjEqualUnary;
+using NDShareBase::ObjGreatCmp;
+using NDShareBase::safe_advance;
 
 
 //self 工程头文件;

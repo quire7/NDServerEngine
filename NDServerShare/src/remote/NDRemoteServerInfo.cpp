@@ -22,6 +22,17 @@ SERVERTYPE NDRemoteServerInfo::getServerType() const
 	return m_eServType;
 }
 
+void NDRemoteServerInfo::setServerID( NDUint16 nServerID )
+{
+	m_nServerID = nServerID;
+}
+
+
+NDUint16 NDRemoteServerInfo::getServerID() const
+{
+	return m_nServerID;
+}
+
 void NDRemoteServerInfo::setSessionID( NDUint32 nSessionID )
 {
 	m_nSessionID = nSessionID;

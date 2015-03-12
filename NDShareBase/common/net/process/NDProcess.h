@@ -21,7 +21,7 @@ class NDProcess
 {
 public:
 	virtual ~NDProcess(){}
-	virtual NDBool Process( NDIStream& rIStream ) = 0;
+	virtual NDBool process( NDIStream& rIStream ) = 0;
 };
 
 

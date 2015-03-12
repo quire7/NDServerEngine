@@ -2,14 +2,14 @@
 #include "main/local/NDPreCompiler.cpp"
 
 //remote file;
-#include "main/remote/NDWorldServerInfo.cpp"
-#include "main/remote/NDWorldServerManager.cpp "
+#include "main/remote/NDRemoteWorldServerInfo.cpp"
+#include "main/remote/NDRemoteWorldServerManager.cpp"
 
 
 
 //message file;
 #include "message/NDS2SRegisterCallBack.cpp"
-#include "message/NDWS2LSCallBack.cpp "
+#include "message/NDWS2LSCallBack.cpp"
 
 
 

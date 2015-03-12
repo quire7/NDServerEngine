@@ -11,7 +11,7 @@
 initialiseSingleton(NDWorldServer);
 
 NDRefCounted<NDServerManager>	refNDServerManager( new NDServerManager );
-NDRefCounted<NDWorldServer>		refNDLoginServer( new NDWorldServer );
+NDRefCounted<NDWorldServer>		refNDWorldServer( new NDWorldServer );
 
 #ifdef	WIN32
 BOOL WINAPI handlerRoutine( DWORD dwCtrlType );

@@ -50,7 +50,7 @@ NDBool NDByteBufferPool::destroyByteBuffer( NDByteBuffer* pByteBuffer )
 {
 	if ( NULL == pByteBuffer )	return NDFalse;
 
-	pByteBuffer->Release();
+	pByteBuffer->release();
 	return m_NDByteBufferObjPool.destroyObj( pByteBuffer );
 }
 

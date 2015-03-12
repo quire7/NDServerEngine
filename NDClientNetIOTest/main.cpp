@@ -16,6 +16,9 @@ using namespace std;
 #include "net/session/NDSessionManager.h"
 #include "net/process/NDServerTask.h"
 
+#include <algorithm>
+#include "stl/NDSTLExtend.h"
+using NDShareBase::IsObjEqualUnary;
 
 #include "event/timerEvent/NDTimerEventManager.h"
 
@@ -25,6 +28,22 @@ using namespace std;
 
 
 map<NDUint32, NDClientNetIO*> gClientMap;
+
+
+struct Corps
+{
+public:
+	int		m_nMemNum;
+	int		m_nCorpsID;
+
+	Corps()	{memset( this, 0, sizeof(Corps) );}
+	int		GetCorpsID() const { return m_nCorpsID; };
+};
+typedef vector<Corps>				CorpsVec;
+typedef CorpsVec::iterator			CorpsVecIter;
+typedef vector<Corps*>				CorpsPtrVec;
+typedef CorpsPtrVec::iterator		CorpsPtrVecIter;
+
 
 int main(int argc, char ** argv)
 {
@@ -57,6 +76,23 @@ int main(int argc, char ** argv)
 
 	file.close();
 
+
+	int temp = 3;
+	CorpsPtrVec corpsPtrVec;
+	for ( int j = 0; j < 10; ++j )
+	{
+		Corps* pCorps = new Corps;
+		pCorps->m_nCorpsID	= j;
+		pCorps->m_nMemNum	= j * j;
+
+		corpsPtrVec.push_back( pCorps );
+	}
+	CorpsPtrVecIter iterFind2 = find_if( corpsPtrVec.begin(), corpsPtrVec.end(), IsObjEqualUnary<int, Corps*>( temp, &Corps::GetCorpsID ) );
+	if ( iterFind2 != corpsPtrVec.end() )
+	{
+		Corps* pCorps = *iterFind2;
+		printf( "pCorps->m_nMemNum = %d.\n", pCorps->m_nMemNum );
+	}
 	
 	NDExcelFile excelFile;
 	if ( NDFalse == excelFile.open("crew_up_cost.txt") )
@@ -96,7 +132,7 @@ int main(int argc, char ** argv)
 		NDMessageManager::getInstance()->RegisterMessage();
 
 
-		for ( NDUint32 i = 0; i < 1; ++i )
+		for ( NDUint32 i = 0; i < 500; ++i )
 		{
 			NDClientNetIO* pClientNetIO = new NDClientNetIO;
 			//NDProtocol* pPingProtocol	= new NDPingProtocol;

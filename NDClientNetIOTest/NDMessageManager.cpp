@@ -15,7 +15,7 @@ NDMessageManager::~NDMessageManager(void)
 
 void NDMessageManager::RegisterMessage()
 {
-	m_pNDDataProcess->RegisterCallBack(1, &m_EchoCallBack);
+	m_pNDDataProcess->registerCallBack(1, &m_EchoCallBack);
 }
 
 NDMessageManager* NDMessageManager::getInstance()

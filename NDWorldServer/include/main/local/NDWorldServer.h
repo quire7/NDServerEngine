@@ -1,16 +1,15 @@
-#ifndef __WORLDSERVER_ND_LOGIN_SERVER_H__
-#define __WORLDSERVER_ND_LOGIN_SERVER_H__
+#ifndef __WORLDSERVER_ND_WORLD_SERVER_H__
+#define __WORLDSERVER_ND_WORLD_SERVER_H__
 
 
 #include "NDWorldCallBack.h"
 #include "NDWorldConnectProcess.h"
 
-//#include "Player/NDPlayerManager.h"
-
 class NDWorldServer : public NDLocalServer, public NDSingleton<NDWorldServer>
 {
 private:
-	//NDPlayerManager*			m_pPlayerMgr;
+	NDRemoteServerManager*		m_pGameServerManager;
+	NDRemoteServerManager*		m_pRoomServerManager;
 public:
 	NDWorldServer(void)
 	{
@@ -21,16 +20,18 @@ public:
 		m_pCallBack				= new NDWorldCallBack;
 		m_pConsoleCMDMagager	= new NDConsoleCMDManager;
 
-		//m_pPlayerMgr			= new NDPlayerManager;
+		m_pGameServerManager	= new NDRemoteServerManager;
+		m_pRoomServerManager	= new NDRemoteServerManager;
 	}
 	~NDWorldServer(void)
 	{
-		//SAFE_DELETE( m_pPlayerMgr );
+		SAFE_DELETE( m_pGameServerManager )
+		SAFE_DELETE( m_pRoomServerManager )
 	}
 
 
-//	NDPlayerManager*	playerManager()		{	return m_pPlayerMgr; }
-
+	NDRemoteServerManager*		gameServerManager()		{	return m_pGameServerManager; }
+	NDRemoteServerManager*		roomServerManager()		{	return m_pRoomServerManager; }
 };
 
 #define sNDWorldServer	NDWorldServer::getSingleton()

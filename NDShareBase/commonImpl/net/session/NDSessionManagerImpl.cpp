@@ -664,10 +664,10 @@ NDBool NDSessionManagerImpl::popCommonDisconnectNtyProtocol( NDUint32 nSessionID
 		return NDFalse;
 	}
 
-	pProtocolBuf->WriteBuffer( (const char*)&nSessionID, sizeof(nSessionID) );
+	pProtocolBuf->writeBuffer( (const char*)&nSessionID, sizeof(nSessionID) );
 
 	NDOStreamImpl out( *pProtocolBuf );
-	if ( NDFalse == m_pDisconnectNtyProtocol->Serialize(out) )
+	if ( NDFalse == m_pDisconnectNtyProtocol->serialize(out) )
 	{
 		NDByteBufferPool::getInstance()->destroyByteBuffer( pProtocolBuf );
 		return NDFalse;

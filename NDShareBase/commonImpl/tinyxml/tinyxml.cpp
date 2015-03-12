@@ -1038,7 +1038,7 @@ bool TiXmlDocument::LoadFile( FILE* file, TiXmlEncoding encoding )
 		return false;
 	}
 
-	// Process the buffer in place to normalize new lines. (See comment above.)
+	// process the buffer in place to normalize new lines. (See comment above.)
 	// Copies from the 'p' to 'q' pointer, where p can advance faster if
 	// a newline-carriage return is hit.
 	//

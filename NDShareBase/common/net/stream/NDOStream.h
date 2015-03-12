@@ -18,13 +18,13 @@ class NDOStream
 {
 public:
 	virtual ~NDOStream() {}
-	virtual NDBool		Write( const void* pChar, NDUint32 nSize ) = 0;
-	virtual NDUint32	GetTotalSize() const = 0;
+	virtual NDBool		write( const void* pChar, NDUint32 nSize ) = 0;
+	virtual NDUint32	getTotalSize() const = 0;
 };
 
 #ifndef NDOSTREAM_WRITE
 #define NDOSTREAM_WRITE( stream, pvoid, size )\
-	if ( NDFalse == stream.Write( (const void*)(pvoid), size ) )\
+	if ( NDFalse == stream.write( (const void*)(pvoid), size ) )\
 	{\
 		return NDFalse;\
 	}

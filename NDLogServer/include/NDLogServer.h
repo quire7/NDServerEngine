@@ -32,6 +32,7 @@ using NDShareBase::NDCFile;
 class NDLogServer : public NDSingleton<NDLogServer>
 {
 private:
+	NDBool										m_bQuit;
 	NDShareMemoryUnitPool<NDShareLogCacheSMU>	*m_pNDShareLogCacheSMUPool;
 
 	struct NDLogFileInfo
@@ -54,10 +55,12 @@ public:
 
 	NDBool		loop();
 
+	void		termHandlerDispose();			//中断程序处理;
 private:
 	NDBool		newStaticManager();
 	NDBool		delStaticManager();
 	NDBool		initStaticManager();
+	NDBool		regSignalFunction();			//注册信号函数;
 
 	NDBool		saveLog( NDShareLogCacheSMU *pNDShareLogCacheSMU );
 

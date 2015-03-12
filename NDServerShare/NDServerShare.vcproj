@@ -426,6 +426,54 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="NDGameToNDWorld"
+					>
+					<File
+						RelativePath=".\include\protocol\NDGameToNDWorld\NDGS2WS_Register.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="NDGameToNDData"
+					>
+					<File
+						RelativePath=".\include\protocol\NDGameToNDData\NDGS2DS_Register.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="NDRoomToNDWorld"
+					>
+					<File
+						RelativePath=".\include\protocol\NDRoomToNDWorld\NDRS2WS_Register.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="NDRoomToNDGame"
+					>
+					<File
+						RelativePath=".\include\protocol\NDRoomToNDGame\NDRS2GS_Register.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="NDGatewayToNDGame"
+					>
+					<File
+						RelativePath=".\include\protocol\NDGatewayToNDGame\NDGWS2GS_Register.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="NDGatewayToNDRoom"
+					>
+					<File
+						RelativePath=".\include\protocol\NDGatewayToNDRoom\NDGWS2RS_Register.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File

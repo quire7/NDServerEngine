@@ -32,7 +32,7 @@ NDBool NDProtocolPacket::composePacket( NDByteBuffer& outMsgBuf, NDProtocol& pro
 	NDUint32 nDataHeadSize = (NDUint32)sizeof(dataHeader);
 	memset( &dataHeader, 0, nDataHeadSize );
 
-	outMsgBuf.WriteBuffer( (const char*)&dataHeader, nDataHeadSize );
+	outMsgBuf.writeBuffer( (const char*)&dataHeader, nDataHeadSize );
 
 	NDUint32 nCRC32			= 0;
 	NDUint32 nOriginalSize	= 0;
@@ -40,13 +40,13 @@ NDBool NDProtocolPacket::composePacket( NDByteBuffer& outMsgBuf, NDProtocol& pro
 	NDUint32 nUint32Size	= sizeof(NDUint32);
 	if ( NDTrue == bCrc )
 	{
-		outMsgBuf.WriteBuffer( (const char*)&nCRC32, nUint32Size );
+		outMsgBuf.writeBuffer( (const char*)&nCRC32, nUint32Size );
 		nExtraHeadSize += nUint32Size;
 	}
 
 	if ( NDTrue == bCompression )
 	{
-		outMsgBuf.WriteBuffer( (const char*)&nOriginalSize, nUint32Size );
+		outMsgBuf.writeBuffer( (const char*)&nOriginalSize, nUint32Size );
 		nExtraHeadSize += nUint32Size;
 	}
 
@@ -59,27 +59,27 @@ NDBool NDProtocolPacket::composePacket( NDByteBuffer& outMsgBuf, NDProtocol& pro
 			return NDFalse;
 		}
 		NDOStreamImpl out( *pProtocolBuf );
-		if ( NDFalse == protocol.Serialize(out) )
+		if ( NDFalse == protocol.serialize(out) )
 		{
 			NDByteBufferPool::getInstance()->destroyByteBuffer( pProtocolBuf );
 			return NDFalse;
 		}
 
-		nOriginalSize = pProtocolBuf->GetDataSize();
+		nOriginalSize = pProtocolBuf->getDataSize();
 		NDUint32 nPlenty = nOriginalSize + 512;
-		if (nPlenty > outMsgBuf.GetSpaceSize())
+		if (nPlenty > outMsgBuf.getSpaceSize())
 		{
-			outMsgBuf.ReSet(nPlenty);
+			outMsgBuf.reSet(nPlenty);
 		}
 
 		NDUint32 nCompression;
-		NDBool bRet = NDShareBaseGlobal::compress( (char*)(outMsgBuf.ReadBuffer() + nDataHeadSize + nExtraHeadSize), &nCompression, (const char*)pProtocolBuf->ReadBuffer(), nOriginalSize );
+		NDBool bRet = NDShareBaseGlobal::compress( (char*)(outMsgBuf.readBuffer() + nDataHeadSize + nExtraHeadSize), &nCompression, (const char*)pProtocolBuf->readBuffer(), nOriginalSize );
 		if ( NDFalse == bRet )
 		{
 			NDByteBufferPool::getInstance()->destroyByteBuffer( pProtocolBuf );
 			return NDFalse;
 		}
-		outMsgBuf.SetWriteBufSize(nCompression);
+		outMsgBuf.setWriteBufSize(nCompression);
 		dataHeader.m_nBodySize = (nExtraHeadSize + nCompression);			
 		dataHeader.m_nBitWise |= ND_PDHMSG_COMPRESSION;
 
@@ -88,19 +88,19 @@ NDBool NDProtocolPacket::composePacket( NDByteBuffer& outMsgBuf, NDProtocol& pro
 	else
 	{
 		NDOStreamImpl out(outMsgBuf);
-		if ( NDFalse == protocol.Serialize(out) )
+		if ( NDFalse == protocol.serialize(out) )
 		{
 			return NDFalse;
 		}
 
-		dataHeader.m_nBodySize = outMsgBuf.GetDataSize() - nDataHeadSize;
+		dataHeader.m_nBodySize = outMsgBuf.getDataSize() - nDataHeadSize;
 	}
 
 	// data encrypt;
 	if ( NDTrue == bEncrypt )
 	{
 		m_sEncrypt.init();
-		m_sEncrypt.encryptSend( (NDUint8*)(outMsgBuf.ReadBuffer() + nDataHeadSize + nExtraHeadSize), dataHeader.m_nBodySize - nExtraHeadSize );
+		m_sEncrypt.encryptSend( (NDUint8*)(outMsgBuf.readBuffer() + nDataHeadSize + nExtraHeadSize), dataHeader.m_nBodySize - nExtraHeadSize );
 		dataHeader.m_nBitWise |= ND_PDHMSG_ENCRYPT;
 	}
 
@@ -108,7 +108,7 @@ NDBool NDProtocolPacket::composePacket( NDByteBuffer& outMsgBuf, NDProtocol& pro
 	if ( NDTrue == bCrc )
 	{
 		dataHeader.m_nBitWise |= ND_PDHMSG_CRC32;
-		nCRC32 = NDShareBaseGlobal::crc32( nCRC32, (const char*)(outMsgBuf.ReadBuffer() + nDataHeadSize + nExtraHeadSize), dataHeader.m_nBodySize - nExtraHeadSize );
+		nCRC32 = NDShareBaseGlobal::crc32( nCRC32, (const char*)(outMsgBuf.readBuffer() + nDataHeadSize + nExtraHeadSize), dataHeader.m_nBodySize - nExtraHeadSize );
 	}
 
 	//set protocol flag;
@@ -117,14 +117,14 @@ NDBool NDProtocolPacket::composePacket( NDByteBuffer& outMsgBuf, NDProtocol& pro
 	//SET PROTOCOLID;
 	dataHeader.m_nProtocolID = protocol.m_unProtocolID;
 
-	memcpy( outMsgBuf.ReadBuffer(), &dataHeader, nDataHeadSize );
+	memcpy( outMsgBuf.readBuffer(), &dataHeader, nDataHeadSize );
 	if ( NDTrue == bCrc )
 	{
-		memcpy( outMsgBuf.ReadBuffer() + nDataHeadSize, &nCRC32, nUint32Size );
+		memcpy( outMsgBuf.readBuffer() + nDataHeadSize, &nCRC32, nUint32Size );
 	}
 	if ( NDTrue == bCompression )
 	{
-		memcpy( outMsgBuf.ReadBuffer() + nDataHeadSize + nUint32Size, &nOriginalSize, nUint32Size );
+		memcpy( outMsgBuf.readBuffer() + nDataHeadSize + nUint32Size, &nOriginalSize, nUint32Size );
 	}
 
 	return NDTrue;
@@ -145,9 +145,9 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& decryptBuf, NDByteBuffer& en
 	if ( bCrc )
 	{
 		NDUint32 nSessionID = 0;
-		encryptBuf.ReadBuffer( (char*)&nSessionID, nSessionIDSize );
+		encryptBuf.readBuffer( (char*)&nSessionID, nSessionIDSize );
 
-		char* pCurEncryptBuf = encryptBuf.ReadBuffer();
+		char* pCurEncryptBuf = encryptBuf.readBuffer();
 		memcpy( &nRecvCRC, pCurEncryptBuf, nUint32Size);
 		memcpy( pCurEncryptBuf, &nSessionID, nSessionIDSize);
 		nExtraHeadSize += nUint32Size;
@@ -156,9 +156,9 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& decryptBuf, NDByteBuffer& en
 	if ( bCompression )
 	{
 		NDUint32 nSessionID = 0;
-		encryptBuf.ReadBuffer( (char*)&nSessionID, nSessionIDSize );
+		encryptBuf.readBuffer( (char*)&nSessionID, nSessionIDSize );
 
-		char* pCurEncryptBuf = encryptBuf.ReadBuffer();
+		char* pCurEncryptBuf = encryptBuf.readBuffer();
 		memcpy( &nOriginalSize, pCurEncryptBuf, nUint32Size);
 		memcpy( pCurEncryptBuf, &nSessionID, nSessionIDSize);
 		nExtraHeadSize += nUint32Size;
@@ -169,7 +169,7 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& decryptBuf, NDByteBuffer& en
 		return NDFalse;
 	}
 
-	char* pEncryptBuf = encryptBuf.ReadBuffer();
+	char* pEncryptBuf = encryptBuf.readBuffer();
 	//crc code;
 	if ( bCrc )
 	{
@@ -191,19 +191,19 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& decryptBuf, NDByteBuffer& en
 	//uncompress code;
 	if ( bCompression )
 	{
-		NDUint32 nDecryptBufSize = decryptBuf.GetCapacitySize();
+		NDUint32 nDecryptBufSize = decryptBuf.getCapacitySize();
 		NDUint32 nNeedBufSize	 = (nOriginalSize + nSessionIDSize);
 		if ( nDecryptBufSize < nNeedBufSize )
 		{
-			decryptBuf.ReSet( nNeedBufSize );
+			decryptBuf.reSet( nNeedBufSize );
 		}
-		decryptBuf.WriteBuffer( pEncryptBuf, nSessionIDSize );
+		decryptBuf.writeBuffer( pEncryptBuf, nSessionIDSize );
 
 		NDUint32 nUnCompression;
-		NDBool bRet = NDShareBaseGlobal::uncompress((char*)(decryptBuf.ReadBuffer()+nSessionIDSize), &nUnCompression, (const char*)(pEncryptBuf + nSessionIDSize), dataHeader.m_nBodySize - nExtraHeadSize );
+		NDBool bRet = NDShareBaseGlobal::uncompress((char*)(decryptBuf.readBuffer()+nSessionIDSize), &nUnCompression, (const char*)(pEncryptBuf + nSessionIDSize), dataHeader.m_nBodySize - nExtraHeadSize );
 		if ( NDTrue == bRet )
 		{
-			decryptBuf.SetWriteBufSize(nUnCompression);
+			decryptBuf.setWriteBufSize(nUnCompression);
 		}
 		else
 		{
@@ -221,7 +221,7 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& recvMsgOriginalBuf, NDParseS
 	NDUint32 nHeadTypeSize = sizeof( dataHeader );
 	memset( &dataHeader, 0, nHeadTypeSize );
 
-	NDUint32 nRecvDataSize = recvMsgOriginalBuf.GetDataSize();
+	NDUint32 nRecvDataSize = recvMsgOriginalBuf.getDataSize();
 
 	if ( nRecvDataSize <= nHeadTypeSize )
 	{	//recv data less than header size;
@@ -235,9 +235,9 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& recvMsgOriginalBuf, NDParseS
 
 	do
 	{
-		recvMsgOriginalBuf.SetRollBackFlag();
+		recvMsgOriginalBuf.setRollBackFlag();
 		//read header;
-		recvMsgOriginalBuf.ReadIntactBuffer( (char*)&dataHeader, nHeadTypeSize );
+		recvMsgOriginalBuf.readIntactBuffer( (char*)&dataHeader, nHeadTypeSize );
 		if ( dataHeader.m_nBodySize > MAX_MSGPACKET_SIZE )
 		{	//beyond max packet size;
 			//handleClose();
@@ -247,8 +247,8 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& recvMsgOriginalBuf, NDParseS
 
 		if ( ( nRecvDataSize - nHeadTypeSize ) < dataHeader.m_nBodySize )
 		{	// 数据不足组成一个包;
-			recvMsgOriginalBuf.RollBack();
-			recvMsgOriginalBuf.CancelRollBack();
+			recvMsgOriginalBuf.rollBack();
+			recvMsgOriginalBuf.cancelRollBack();
 			break;
 		}
 		// body size is enough so that can make up a packet;
@@ -271,17 +271,17 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& recvMsgOriginalBuf, NDParseS
 		NDByteBuffer* pParseBuffer = NDByteBufferPool::getInstance()->createByteBuffer();
 		if ( NULL == pParseBuffer )
 		{
-			recvMsgOriginalBuf.RollBack();
-			recvMsgOriginalBuf.CancelRollBack();
+			recvMsgOriginalBuf.rollBack();
+			recvMsgOriginalBuf.cancelRollBack();
 			bRet = NDFalse;
 			break;
 		}
 
-		pParseBuffer->WriteBuffer( (const char*)&refNDParseSessionDataEx.m_nSessionID, nUint32Size );
-		pParseBuffer->WriteBuffer( recvMsgOriginalBuf, dataHeader.m_nBodySize );
+		pParseBuffer->writeBuffer( (const char*)&refNDParseSessionDataEx.m_nSessionID, nUint32Size );
+		pParseBuffer->writeBuffer( recvMsgOriginalBuf, dataHeader.m_nBodySize );
 		//set have readbuffer size;
-		recvMsgOriginalBuf.SetReadBufSize( dataHeader.m_nBodySize );
-		recvMsgOriginalBuf.CancelRollBack();
+		recvMsgOriginalBuf.setReadBufSize( dataHeader.m_nBodySize );
+		recvMsgOriginalBuf.cancelRollBack();
 
 		if ( NDFalse == parsePacketAndPutQueue( pParseBuffer, dataHeader ) )
 		{
@@ -293,7 +293,7 @@ NDBool NDProtocolPacket::parsePacket( NDByteBuffer& recvMsgOriginalBuf, NDParseS
 
 		++refNDParseSessionDataEx.m_nParsePacket;
 
-		nRecvDataSize = recvMsgOriginalBuf.GetDataSize();
+		nRecvDataSize = recvMsgOriginalBuf.getDataSize();
 		memset( &dataHeader, 0, nHeadTypeSize );
 
 	} while ( nRecvDataSize > nHeadTypeSize );
@@ -329,7 +329,7 @@ NDBool NDProtocolPacket::parsePacketAndPutQueue( NDByteBuffer* pParseBuffer, con
 		if ( refDataHeader.m_nBodySize == nUint32Size )
 		{	//dispose ping protocol (ping协议不加解密.不压缩.不计算crc);
 			NDUint32 nProtocolID	= 0;
-			char* pszBuf			= pParseBuffer->ReadBuffer();
+			char* pszBuf			= pParseBuffer->readBuffer();
 
 			memcpy( &nProtocolID, pszBuf + nUint32Size, refDataHeader.m_nBodySize );
 			//if ( CMD_PING_PROTOCOL == nProtocolID )

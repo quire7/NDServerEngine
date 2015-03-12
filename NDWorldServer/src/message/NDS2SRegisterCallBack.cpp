@@ -1,11 +1,10 @@
 #include "message/NDS2SRegisterCallBack.h"
 
-//#include "../../NDServerShare/include/Protocol/NDCenterToNDGameDB/NDC2GDB_Register.h"
-#include "protocol/NDWorldToNDLogin/NDWS2LS_Register.h"
-//#include "../../NDServerShare/include/protocol/NDGateToNDCenter/NDG2C_Register.h"
-//#include "../../NDServerShare/include/protocol/NDMapToNDCenter/NDM2C_Register.h"
 
-//#include "../RemoteServerInfo/NDMapServerInfo.h"
+#include "protocol/NDWorldToNDLogin/NDWS2LS_Register.h"
+#include "protocol/NDGameToNDWorld/NDGS2WS_Register.h"
+#include "protocol/NDRoomToNDWorld/NDRS2WS_Register.h"
+
 
 #include "main/local/NDWorldServer.h"
 
@@ -15,15 +14,15 @@ NDS2SRegisterCallBack::NDS2SRegisterCallBack(void)
 {
 	//NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMD_NDCS2GDB_Register_Res, this )
 	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_NDLS2WS_Register_Res, this )
-	//NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMD_NDG2CS_Register_Req, this )
-	//NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMD_NDM2CS_Register_Req, this )
+	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_NDRS2WS_Register_Req, this )
+	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_NDGS2WS_Register_Req, this )
 }
 
 NDS2SRegisterCallBack::~NDS2SRegisterCallBack(void)
 {
 }
 
-NDBool NDS2SRegisterCallBack::Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
+NDBool NDS2SRegisterCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
 	NDBool	bRet = NDFalse;
 
@@ -39,16 +38,16 @@ NDBool NDS2SRegisterCallBack::Process( NDIStream& rIStream, NDProtocolHeader& pr
 			bRet = ls2wsRegisterResDispose( rIStream, protocolHeader );
 		}
 		break;
-	//case CMD_NDG2CS_Register_Req:
-	//	{
-	//		bRet = g2cRegisterReqDispose( rIStream, protocolHeader );
-	//	}
-	//	break;
-	//case CMD_NDM2CS_Register_Req:
-	//	{
-	//		bRet = m2cRegisterReqDispose( rIStream, protocolHeader );
-	//	}
-	//	break;
+	case CMDP_NDRS2WS_Register_Req:
+		{
+			bRet = rs2wsRegisterReqDispose( rIStream, protocolHeader );
+		}
+		break;
+	case CMDP_NDGS2WS_Register_Req:
+		{
+			bRet = gs2wsRegisterReqDispose( rIStream, protocolHeader );
+		}
+		break;
 	}
 
 	return bRet;
@@ -58,7 +57,7 @@ NDBool NDS2SRegisterCallBack::Process( NDIStream& rIStream, NDProtocolHeader& pr
 //NDBool NDS2SRegisterCallBack::c2gdbRegisterResDispose( NDIStream& rIStream, NDProtocolHeader& header )
 //{
 //	NDCS2GDB_Register_Res registerRes;
-//	if ( NDFalse == registerRes.Deserialize(rIStream) ) 
+//	if ( NDFalse == registerRes.deserialize(rIStream) ) 
 //	{
 //		NDLOG_ERROR( " [NDS2SRegisterCallBack::c2gdbRegisterResDispose] NDC2GDB_Register_Res deserialize failed! " )
 //		return NDFalse;
@@ -101,7 +100,7 @@ NDBool NDS2SRegisterCallBack::Process( NDIStream& rIStream, NDProtocolHeader& pr
 NDBool NDS2SRegisterCallBack::ls2wsRegisterResDispose( NDIStream& rIStream, NDProtocolHeader& header )
 {
 	NDLS2WS_Register_Res registerRes;
-	if ( NDFalse == registerRes.Deserialize(rIStream) ) 
+	if ( NDFalse == registerRes.deserialize(rIStream) ) 
 	{
 		NDLOG_ERROR( " [NDS2SRegisterCallBack::ls2wsRegisterResDispose] NDLS2WS_Register_Res deserialize failed!" )
 		return NDFalse;
@@ -133,117 +132,96 @@ NDBool NDS2SRegisterCallBack::ls2wsRegisterResDispose( NDIStream& rIStream, NDPr
 	return NDTrue;
 }
 
-//NDBool NDS2SRegisterCallBack::g2cRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& header )
-//{
-//	NDG2C_Register_Req	registerReq;
-//	if ( NDFalse == registerReq.Deserialize(rIStream) )
-//	{
-//		NDLOG_ERROR( " [NDS2SRegisterCallBack::g2cRegisterReqDispose] NDG2C_Register_Req deserialize failed! " )
-//		return NDFalse;
-//	}
-//
-//	NDRemoteServerInfo* pGateServerInfo = new NDRemoteServerInfo;
-//	if ( NULL == pGateServerInfo )
-//	{
-//		NDLOG_ERROR( " [NDS2SRegisterCallBack::g2cRegisterReqDispose] pGateServerInfo is NULL! " )
-//		return NDFalse;
-//	}
-//
-//	pGateServerInfo->setServerType( GATE_SERVER );
-//	pGateServerInfo->setServerName( "NDGateServer" );
-//
-//	pGateServerInfo->setSessionID( header.m_nSessionID );
-//	pGateServerInfo->setLoadFactor( NDLoadFactor(1000) );
-//	pGateServerInfo->setNetAddress( registerReq.m_netAddress );
-//
-//	NDGateServerManager* pGateServerMgr = sNDCenterServer.gateServerManager();
-//	if ( NULL == pGateServerMgr )
-//	{
-//		NDLOG_ERROR( " [NDS2SRegisterCallBack::g2cRegisterReqDispose] pGateServerMgr is NULL! " )
-//		return NDFalse;
-//	}
-//
-//	//the first gate server info send to login server;
-//	if ( NDTrue == pGateServerMgr->isEmptyRemoteServerInfo() )
-//	{
-//		NDCS2L_LoadFactor_Nty loadFactorNty;
-//		loadFactorNty.m_stBestGate			= pGateServerInfo->getNetAddress();
-//		loadFactorNty.m_nBestGateSessionID	= pGateServerInfo->getSessionID();
-//		loadFactorNty.m_stLoadFactor		= NDLoadFactor(1000);
-//
-//		NDServerManager::getSingleton().sendToServer( loadFactorNty, LOGIN_SERVER );
-//	} 
-//	pGateServerMgr->addRemoteServer( pGateServerInfo );
-//
-//	NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GT2CS );
-//
-//	const NDNetAddress& rNetAddress = pGateServerInfo->getNetAddress();
-//
-//	std::ostringstream oStr;
-//	oStr		<< " " 
-//				<< pGateServerInfo->getServerName()		<< "("
-//				<< rNetAddress.getIP()					<< ":"
-//				<< rNetAddress.getPort()				<< ")"
-//				<< " connected! ";
-//	NDLOG_INFO( oStr.str().c_str() )
-//	oStr.clear();
-//
-//
-//	NDG2C_Register_Res	registerRes;
-//	registerRes.m_nErrorCode = eND_SRS_OK;
-//	registerRes.m_nGateWayID = 0;
-//	registerRes.m_nWorldID   = 0;
-//
-//	sNDCenterServer.mapServerManager()->getAllMapServerInfo( registerRes.m_gameServerAddress );
-//
-//	return NDServerManager::getSingleton().sendToClient( registerRes, header.m_nSessionID );
-//	 
-//}
-//
-//NDBool NDS2SRegisterCallBack::m2cRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& header )
-//{
-//	NDM2CS_Register_Req	m2csRegisterReq;
-//	if ( NDFalse == m2csRegisterReq.Deserialize(rIStream) )
-//	{
-//		NDLOG_ERROR( " [NDS2SRegisterCallBack::m2cRegisterReqDispose] NDM2C_Register_Req deserialize failed! " )
-//		return NDFalse;
-//	}
-//
-//	NDMapServerInfo* pMapServerInfo =  new NDMapServerInfo;
-//	if ( NULL == pMapServerInfo )
-//	{
-//		NDLOG_ERROR( " [NDS2SRegisterCallBack::m2cRegisterReqDispose] new NDMapServerInfo failed! " )
-//		return NDFalse;
-//	}
-//
-//	pMapServerInfo->setServerType( MAP_SERVER );
-//	pMapServerInfo->setServerName( "NDMapServer" );
-//	//pMapServerInfo->setLoadFactor(NDLoadFactor(2000));
-//	pMapServerInfo->setSessionID( header.m_nSessionID );
-//	pMapServerInfo->setNetAddress( m2csRegisterReq.m_netAddress );
-//	pMapServerInfo->setMapID(m2csRegisterReq.m_nMapID);
-//
-//	sNDCenterServer.mapServerManager()->addRemoteServer( pMapServerInfo );
-//
-//	sNDCenterServer.gateServerManager()->sendMapInfo( pMapServerInfo );
-//
-//	NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_M2CS );
-//
-//	const NDNetAddress& rNetAddress = pMapServerInfo->getNetAddress();
-//
-//	std::ostringstream oStr;
-//	oStr		<< " " 
-//				<< pMapServerInfo->getServerName()		<< "("
-//				<< rNetAddress.getIP()					<< ":"
-//				<< rNetAddress.getPort()				<< ")"
-//				<< " connected! ";
-//	NDLOG_INFO( oStr.str().c_str() )
-//	oStr.clear();
-//
-//	NDM2C_Register_Res	m2cRegisterRes;
-//	m2cRegisterRes.m_nErrorCode	= eND_SRS_OK;
-//
-//	return NDServerManager::getSingleton().sendToClient(  m2cRegisterRes, header.m_nSessionID );
-//
-//}
+NDBool NDS2SRegisterCallBack::rs2wsRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& header )
+{
+	NDRS2WS_Register_Req	registerReq;
+	if ( NDFalse == registerReq.deserialize(rIStream) )
+	{
+		NDLOG_ERROR( " [NDS2SRegisterCallBack::rs2wsRegisterReqDispose] NDRS2WS_Register_Req deserialize failed! " )
+		return NDFalse;
+	}
+
+	NDRemoteServerInfo* pRoomServerInfo = new NDRemoteServerInfo;
+	if ( NULL == pRoomServerInfo )
+	{
+		NDLOG_ERROR( " [NDS2SRegisterCallBack::rs2wsRegisterReqDispose] pRoomServerInfo is NULL! " )
+		return NDFalse;
+	}
+
+	pRoomServerInfo->setServerType( ROOM_SERVER );
+	pRoomServerInfo->setServerName( "NDRoomServer" );
+	pRoomServerInfo->setSessionID( header.m_nSessionID );
+	//pGateServerInfo->setLoadFactor( NDLoadFactor(1000) );
+	pRoomServerInfo->setNetAddress( registerReq.m_netAddress );
+	pRoomServerInfo->setServerID( registerReq.m_nRoomServerID );
+
+	NDRemoteServerManager* pRoomServerMgr = sNDWorldServer.roomServerManager();
+	if ( NULL == pRoomServerMgr )
+	{
+		NDLOG_ERROR( " [NDS2SRegisterCallBack::rs2wsRegisterReqDispose] pRoomServerMgr is NULL! " )
+		return NDFalse;
+	}
+
+	pRoomServerMgr->addRemoteServer( pRoomServerInfo );
+
+	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GT2CS );
+
+	const NDSocketAddress& rNetAddress = pRoomServerInfo->getNetAddress();
+
+	char szBuf[BUF_LEN_128] = {0};
+	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [RoomServerID:%u] connected. ",	pRoomServerInfo->getServerName(),
+																						rNetAddress.getIP(),
+																						rNetAddress.getPort(),
+																						pRoomServerInfo->getServerID() );
+	NDLOG_INFO( szBuf )
+
+
+	NDRS2WS_Register_Res	registerRes;
+	registerRes.m_nErrorCode = eND_SRS_OK;
+
+	return NDServerManager::getSingleton().sendToClient( registerRes, header.m_nSessionID );
+}
+
+NDBool NDS2SRegisterCallBack::gs2wsRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& header )
+{
+	NDGS2WS_Register_Req	gs2wsRegisterReq;
+	if ( NDFalse == gs2wsRegisterReq.deserialize(rIStream) )
+	{
+		NDLOG_ERROR( " [NDS2SRegisterCallBack::gs2wsRegisterReqDispose] NDGS2WS_Register_Req deserialize failed! " )
+		return NDFalse;
+	}
+
+	NDRemoteServerInfo* pMapServerInfo =  new NDRemoteServerInfo;
+	if ( NULL == pMapServerInfo )
+	{
+		NDLOG_ERROR( " [NDS2SRegisterCallBack::gs2wsRegisterReqDispose] new NDGameServerInfo failed! " )
+		return NDFalse;
+	}
+
+	pMapServerInfo->setServerType( GAME_SERVER );
+	pMapServerInfo->setServerName( "NDGameServer" );
+	pMapServerInfo->setSessionID( header.m_nSessionID );
+	pMapServerInfo->setNetAddress( gs2wsRegisterReq.m_netAddress );
+	pMapServerInfo->setServerID( gs2wsRegisterReq.m_nMapID );
+
+	sNDWorldServer.gameServerManager()->addRemoteServer( pMapServerInfo );
+
+	//sNDCenterServer.gateServerManager()->sendMapInfo( pMapServerInfo );
+
+	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_M2CS );
+
+	const NDSocketAddress& rNetAddress = pMapServerInfo->getNetAddress();
+
+	char szBuf[BUF_LEN_128] = {0};
+	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [GameServerID:%u] connected. ", pMapServerInfo->getServerName(),
+																						rNetAddress.getIP(),
+																						rNetAddress.getPort(),
+																						pMapServerInfo->getServerID() );
+	NDLOG_INFO( szBuf )
+
+	NDGS2WS_Register_Res	gs2wsRegisterRes;
+	gs2wsRegisterRes.m_nErrorCode	= eND_SRS_OK;
+
+	return NDServerManager::getSingleton().sendToClient(  gs2wsRegisterRes, header.m_nSessionID );
+}
 

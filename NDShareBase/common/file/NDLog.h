@@ -17,23 +17,29 @@
 
 #ifndef NDLOG_INFO
 #define NDLOG_INFO( info ) \
+	do { \
 		if ( g_bConsole ) { NDCONSOLE_LOG_INFO << info << NDCONSOLE_LOG_END; } \
 		NDFILE_LOG_INFO( info )	\
-		NDSM_LOG_INFO( info )
+		NDSM_LOG_INFO( info )	\
+	} while(0);
 #endif
 
 #ifndef NDLOG_WARNGING
 #define NDLOG_WARNGING( info ) \
+	do { \
 		if ( g_bConsole ) { NDCONSOLE_LOG_WARNGING << info << NDCONSOLE_LOG_END; } \
 		NDFILE_LOG_WARNGING( info )	\
-		NDSM_LOG_WARNGING( info )
+		NDSM_LOG_WARNGING( info )	\
+	} while(0);
 #endif
 
 #ifndef NDLOG_ERROR
 #define NDLOG_ERROR( info ) \
+	do { \
 		if ( g_bConsole ) { NDCONSOLE_LOG_ERROR << info << NDCONSOLE_LOG_END; } \
-		NDFILE_LOG_ERROR( info )	\
-		NDSM_LOG_ERROR( info )
+		NDFILE_LOG_ERROR( info ) \
+		NDSM_LOG_ERROR( info )	 \
+	} while(0);
 #endif
 
 #endif

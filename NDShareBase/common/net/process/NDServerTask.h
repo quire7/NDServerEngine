@@ -19,6 +19,14 @@ class NDByteBuffer;
 class NDProcess;
 class NDServerTask
 {
+private:
+	typedef	NDMessageQueue< NDByteBuffer* >		MsgBufQueue;
+
+	NDProcess*									m_pProcess;
+	MsgBufQueue									m_msgDeque;
+
+	static	NDServerTask*						m_pNDServerTask;
+
 public:
 	static NDServerTask* getInstance();
 	static void releaseInstance();
@@ -41,13 +49,6 @@ private:
 	NDServerTask(const NDServerTask& other);
 	NDServerTask& operator = (const NDServerTask& other);
 
-private:
-	typedef	NDMessageQueue< NDByteBuffer* >		MsgBufQueue;
-	
-	NDProcess*									m_pProcess;
-	MsgBufQueue									m_msgDeque;
-
-	static	NDServerTask*						m_pNDServerTask;
 };
 
 _NDSHAREBASE_END

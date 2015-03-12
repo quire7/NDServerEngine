@@ -109,7 +109,18 @@ NDBool NDServerManager::startServer( NDLocalServer* pLocalServer, NDBool bConnOt
 	m_pListenNetIO->setCommonDisconnectNtyProtocol( new NDDisconnectNtyProtocol );
 
 	setDisposeProtocol();
-	
+
+	//m_pListenNetIO->SetCheckSessionTimer();
+
+	ostringstream& oStr = m_pListenServer->getostringstream();
+	oStr		<< " " << pListenServerInfo->getServerName() << " [" << pListenServerInfo->getServerIP() << ":" << pListenServerInfo->getServerPort() << "] listening ...";
+
+	string strString( oStr.str() );
+	const char* szStr = strString.c_str();
+	NDLOG_INFO( szStr )
+	oStr.clear();
+	oStr.str("");
+
 	if ( NDTrue == bConnOtherServer )
 	{
 		NDConnectProcess* pConnecter = m_pListenServer->connectProcess();
@@ -123,18 +134,6 @@ NDBool NDServerManager::startServer( NDLocalServer* pLocalServer, NDBool bConnOt
 			return NDFalse;
 		}
 	}
-
-
-	//m_pListenNetIO->SetCheckSessionTimer();
-
-	ostringstream& oStr = m_pListenServer->getostringstream();
-	oStr		<< " " << pListenServerInfo->getServerName() << " [" << pListenServerInfo->getServerIP() << ":" << pListenServerInfo->getServerPort() << "] listening ...";
-
-	string strString( oStr.str() );
-	const char* szStr = strString.c_str();
-	NDLOG_INFO( szStr )
-	oStr.clear();
-	oStr.str("");
 
 	m_pListenServer->setState( NDLocalServer::eServState_Starting );
 

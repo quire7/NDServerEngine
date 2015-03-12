@@ -9,7 +9,7 @@ public:
 	NDS2SRegisterCallBack(void);
 	~NDS2SRegisterCallBack(void);
 
-	NDBool Process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
 	NDBool c2lRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );

@@ -19,7 +19,7 @@ class NDEchoProtocol : public NDProtocol
 {
 public:
 	NDEchoProtocol() : NDProtocol(1) { Clear(); }
-	NDBool Serialize( NDOStream &rOSteam )
+	NDBool serialize( NDOStream &rOSteam )
 	{
 		//const char *pszData = m_strData.c_str();
 
@@ -64,7 +64,7 @@ public:
 
 		return true;
 	}
-	NDBool Deserialize( NDIStream &rIStream )
+	NDBool deserialize( NDIStream &rIStream )
 	{
 		//NDUint32 nSize = 0;
 		//rIStream.Read((void*)&nSize, sizeof(nSize));
