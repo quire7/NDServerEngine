@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="common;common/mysql;common/zlib;commonImpl;windows"
+				AdditionalIncludeDirectories="common;common/mysql;common/zlib;common/lua;commonImpl;windows"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -50,7 +50,7 @@
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4127;4131;4244;4996;"
+				DisableSpecificWarnings="4127;4131;4244;4310;4702;4996;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -167,7 +167,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="common;common/mysql;common/zlib;commonImpl;windows"
+				AdditionalIncludeDirectories="common;common/mysql;common/zlib;common/lua;commonImpl;windows"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -177,7 +177,7 @@
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4127;4131;4244;4996;"
+				DisableSpecificWarnings="4127;4131;4244;4310;4702;4996;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -918,6 +918,106 @@
 							>
 						</File>
 					</Filter>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="lua"
+				>
+				<File
+					RelativePath=".\common\lua\lauxlib.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\lua\lua.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\lua\lua.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\common\lua\luaconf.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\lua\lualib.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="luabridge"
+				>
+				<File
+					RelativePath=".\common\luabridge\LuaBridge.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\luabridge\RefCountedObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\luabridge\RefCountedPtr.h"
+					>
+				</File>
+				<Filter
+					Name="detail"
+					>
+					<File
+						RelativePath=".\common\luabridge\detail\CFunctions.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\ClassInfo.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\Constructor.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\dump.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\FuncTraits.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\Iterator.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\LuaException.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\LuaHelpers.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\LuaRef.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\Namespace.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\Stack.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\TypeList.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\TypeTraits.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\luabridge\detail\Userdata.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 		</Filter>
@@ -1781,6 +1881,234 @@
 				</File>
 				<File
 					RelativePath=".\commonImpl\zlib\zutil.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="lua"
+				>
+				<File
+					RelativePath=".\commonImpl\lua\lapi.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lapi.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lauxlib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lbaselib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lbitlib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lcode.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lcode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lcorolib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lctype.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lctype.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ldblib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ldebug.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ldebug.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ldo.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ldo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ldump.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lfunc.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lfunc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lgc.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lgc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\linit.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\liolib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\llex.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\llex.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\llimits.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lmathlib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lmem.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lmem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\loadlib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lobject.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lobject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lopcodes.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lopcodes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\loslib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lparser.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lparser.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lprefix.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lstate.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lstate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lstring.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lstring.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lstrlib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ltable.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ltable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ltablib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ltm.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\ltm.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lua.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\luac.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lundump.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lundump.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lutf8lib.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lvm.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lvm.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lzio.c"
+					>
+				</File>
+				<File
+					RelativePath=".\commonImpl\lua\lzio.h"
 					>
 				</File>
 			</Filter>

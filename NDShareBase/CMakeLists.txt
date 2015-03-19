@@ -20,6 +20,7 @@ endforeach()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/commonImpl)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/mysql)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/zlib)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/lua)
 
 #包含c文件;
 set(zlib_c_path ${CMAKE_CURRENT_SOURCE_DIR}/commonImpl/zlib)
@@ -38,6 +39,42 @@ SET(SRC_C ${zlib_c_path}/adler32.c
 					${zlib_c_path}/trees.c
 					${zlib_c_path}/uncompr.c
 					${zlib_c_path}/zutil.c)
+					
+set(lua_c_path ${CMAKE_CURRENT_SOURCE_DIR}/commonImpl/lua)
+SET(SRC_LUA ${lua_c_path}/lapi.c
+					${lua_c_path}/lcode.c
+					${lua_c_path}/lctype.c
+					${lua_c_path}/ldebug.c
+					${lua_c_path}/ldo.c
+					${lua_c_path}/ldump.c
+					${lua_c_path}/lfunc.c
+					${lua_c_path}/lgc.c
+					${lua_c_path}/llex.c
+					${lua_c_path}/lmem.c
+					${lua_c_path}/lobject.c
+					${lua_c_path}/lopcodes.c
+					${lua_c_path}/lparser.c
+					${lua_c_path}/lstate.c
+					${lua_c_path}/lstring.c
+					${lua_c_path}/ltable.c
+					${lua_c_path}/ltm.c
+					${lua_c_path}/lundump.c
+					${lua_c_path}/lvm.c
+					${lua_c_path}/lzio.c
+					${lua_c_path}/lauxlib.c
+					${lua_c_path}/lbaselib.c
+					${lua_c_path}/lbitlib.c
+					${lua_c_path}/lcorolib.c
+					${lua_c_path}/ldblib.c
+					${lua_c_path}/liolib.c
+					${lua_c_path}/lmathlib.c
+					${lua_c_path}/loslib.c
+					${lua_c_path}/lstrlib.c
+					${lua_c_path}/ltablib.c
+					${lua_c_path}/lutf8lib.c
+					${lua_c_path}/loadlib.c
+					${lua_c_path}/linit.c)
+										
 #包含cpp文件;
 SET(SRC_CPP ${CMAKE_CURRENT_SOURCE_DIR}/linux/NDShareBaseLinuxAll.cpp)
 
@@ -48,14 +85,14 @@ MESSAGE(STATUS "this is CURRENT dir: " ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 IF(UNIX)
-ADD_DEFINITIONS(-DLINUX -g -O0)
+ADD_DEFINITIONS(-DLINUX -DLUA_USE_LINUX -g -O0)
 SET(CMAKE_CXX_COMPILER g++)
 SET(CMAKE_CXX_FLAGS -Wall)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../DebugBin/lib)
 
 #LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/dep/lib)
 
-ADD_LIBRARY(NDShareBase STATIC ${SRC_C} ${SRC_CPP})
+ADD_LIBRARY(NDShareBase STATIC ${SRC_C} ${SRC_LUA} ${SRC_CPP})
 
 #TARGET_LINK_LIBRARIES(NDShareBase GMemPool mysqlclient)
 

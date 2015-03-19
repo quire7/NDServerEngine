@@ -54,6 +54,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NDRoomServer", "NDRoomServe
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NDGatewayServer", "NDGatewayServer\NDGatewayServer.vcproj", "{24E7889C-1E15-41EF-83F2-CB2D5F1A545A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8763A55E-26C3-4DF6-9FEA-607941945BB8} = {8763A55E-26C3-4DF6-9FEA-607941945BB8}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{37D1BE9F-CAC8-47C4-8F91-932173EF9FFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExcelToTxt", "Tool\ExcelToTxt\ExcelToTxt.vcproj", "{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,8 +166,19 @@ Global
 		{24E7889C-1E15-41EF-83F2-CB2D5F1A545A}.UnityDebug|Win32.Build.0 = UnityDebug|Win32
 		{24E7889C-1E15-41EF-83F2-CB2D5F1A545A}.UnityRelease|Win32.ActiveCfg = UnityRelease|Win32
 		{24E7889C-1E15-41EF-83F2-CB2D5F1A545A}.UnityRelease|Win32.Build.0 = UnityRelease|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.Debug|Win32.Build.0 = Debug|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.Release|Win32.ActiveCfg = Release|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.Release|Win32.Build.0 = Release|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.UnityDebug|Win32.ActiveCfg = Debug|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.UnityDebug|Win32.Build.0 = Debug|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.UnityRelease|Win32.ActiveCfg = Release|Win32
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F}.UnityRelease|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD6B20AE-90FC-4DBE-A484-1CE44B2E411F} = {37D1BE9F-CAC8-47C4-8F91-932173EF9FFB}
 	EndGlobalSection
 EndGlobal
