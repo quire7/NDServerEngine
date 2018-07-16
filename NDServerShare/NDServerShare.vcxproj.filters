@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\local">
+      <UniqueIdentifier>{1ccdff24-01e2-412e-a13e-a02c0c40b994}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\remote">
+      <UniqueIdentifier>{b0cdce0c-ae04-4c05-b803-c3380d5a4ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\table">
+      <UniqueIdentifier>{079eb992-7a9a-40d9-8577-98b708c41af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\local">
+      <UniqueIdentifier>{cad57a6d-5ac7-4bac-9ea9-1e31a2deadaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\remote">
+      <UniqueIdentifier>{9f08ff03-a746-4b84-9bf1-26f62466fa41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol">
+      <UniqueIdentifier>{50ca2f3e-3f52-4c5c-ad4e-ac3e19f3e442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDWorldToNDLogin">
+      <UniqueIdentifier>{f6645991-8fcd-4e11-b5af-722b7cff1776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDGameToNDWorld">
+      <UniqueIdentifier>{c9c4c03d-7005-4c93-9272-0c1dd69725fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDGameToNDData">
+      <UniqueIdentifier>{bfd52846-1d16-4862-aee3-05ab0a2c6d97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDRoomToNDWorld">
+      <UniqueIdentifier>{8b1ec69d-c7d7-4174-989c-f9684f4566e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDRoomToNDGame">
+      <UniqueIdentifier>{20c7c3c6-e0ff-4b46-ac8e-3efee86c43e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDGatewayToNDGame">
+      <UniqueIdentifier>{13b7a8d5-1c68-49a5-bf21-c796ad531bf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\NDGatewayToNDRoom">
+      <UniqueIdentifier>{665dcb83-8b8d-465c-b0ac-a499af1f565b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\table">
+      <UniqueIdentifier>{163c9564-c402-4c43-9867-fc531e535616}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDServerShare.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NDServerShareStructs.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\local\NDLocalServer.cpp">
+      <Filter>src\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\local\NDServerInfo.cpp">
+      <Filter>src\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\local\NDServerManager.cpp">
+      <Filter>src\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\local\NDXmlConfigServerCommon.cpp">
+      <Filter>src\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\remote\NDRemoteServerInfo.cpp">
+      <Filter>src\remote</Filter>
+    </ClCompile>
+    <ClCompile Include="src\remote\NDRemoteServerManager.cpp">
+      <Filter>src\remote</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\NDServerShare.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDServerShareEnums.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDServerShareMacros.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDServerShareStructs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\local\NDLocalServer.h">
+      <Filter>include\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\local\NDServerInfo.h">
+      <Filter>include\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\local\NDServerManager.h">
+      <Filter>include\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\local\NDXmlConfigServerCommon.h">
+      <Filter>include\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\remote\NDRemoteServerInfo.h">
+      <Filter>include\remote</Filter>
+    </ClInclude>
+    <ClInclude Include="include\remote\NDRemoteServerManager.h">
+      <Filter>include\remote</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDCmdProtocolS2S.h">
+      <Filter>include\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDWorldToNDLogin\NDWS2LS_Register.h">
+      <Filter>include\protocol\NDWorldToNDLogin</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGameToNDWorld\NDGS2WS_Register.h">
+      <Filter>include\protocol\NDGameToNDWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGameToNDData\NDGS2DS_PlayerData.h">
+      <Filter>include\protocol\NDGameToNDData</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGameToNDData\NDGS2DS_PlayerLogin.h">
+      <Filter>include\protocol\NDGameToNDData</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGameToNDData\NDGS2DS_Register.h">
+      <Filter>include\protocol\NDGameToNDData</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDRoomToNDWorld\NDRS2WS_Register.h">
+      <Filter>include\protocol\NDRoomToNDWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDRoomToNDGame\NDRS2GS_Register.h">
+      <Filter>include\protocol\NDRoomToNDGame</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGatewayToNDGame\NDGWS2GS_PlayerLogin.h">
+      <Filter>include\protocol\NDGatewayToNDGame</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGatewayToNDGame\NDGWS2GS_Register.h">
+      <Filter>include\protocol\NDGatewayToNDGame</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\NDGatewayToNDRoom\NDGWS2RS_Register.h">
+      <Filter>include\protocol\NDGatewayToNDRoom</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

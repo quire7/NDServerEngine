@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -195,7 +195,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -403,10 +403,26 @@
 					Name="remote"
 					>
 				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\src\main\data\NDGSPlayer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\main\data\NDGSPlayerManager.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="message"
 				>
+				<File
+					RelativePath=".\src\message\NDDS2GSCallBack.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\src\message\NDS2SRegisterCallBack.cpp"
 					>
@@ -453,10 +469,26 @@
 					Name="remote"
 					>
 				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\include\main\data\NDGSPlayer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDGSPlayerManager.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="message"
 				>
+				<File
+					RelativePath=".\include\message\NDDS2GSCallBack.h"
+					>
+				</File>
 				<File
 					RelativePath=".\include\message\NDS2SRegisterCallBack.h"
 					>

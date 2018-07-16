@@ -63,6 +63,18 @@ NDTime NDTimerBoundSlot::getFireEventTimes() const
 	return m_NDTimerEventArgs.m_nProcessMSTimes;
 }
 
+
+NDTime NDTimerBoundSlot::getFireEventIntervalTimes() const
+{
+	return m_NDTimerEventArgs.m_nStepMSTimes;
+}
+
+
+const char* NDTimerBoundSlot::getFireEventName() const
+{
+	return m_NDTimerEventArgs.m_szName;
+}
+
 NDBool NDTimerBoundSlot::fireTimerEvent()
 {
 	if ( NDFalse == connected() )

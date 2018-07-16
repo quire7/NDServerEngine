@@ -1,13 +1,13 @@
 #include "main/local/NDDataCallBack.h"
 
-
+#include "special/NDSpecialProtocol.h"
 
 #include "main/local/NDDataServer.h"
 
 
 NDDataCallBack::NDDataCallBack(void)
 {
-	NDRegisterCallBackMACRO( sNDDataServer.dataProcess(), CMDP_PING, this )
+	NDRegisterCallBackMACRO( sNDDataServer.dataProcess(), CMDP_PING_Req, this )
 	NDRegisterCallBackMACRO( sNDDataServer.dataProcess(), CMDP_DISCONNECT_NOTIFY, this )
 	//NDRegisterCallBackMACRO( sNDLoginServer.dataProcess(), CMD_TIMER_NOTIFY, this )
 }
@@ -22,7 +22,7 @@ NDBool NDDataCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocolH
 
 	switch (protocolHeader.m_nProtocolID)
 	{
-	case CMDP_PING:
+	case CMDP_PING_Req:
 		{
 			bRet = pingProtocolDispose( rIStream, protocolHeader );
 		}
@@ -55,34 +55,22 @@ NDBool NDDataCallBack::pingProtocolDispose( NDIStream& rIStream, NDProtocolHeade
 
 NDBool NDDataCallBack::disconnectNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
-	NDRemoteServerInfo* pRemoteServerInfo = sNDDataServer.gameServerManager()->getRemoteServerInfoBySessionID( protocolHeader.m_nSessionID );
-	if ( NULL != pRemoteServerInfo )
-	{	//dispose NDGameServer offline;
-		//NDRemoteGameServerCommonInfo* pGameServerInfo	= dynamic_cast<NDRemoteGameServerCommonInfo*>(pRemoteServerInfo);
-		NDRemoteServerInfo* pGameServerInfo = pRemoteServerInfo;
-		const NDSocketAddress& rNetAddress	= pGameServerInfo->getNetAddress();
-
-		char szErrorBuf[BUF_LEN_128] = {0};
-		ND_SNPRINTF( szErrorBuf, sizeof(szErrorBuf) - 1, " %s [%s:%u] [GameServerID:%u] offline. ", pGameServerInfo->getServerName(),
-																									rNetAddress.getIP(),
-																									rNetAddress.getPort(),
-																									pGameServerInfo->getServerID() );
-
-		NDLOG_ERROR( szErrorBuf )
-
-		sNDDataServer.gameServerManager()->removeRemoteServer( protocolHeader.m_nSessionID );
-	}
-	else
+	NDDisconnectNtyProtocol disconnectNty;
+	if ( NDFalse == disconnectNty.deserialize( rIStream ) )
 	{
-		//走到这里就TM的错了,根据设计只有NDGameServer连接NDDataServer.(除非设计改变);
-		char szErrorBuf[BUF_LEN_64] = {0};
-		ND_SNPRINTF( szErrorBuf, sizeof(szErrorBuf) - 1, " NDDataCallBack::disconnectNotifyDispose error type sessionID=%u. ", protocolHeader.m_nSessionID );
-		NDLOG_ERROR( szErrorBuf )
-
+		NDLOG_ERROR( " [NDDataCallBack::disconnectNotifyDispose] NDDisconnectNtyProtocol deserialize failed! " )
 		return NDFalse;
 	}
-	
-	return NDTrue;
+	//dispose NDGameServer offline;
+	if ( NDTrue == NDServerManager::getSingleton().disconnectNotifyCommonDispose( protocolHeader.m_nSessionID, disconnectNty.m_nDisconnectionType, sNDDataServer.gameServerManager() ) )
+	{	
+		return NDTrue;
+	}
+
+	//走到这里就TM的错了,根据设计只有NDGameServer连接NDDataServer.(除非设计改变);
+	NDServerManager::getSingleton().disconnectNotifyCommonErrorDispose( protocolHeader.m_nSessionID, disconnectNty.m_nDisconnectionType, "NDDataServer" );
+
+	return NDFalse;
 }
 
 //NDBool NDDataCallBack::timerNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )

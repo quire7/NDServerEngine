@@ -27,7 +27,7 @@ _NDSHAREBASE_BEGIN
 struct NDProtocolHeader
 {
 	NDUint32 m_nSessionID;
-	NDUint32 m_nProtocolID;
+	NDUint16 m_nProtocolID;
 };
 
 class NDProtocolCallBack
@@ -45,9 +45,9 @@ public:
 	NDDataProcess(void);
 	virtual ~NDDataProcess(void);
 
-	void registerCallBack( NDUint32 nProtocolID, NDProtocolCallBack *pNDCallBack );
+	void registerCallBack( NDUint16 nProtocolID, NDProtocolCallBack *pNDCallBack );
 	//just for show error start;
-	void registerProtocolIDName( NDUint32 nProtocolID, string strProtocolIDName );
+	void registerProtocolIDName( NDUint16 nProtocolID, string strProtocolIDName );
 	//just for show error end;
 
 	virtual NDBool process( NDIStream &rIStream );
@@ -61,13 +61,13 @@ private:
 	NDDataProcess& operator = (const NDDataProcess& other);
 
 protected:
-	typedef std::map< NDUint32, string >					ProtocolIDNameMap;
+	typedef std::map< NDUint16, string >					ProtocolIDNameMap;
 	typedef ProtocolIDNameMap::iterator						ProtocolIDNameMapIter;
 
 	ProtocolIDNameMap										m_ProtocolIDNameMap;
 
 private:
-	typedef std::map< NDUint32, NDProtocolCallBack* >		CallBackMap;
+	typedef std::map< NDUint16, NDProtocolCallBack* >		CallBackMap;
 	typedef CallBackMap::iterator							CallBackMapIter;
 
 	CallBackMap												m_CallBackMap;

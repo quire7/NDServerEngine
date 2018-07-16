@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\main">
+      <UniqueIdentifier>{979d0ff5-bd81-4c1c-b027-4fd8ad35986f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\local">
+      <UniqueIdentifier>{66e9e7af-c722-4f7f-9080-bb3ba6bc8ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\remote">
+      <UniqueIdentifier>{eb7348e2-01e1-4ed6-ac0b-bdd2730a6b7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\thread">
+      <UniqueIdentifier>{1ef01391-6924-446d-8f66-03357089b1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\data">
+      <UniqueIdentifier>{7f7811f6-13cb-43b8-9d4b-bbb82db76f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\table">
+      <UniqueIdentifier>{4801827a-58b1-4984-9472-e81c856ef745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\message">
+      <UniqueIdentifier>{78d35911-9fb0-4dac-a920-b1ff0eade80b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\main">
+      <UniqueIdentifier>{c4f6b904-755c-44d0-b346-25c8b195e629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\local">
+      <UniqueIdentifier>{be6d432d-7d53-4eb4-a309-03e5e59f3768}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\remote">
+      <UniqueIdentifier>{11c0b87b-4d3f-4a6d-bdbc-54487e5c2644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\thread">
+      <UniqueIdentifier>{72c9e498-9a76-4ee3-9ad9-b51cd609622e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\data">
+      <UniqueIdentifier>{a226752f-c965-4862-980a-6ac74f9d314b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\table">
+      <UniqueIdentifier>{78d56db4-c399-476e-9dee-a92ea5a3bffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\message">
+      <UniqueIdentifier>{fc9776a2-7d5d-4520-a245-a9a89094770b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDDataServer_all.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDDataCallBack.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDDataServer.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDPreCompiler.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\thread\NDDBThreadManager.cpp">
+      <Filter>src\main\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\thread\NDSelectDBThread.cpp">
+      <Filter>src\main\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\thread\NDUpdateDBThread.cpp">
+      <Filter>src\main\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDDSDataManager.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDDSPlayer.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDDSPlayerManager.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\table\NDPlayerAccountTable.cpp">
+      <Filter>src\main\table</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\table\NDPlayerMainTable.cpp">
+      <Filter>src\main\table</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDGS2DSCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDS2SRegisterCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\main\local\NDDataCallBack.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDDataServer.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDDataServerEnums.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDPreCompiler.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\thread\NDDBThreadManager.h">
+      <Filter>include\main\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\thread\NDSelectDBThread.h">
+      <Filter>include\main\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\thread\NDUpdateDBThread.h">
+      <Filter>include\main\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDDSDataManager.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDDSDataStructs.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDDSPlayer.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDDSPlayerManager.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\table\NDPlayerAccountTable.h">
+      <Filter>include\main\table</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\table\NDPlayerMainTable.h">
+      <Filter>include\main\table</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDGS2DSCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDS2SRegisterCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -195,7 +195,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -391,6 +391,114 @@
 					Name="remote"
 					>
 				</Filter>
+				<Filter
+					Name="thread"
+					>
+					<File
+						RelativePath=".\src\main\thread\NDDBThreadManager.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\thread\NDSelectDBThread.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\thread\NDUpdateDBThread.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\src\main\data\NDDSDataManager.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\data\NDDSPlayer.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\data\NDDSPlayerManager.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="table"
+					>
+					<File
+						RelativePath=".\src\main\table\NDPlayerAccountTable.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\table\NDPlayerMainTable.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="message"
@@ -441,6 +549,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\include\main\local\NDDataServerEnums.h"
+						>
+					</File>
+					<File
 						RelativePath=".\include\main\local\NDPreCompiler.h"
 						>
 					</File>
@@ -448,6 +560,54 @@
 				<Filter
 					Name="remote"
 					>
+				</Filter>
+				<Filter
+					Name="thread"
+					>
+					<File
+						RelativePath=".\include\main\thread\NDDBThreadManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\thread\NDSelectDBThread.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\thread\NDUpdateDBThread.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\include\main\data\NDDSDataManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDDSDataStructs.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDDSPlayer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDDSPlayerManager.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="table"
+					>
+					<File
+						RelativePath=".\include\main\table\NDPlayerAccountTable.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\table\NDPlayerMainTable.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter

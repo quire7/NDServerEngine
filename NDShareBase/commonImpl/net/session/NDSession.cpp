@@ -15,7 +15,8 @@ _NDSHAREBASE_BEGIN
 
 PParsePacketFun NDSession::s_pParsePacket = NULL;
 
-NDSession::NDSession( NDUint32 nSessionID ) : m_pSocket(NULL), m_nSessionID( nSessionID ), m_nSocketSendBuf( 0 ), m_nProtocolType(ND_UINT8_MAX), m_nEventFlag( EIOEventType_Invalid ), 
+NDSession::NDSession( NDUint32 nSessionID ) : m_pSocket( NULL ), m_nSessionID( nSessionID ), m_nSocketSendBuf( 0 ), 
+											m_nDisconnectionType( ESessionDisconnectionType_NULL ), m_nProtocolType( ND_UINT8_MAX ), m_nEventFlag( EIOEventType_Invalid ), 
 											m_bAlive( NDFalse ), m_bSendPipe( NDFalse ), m_nRecvPacketNum( 0 ), m_nSendPacketNum( 0 ),
 											m_nRecvPacketBytes( 0 ), m_nSendPacketBytes( 0 ), m_pSendBuffer( NULL), m_pRecvBuffer( NULL )
 {
@@ -51,6 +52,7 @@ NDBool NDSession::initSession()
 		return NDFalse;
 	}
 
+	m_nDisconnectionType= ESessionDisconnectionType_NULL;
 	m_nProtocolType		= ND_UINT8_MAX;
 	m_nEventFlag		= 0;
 	m_bAlive			= NDTrue;
@@ -82,6 +84,7 @@ NDBool NDSession::releaseSession()
 
 	m_nSocketSendBuf	= 0;
 
+	m_nDisconnectionType= ESessionDisconnectionType_NULL;
 	m_nProtocolType		= ND_UINT8_MAX;
 	m_nEventFlag		= 0;
 	m_bAlive			= NDFalse;
@@ -233,6 +236,11 @@ NDBool NDSession::handleRead()
 	NDUint32 nCanRecvBytes = m_pSocket->getRecvBufBytes();
 	if ( nCanRecvBytes == 0 )	
 	{	//优雅关闭SOCKET的条件;(这个地方是否合适有待讨论);
+		if ( m_nDisconnectionType == ESessionDisconnectionType_NULL )
+		{
+			m_nDisconnectionType = ESessionDisconnectionType_READ_PASSIVE;
+		}
+		
 		handleClose();
 		return NDFalse;
 	}
@@ -245,6 +253,11 @@ NDBool NDSession::handleRead()
 	NDUint32 nRecvBufferDataSize	= m_pRecvBuffer->getDataSize();
 	if ( NDFalse == m_pSocket->recv( ( m_pRecvBuffer->readBuffer() + nRecvBufferDataSize ) , nCanRecvBytes, nRefRealRecvLen ) )
 	{
+		if ( m_nDisconnectionType == ESessionDisconnectionType_NULL )
+		{
+			m_nDisconnectionType = ESessionDisconnectionType_READ_PASSIVE;
+		}
+
 		if ( 0 == nRefRealRecvLen )
 		{	//优雅关闭SOCKET的条件;
 			handleClose();
@@ -293,6 +306,8 @@ NDBool NDSession::handleWrite()
 	
 	if ( NDFalse == m_pSocket->send( m_pSendBuffer->readBuffer(), nSendBufferSize, nSendBufferSize ) )
 	{
+		m_nDisconnectionType = ESessionDisconnectionType_SEND_PASSIVE;
+
 		//先关闭SEND通道;
 		shutdownSendPipe();
 		return NDFalse;
@@ -388,101 +403,21 @@ NDBool NDSession::parseRecvData()
 	NDParseSessionDataEx parseSessionDataEx;
 	parseSessionDataEx.m_nProtocolType	= m_nProtocolType;
 	parseSessionDataEx.m_nSessionID		= m_nSessionID;
+	parseSessionDataEx.m_nParsePacket	= (m_nRecvPacketNum > 0 ? 1 : 0);	//特殊处理是否是地方一个包,也可以在结构中增加一个字段;
+	parseSessionDataEx.m_nErrorCode		= 0;
 	
 	if ( NDFalse == (*s_pParsePacket)( *m_pRecvBuffer, parseSessionDataEx ) )
 	{
 		parseSessionDataEx.m_nErrorCode;
+
+		m_nDisconnectionType = ESessionDisconnectionType_PACKET_ERROR_ACTIVE;
+
 		handleClose();
 		return NDFalse;
 	}
 
 	m_nRecvPacketNum += parseSessionDataEx.m_nParsePacket;
 
-	//NDProDataHead	dataHeader;
-
-	//NDUint32 nHeadTypeSize = sizeof( dataHeader );
-	//memset( &dataHeader, 0, nHeadTypeSize );
-
-
-	//NDGuardLock locker(*m_pRecvDataMutex);
-	//NDUint32 nRecvDataSize = m_pRecvBuffer->GetDataSize();
-
-	//if ( nRecvDataSize <= nHeadTypeSize )
-	//{	//recv data less than header size;
-	//	return NDTrue;
-	//}
-
-	//NDBool bRet = NDTrue;
-
-	////recv data large than header size 
-	//NDUint32 nUint32Size = sizeof(NDUint32); //sizeof(m_nSessionID)
-
-	//do
-	//{
-	//	m_pRecvBuffer->SetRollBackFlag();
-	//	//read header;
-	//	m_pRecvBuffer->ReadIntactBuffer( (char*)&dataHeader, nHeadTypeSize );
-	//	if ( dataHeader.m_nBodySize > MAX_MSGPACKET_SIZE )
-	//	{	//beyond max packet size;
-	//		handleClose();
-	//		bRet = NDFalse;
-	//		break;
-	//	}
-
-	//	if ( ( nRecvDataSize - nHeadTypeSize ) < dataHeader.m_nBodySize )
-	//	{	// 数据不足组成一个包;
-	//		m_pRecvBuffer->RollBack();
-	//		m_pRecvBuffer->CancelRollBack();
-	//		break;
-	//	}
-	//	// body size is enough so that can make up a packet;
-	//	if ( (dataHeader.m_nBitWise & ND_PDHMSG_PROTO_NUM) != ND_PDHMSG_PROTO_NUM )
-	//	{	//it's not my protocol, disconnect session;
-	//		handleClose();
-	//		bRet = NDFalse;
-	//		break;
-	//	}
-
-	//	++m_nRecvPacketNum;
-
-	//	//// check protocol ID;
-	//	//if ( m_bServer && !IsSessionProtocolID( dataHeader ) )
-	//	//{	//it's not my protocol, disconnect session;
-	//	//	handleClose();
-	//	//	bRet = NDFalse;
-	//	//	break;
-	//	//}
-
-	//	////it's my protocol;
-	//	NDByteBuffer* pParseBuffer = NDByteBufferPool::getInstance()->createByteBuffer();
-	//	if ( NULL == pParseBuffer )
-	//	{
-	//		m_pRecvBuffer->RollBack();
-	//		m_pRecvBuffer->CancelRollBack();
-	//		bRet = NDFalse;
-	//		break;
-	//	}
-
-	//	pParseBuffer->WriteBuffer( (const char*)&m_nSessionID, nUint32Size );
-	//	pParseBuffer->WriteBuffer( *m_pRecvBuffer, dataHeader.m_nBodySize );
-	//	//set have readbuffer size;
-	//	m_pRecvBuffer->SetReadBufSize( dataHeader.m_nBodySize );
-	//	m_pRecvBuffer->CancelRollBack();
-
-	//	if ( NDFalse == parsePacketAndPutQueue( dataHeader, pParseBuffer ) )
-	//	{
-	//		NDByteBufferPool::getInstance()->releaseByteBuffer( pParseBuffer );
-	//		//是否要断开连接有待考虑;
-	//		bRet = NDFalse;
-	//		break;
-	//	}
-
-	//	nRecvDataSize = m_pRecvBuffer->GetDataSize();
-	//	memset( &dataHeader, 0, nHeadTypeSize );
-
-	//} while ( nRecvDataSize > nHeadTypeSize );
-
-	//return bRet;
 	return NDTrue;
 }
 
@@ -497,65 +432,7 @@ NDBool NDSession::shutdownSendPipe()
 	return NDTrue;
 }
 
-//NDBool NDSession::parsePacketAndPutQueue( const NDProDataHead& refDataHeader, NDByteBuffer* pParseBuffer )
-//{
-//	if ( NULL == pParseBuffer )
-//	{
-//		return NDFalse;
-//	}
-//
-//	if ( (refDataHeader.m_nBitWise & ND_PDHMSG_COMPRESSION) == ND_PDHMSG_COMPRESSION )
-//	{	//加密包需要另外生成一个buf传进入函数;
-//		NDByteBuffer* pDecryptBuf = NDByteBufferPool::getInstance()->createByteBuffer();
-//		if ( NULL == pDecryptBuf )
-//		{	//丢包了;
-//			return NDFalse;
-//		}
-//		if ( NDFalse == NDProtocolPacket::parsePacket( *pDecryptBuf, *pParseBuffer, refDataHeader ) )
-//		{
-//			NDByteBufferPool::getInstance()->releaseByteBuffer( pDecryptBuf );
-//			return NDFalse;
-//		}
-//
-//		//put msg into  msg dispose deque;
-//		NDServerTask::getInstance()->putQueue( pDecryptBuf );
-//
-//		NDByteBufferPool::getInstance()->releaseByteBuffer( pParseBuffer );
-//	}
-//	else
-//	{	//先处理特殊的PING包;
-//		NDUint32 nUint32Size= sizeof(NDUint32); //sizeof(m_nSessionID)
-//		if ( refDataHeader.m_nBodySize == nUint32Size )
-//		{	//dispose ping protocol (ping协议不加解密.不压缩.不计算crc);
-//			NDUint32 nProtocolID	= 0;
-//			char* pszBuf			= pParseBuffer->ReadBuffer();
-//
-//			memcpy( &nProtocolID, pszBuf + nUint32Size, refDataHeader.m_nBodySize );
-//			//if ( CMD_PING_PROTOCOL == nProtocolID )
-//			//{
-//			//	HandlePing( *pParseBuffer );
-//			//	NDByteBufferPool::getInstance()->releaseByteBuffer( pParseBuffer );
-//			//	return NDTrue;
-//			//}
-//		}
-//
-//		if ( NDFalse == NDProtocolPacket::parsePacket( *pParseBuffer, *pParseBuffer, refDataHeader ) )
-//		{
-//			return NDFalse;
-//		}
-//
-//		//put msg into  msg dispose deque;
-//		NDServerTask::getInstance()->putQueue( pParseBuffer );
-//	}
-//
-//	return NDTrue;	
-//}
 
-//NDBool NDSession::isSessionProtocolID( const NDProDataHead& refDataHeader )
-//{
-//	refDataHeader;
-//	return NDTrue;
-//}
 
 NDBool NDSession::registerWriteEvent()
 {

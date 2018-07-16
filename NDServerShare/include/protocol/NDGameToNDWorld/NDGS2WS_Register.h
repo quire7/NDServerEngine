@@ -8,6 +8,9 @@
 class NDGS2WS_Register_Req : public NDProtocol
 {
 public:
+	NDUint16		m_nMapID;
+	NDSocketAddress	m_netAddress;
+public:
 	NDGS2WS_Register_Req() : NDProtocol( CMDP_NDGS2WS_Register_Req ) { clear(); }
 	~NDGS2WS_Register_Req() {}
 
@@ -29,20 +32,24 @@ public:
 		return NDTrue;
 	}
 
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_nMapID) + sizeof(m_netAddress);
+	}
+
 	void   clear() 
 	{
 		m_nMapID	= 0;
 		m_netAddress.clear();
 	}
-public:
-	NDUint16		m_nMapID;
-	NDSocketAddress	m_netAddress;
 };
 
 class NDGS2WS_Register_Res : public NDProtocol
 {
 public:
-	NDGS2WS_Register_Res() : NDProtocol( CMDP_NDGS2WS_Register_Res ) {}
+	NDUint32 m_nErrorCode;
+public:
+	NDGS2WS_Register_Res() : NDProtocol( CMDP_NDGS2WS_Register_Res ) { clear(); }
 	~NDGS2WS_Register_Res() {}
 
 	NDBool serialize(NDOStream& stream)
@@ -61,8 +68,15 @@ public:
 		return NDTrue;
 	}
 
-public:
-	NDUint32 m_nErrorCode;
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_nErrorCode);
+	}
+
+	void   clear() 
+	{
+		m_nErrorCode = 0;
+	}
 };
 
 #endif

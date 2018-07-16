@@ -36,11 +36,12 @@
 //thread file;(先包含实现文件,在#include包含她们的文件);
 
 #include "thread/NDWindowsConditionImpl.cpp"
-#include "thread/NDWindowsThreadImpl.cpp"
+
 
 #include "thread/NDMutex.cpp"
 #include "thread/NDCondition.cpp"
 #include "thread/NDThread.cpp"
+#include "thread/NDDBThread.cpp"
 
 
 
@@ -51,6 +52,7 @@
 #include "memory/NDByteBufferImpl.cpp"
 #include "memory/NDByteBuffer.cpp"
 #include "memory/NDByteBufferPool.cpp"
+#include "memory/object/NDMemoryPoolExManager.cpp"
 
 
 //sharememory file;
@@ -86,6 +88,8 @@
 #include "database/NDField.cpp"
 #include "database/NDMysqlBaseOp.cpp"
 #include "database/NDMysqlBase.cpp"
+#include "database/NDTableBase.cpp"
+#include "database/NDSelectTableBase.cpp"
 
 
 //event operation file;

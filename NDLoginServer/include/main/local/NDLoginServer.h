@@ -5,15 +5,17 @@
 #include "NDLoginCallBack.h"
 
 #include "main/remote/NDRemoteWorldServerManager.h"
-//#include "Player/NDPlayerManager.h"
 
 class NDLoginServer : public NDLocalServer, public NDSingleton<NDLoginServer>
 {
 private:
 	NDRemoteWorldServerManager*		m_pWorldServerManager;
-	//NDPlayerManager*			m_pPlayerMgr;
+	
 public:
-	NDLoginServer(void)
+	NDLoginServer(void){}
+	~NDLoginServer(void){ release(); }
+
+	NDBool							initialize( SERVERTYPE eType, NDUint32 nServerID, const char* szXmlConfig )
 	{
 		m_pLocalServerInfo		= new NDLocalServerInfo;
 		m_pDataProcess			= new NDDataProcess;
@@ -22,17 +24,15 @@ public:
 		m_pConsoleCMDMagager	= new NDConsoleCMDManager;
 
 		m_pWorldServerManager	= new NDRemoteWorldServerManager;
-		//m_pPlayerMgr			= new NDPlayerManager;
+
+		return NDLocalServer::initialize( eType, nServerID, szXmlConfig );
 	}
-	~NDLoginServer(void)
+	void							release()
 	{
 		SAFE_DELETE( m_pWorldServerManager );
-		//SAFE_DELETE( m_pPlayerMgr );
 	}
 
 	NDRemoteWorldServerManager*		worldManager()		{	return m_pWorldServerManager; }
-
-//	NDPlayerManager*	playerManager()		{	return m_pPlayerMgr; }
 
 };
 

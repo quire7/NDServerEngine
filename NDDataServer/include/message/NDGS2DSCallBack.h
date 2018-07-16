@@ -12,7 +12,7 @@ public:
 	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
-	//NDBool c2lLoadFactorNtyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+	NDBool gs2dsPlayerLoginReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 	//NDBool c2lPlayerOfflineNtyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 };
 

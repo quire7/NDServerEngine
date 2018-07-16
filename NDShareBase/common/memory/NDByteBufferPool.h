@@ -11,7 +11,7 @@
 #define __SHARE_BASE_ND_BYTE_BUFFER_POOL_H__
 
 #include "NDTypes.h"
-#include "function/NDObjectPool.h"
+#include "memory/object/NDObjectPool.h"
 #include "NDByteBuffer.h"
 
 

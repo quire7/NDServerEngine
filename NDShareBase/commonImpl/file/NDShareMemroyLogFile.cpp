@@ -9,14 +9,14 @@
 
 _NDSHAREBASE_BEGIN
 
-NDBool NDShareBase::NDShareLogCacheSMU::tryLock( NDUint8 nOwnType )
+NDBool NDShareLogCacheSMU::tryLock( NDUint16 nLockType )
 {
-	return NDShareBaseGlobal::sm_try_lock( m_NDSMUHead.m_nOwnType, nOwnType );
+	return NDShareBaseGlobal::sm_try_lock( &m_NDSMUHead.m_nOwnType, nLockType );
 }
 
-NDBool NDShareBase::NDShareLogCacheSMU::tryUnlock( NDUint8 nOwnType )
+NDBool NDShareLogCacheSMU::tryUnlock( NDUint16 nUnlockType )
 {
-	return NDShareBaseGlobal::sm_try_unlock( m_NDSMUHead.m_nOwnType, nOwnType );
+	return NDShareBaseGlobal::sm_try_unlock( &m_NDSMUHead.m_nOwnType, nUnlockType );
 }
 
 NDBool NDShareLogCacheSMU::setLogName( const char* szLogName )
@@ -40,7 +40,8 @@ NDBool NDShareLogCacheSMU::setLogName( const char* szLogName )
 
 NDBool NDShareLogCacheSMU::writeLog( const char* szBuf, NDUint32 nBufSize )
 {
-	if ( ( NULL == szBuf ) || ( '\0' == szBuf[0] ) || ( 0 == nBufSize ) || ( m_nLogDataSize + nBufSize ) > sizeof( m_szLogBuf ) )
+	static NDUint32 nLogBufMaxSize = sizeof(m_szLogBuf);
+	if ( (NULL == szBuf) || ('\0' == szBuf[0]) || (0 == nBufSize) || (m_nLogDataSize + nBufSize) > nLogBufMaxSize )
 	{
 		return NDFalse;
 	}
@@ -134,7 +135,7 @@ NDBool NDShareMemoryLogFile::write( const char* pFile, NDInt32 nLine, NDInt32 nL
 	if ( NULL == m_pNDShareLogCacheSMU )  return NDFalse;
 
 	NDUint32 nCurCacheDataSize = cacheDataSize();
-	if ( nCurCacheDataSize >= m_nCacheSize )
+	if ( ( (NDUint32)ND_INVALID_ID == nCurCacheDataSize ) || ( nCurCacheDataSize >= m_nCacheSize ) )
 	{
 		return NDFalse;
 	}
@@ -182,6 +183,7 @@ NDShareMemoryLogManager::NDShareMemoryLogManager():
 m_pszLogPath( NULL ),
 m_pszLogBaseName( NULL ),
 m_nLogMaxSize( 0 ),
+m_pStandbyShareLogCacheSMU( NULL ),
 m_pNDShareMemoryLogFile( new NDShareMemoryLogFile ),
 m_pNDShareLogCacheSMUPool( new NDShareMemoryUnitPool<NDShareLogCacheSMU>() )
 {
@@ -189,6 +191,21 @@ m_pNDShareLogCacheSMUPool( new NDShareMemoryUnitPool<NDShareLogCacheSMU>() )
 
 NDShareMemoryLogManager::~NDShareMemoryLogManager()
 {
+	if ( NULL != m_pszLogPath )
+	{
+		delete[] m_pszLogPath;
+		m_pszLogPath = NULL;
+	}
+	if ( NULL != m_pszLogBaseName )
+	{
+		delete[] m_pszLogBaseName;
+		m_pszLogBaseName = NULL;
+	}
+	if ( NULL != m_pStandbyShareLogCacheSMU )
+	{
+		m_pStandbyShareLogCacheSMU->setUseStatus(eNDSMU_USE_STATE_READFREE);
+		m_pStandbyShareLogCacheSMU = NULL;
+	}
 	if ( NULL != m_pNDShareMemoryLogFile )
 	{
 		delete m_pNDShareMemoryLogFile;
@@ -229,6 +246,8 @@ NDBool NDShareMemoryLogManager::init(  NDSM_KEY nKey, NDUint32 nUnitMax, NDUint8
 		return NDFalse;
 	}
 
+	getStandbyShareLogCacheSMU();
+
 	return initFile( m_pNDShareLogCacheSMUPool->createObj() );
 }
 
@@ -239,17 +258,74 @@ NDBool NDShareMemoryLogManager::initFile( NDShareLogCacheSMU* pNDShareLogCacheSM
 		return NDFalse;
 	}
 
-	char szTimeBuf[ND_TIME_LENGTH] = {0};
-	NDShareBaseGlobal::getLocalSecondTimeStr( szTimeBuf, ND_TIME_LENGTH );
+	setLogNameInfo( pNDShareLogCacheSMU );
+
+	return m_pNDShareMemoryLogFile->init( pNDShareLogCacheSMU );
+}
+
+NDBool NDShareMemoryLogManager::write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, ... )
+{
+	va_list ap;
+	va_start( ap, pFormat );
+	NDBool bRet = write( pFile, nLine, nLevel, pFormat, ap );
+	va_end(ap);
+	return bRet;
+}
+
+NDBool NDShareMemoryLogManager::write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, va_list ap )
+{
+	if ( NULL == m_pNDShareMemoryLogFile )	return NDFalse;
+
+	if ( ( m_pNDShareMemoryLogFile->size() >= m_nLogMaxSize ) || ( m_pNDShareMemoryLogFile->cacheSpaceSize() < BUF_LEN_512 ) )
+	{
+		m_pNDShareMemoryLogFile->release();
+
+		if ( NULL == m_pStandbyShareLogCacheSMU )
+		{
+			if ( NDFalse == initFile( m_pNDShareLogCacheSMUPool->createObj() ) )
+			{
+				return NDFalse;
+			}
+		}
+		else
+		{
+			if ( NDFalse == initFile( m_pStandbyShareLogCacheSMU ) )
+			{
+				return NDFalse;
+			}
+			m_pStandbyShareLogCacheSMU = NULL;
+		}
+	}
+	if ( NULL == m_pStandbyShareLogCacheSMU )
+	{
+		getStandbyShareLogCacheSMU();
+	}
+	else
+	{	//设置备用的共享内存也在使用;
+		m_pStandbyShareLogCacheSMU->setSaveTime( NDShareBaseGlobal::getCurSecondTimeOfUTC() );
+	}
+
+	return m_pNDShareMemoryLogFile->write( pFile, nLine, nLevel, pFormat, ap );
+}
+
+NDBool NDShareMemoryLogManager::setLogNameInfo( NDShareLogCacheSMU* pNDShareLogCacheSMU )
+{
+	if ( NULL == pNDShareLogCacheSMU )
+	{
+		return NDFalse;
+	}
+
+	char szTimeBuf[ND_TIME_LENGTH] = { 0 };
+	NDShareBaseGlobal::getLocalSecondTimeStr(  szTimeBuf, ND_TIME_LENGTH );
 	szTimeBuf[10] = '-';
 	szTimeBuf[13] = '-';
 	szTimeBuf[16] = '-';	//fopen路径规则中不能有:这个符号,否则创建不了文件;
 
 	//最终文件名;
-	char szFileName[MAX_PATH_LEN] = {0};
+	char szFileName[MAX_PATH_LEN] = { 0 };
 
 	NDUint32 nLogPathLen = (NDUint32)strlen( m_pszLogPath );
-	if ( '/' != m_pszLogPath[ nLogPathLen - 1 ])
+	if ( '/' != m_pszLogPath[ nLogPathLen - 1 ] )
 	{
 		ND_SNPRINTF( szFileName, MAX_PATH_LEN - 1, "%s/%s-%s.log", m_pszLogPath, m_pszLogBaseName, szTimeBuf );
 	}
@@ -261,31 +337,34 @@ NDBool NDShareMemoryLogManager::initFile( NDShareLogCacheSMU* pNDShareLogCacheSM
 	pNDShareLogCacheSMU->setLogName( szFileName );
 	pNDShareLogCacheSMU->setLogNameHash( NDShareBaseGlobal::bkdr_hash( szFileName ) );
 
-	return m_pNDShareMemoryLogFile->init( pNDShareLogCacheSMU );
+	return NDTrue;
 }
 
-NDBool NDShareMemoryLogManager::write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, ... )
+
+NDBool NDShareMemoryLogManager::getStandbyShareLogCacheSMU()
 {
-	if ( NULL == m_pNDShareMemoryLogFile )	return NDFalse;
-
-	if ( ( m_pNDShareMemoryLogFile->size() >= m_nLogMaxSize ) || ( m_pNDShareMemoryLogFile->cacheSpaceSize() < MAX_PATH_LEN )  )
+	if ( NULL == m_pNDShareLogCacheSMUPool )
 	{
-		m_pNDShareMemoryLogFile->release();
-
-		if ( NDFalse == initFile( m_pNDShareLogCacheSMUPool->createObj() ) )
-		{
-			return NDFalse;
-		}
+		return NDFalse;
+	}
+	if ( NULL != m_pStandbyShareLogCacheSMU )
+	{
+		return NDTrue;
 	}
 
-	va_list ap;
-	va_start( ap, pFormat );
-	NDBool bRet = m_pNDShareMemoryLogFile->write( pFile, nLine, nLevel, pFormat, ap );
-	va_end(ap);
-	return bRet;
+	if ( NULL == ( m_pStandbyShareLogCacheSMU = m_pNDShareLogCacheSMUPool->createObj() ) )
+	{
+		return NDFalse;
+	}
+
+	//设置备用共享内存为被占用状态;
+	m_pStandbyShareLogCacheSMU->setUseStatus( eNDSMU_USE_STATE_HOLDDATA );
+	m_pStandbyShareLogCacheSMU->setSaveTime( NDShareBaseGlobal::getCurSecondTimeOfUTC() );
+
+	setLogNameInfo( m_pStandbyShareLogCacheSMU );
+
+	return NDTrue;
 }
-
-
 
 _NDSHAREBASE_END
 

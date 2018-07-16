@@ -77,8 +77,8 @@ public:
 	
 
 	/*获得和释放头部数据的控制权;*/
-	NDBool		tryLockHead( NDUint8 nSetType );
-	NDBool		tryUnLockHead( NDUint8 nSetType );
+	NDBool		tryLockHead( NDUint16 nLockType );
+	NDBool		tryUnLockHead( NDUint16 nUnlockType );
 
 	NDBool		dumpToFile( const char* szFilePath );
 	NDBool		mergeFromFile( const char* szFilePath );

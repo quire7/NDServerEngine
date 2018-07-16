@@ -1,4 +1,6 @@
 
+#include "NDServerShareStructs.cpp"
+
 //local file;
 #include "local/NDServerInfo.cpp"
 #include "local/NDLocalServer.cpp"

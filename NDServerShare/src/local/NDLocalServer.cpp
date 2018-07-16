@@ -11,7 +11,9 @@
 #include "net/process/NDDataProcess.h"
 #include "function/NDConsoleCMDManager.h"
 
+#include "event/functor/NDSubFunctorSlot.h"
 #include "event/timerEvent/NDTimerEventManager.h"
+#include "memory/object/NDMemoryPoolExManager.h"
 
 #include "local/NDServerInfo.h"
 #include "local/NDXmlConfigServerCommon.h"
@@ -20,6 +22,15 @@
 using NDShareBase::g_bConsole;
 using NDShareBase::g_pFileLogManager;
 using NDShareBase::g_pSMLogManager;
+
+using NDShareBase::NDTimerEventManager;
+using NDShareBase::NDMemoryPoolExManager;
+
+
+#ifdef _DEBUG
+const char* NDLocalServer::s_szTimerPrintTimerList = "timerPrintTimerList";
+#endif
+
 
 NDLocalServer::NDLocalServer()
 :m_eState(eServState_Null),
@@ -41,6 +52,12 @@ NDLocalServer::NDLocalServer()
 
 NDLocalServer::~NDLocalServer()
 {
+	release();
+}	
+
+
+void NDLocalServer::release()
+{
 	SAFE_DELETE(m_pLocalServerInfo)
 	SAFE_DELETE(m_pDataProcess)
 	SAFE_DELETE(m_pConfig)
@@ -52,9 +69,16 @@ NDLocalServer::~NDLocalServer()
 
 	SAFE_DELETE(m_postringstream)
 
-	NDShareBase::NDTimerManager::releaseInstance();
-}	
+#ifdef _DEBUG
+	if ( m_timerPrintTimerListConn.isvaild() )
+	{
+		m_timerPrintTimerListConn->disconnect();
+	}
+#endif
 
+	NDTimerEventManager::releaseInstance();
+	NDMemoryPoolExManager::releaseInstance();
+}
 
 NDBool NDLocalServer::initialize( SERVERTYPE eType, NDUint32 nServerID, const char* szXmlConfig )
 {
@@ -81,7 +105,8 @@ NDBool NDLocalServer::initialize( SERVERTYPE eType, NDUint32 nServerID, const ch
 
 	//先初始化时间和GUID分配器(因为nGroupID是在配置文件中读取的,所以所有初始化函数都应该在这个函数之后);
 	NDShareBaseGlobal::init( (NDUint8)m_serverCfgSystemInfo.nGroupID, (NDUint8)nServerID );	
-	NDShareBase::NDTimerManager::getInstance();
+	NDTimerEventManager::getInstance();
+	NDMemoryPoolExManager::getInstance()->init();
 
 	if ( NDFalse == InitLogMgr() )
 	{
@@ -98,6 +123,15 @@ NDBool NDLocalServer::initialize( SERVERTYPE eType, NDUint32 nServerID, const ch
 	m_pLocalServerInfo->setLocalRemote( NDServerInfo::eLR_Local );
 	
 	m_nStartServerSecondTimeOfUTC = NDShareBaseGlobal::getCurSecondTimeOfUTC();
+
+#ifdef _DEBUG
+	NDTimerEventArgs printTimerListSubFunctorSlotArgs( NDLocalServer::s_szTimerPrintTimerList, ND_PRINT_OBJMEMEX_INFO_MILLISECONDS,  NDShareBaseGlobal::getCurMSTimeOfUTC() + ND_PRINT_OBJMEMEX_INFO_MILLISECONDS );
+	m_timerPrintTimerListConn = NDTimerEventManager::getInstance()->addTimer( NDSubFunctorSlot( &NDTimerEventManager::printTimerList, NDTimerEventManager::getInstance() ), printTimerListSubFunctorSlotArgs );
+	if ( !m_timerPrintTimerListConn.isvaild() )
+	{
+		return NDFalse;
+	}
+#endif
 
 	return NDTrue;
 }
@@ -125,7 +159,7 @@ NDBool NDLocalServer::InitLogMgr()
 	}
 
 	NDUint32 nServerType= m_pLocalServerInfo->getServerType();
-	NDUint8  byOwnType	= (NDUint8)( ( ( nServerType & MANAGE_SERVER ) >> 20 ) + eNDSMU_OWN_TYPE_SELF ); 
+	NDUint8  byOwnType	= (NDUint8)( ( ( nServerType & MANAGE_SERVER ) >> 12 ) + eNDSMU_OWN_TYPE_SELF );
 
 	if ( NDFalse == m_pSMLogManager->init( eNDSMKEY_LOG, ND_LOG_SMU_MAX, byOwnType, pszLogPath, m_pLocalServerInfo->getServerName() ) )
 	{
@@ -218,12 +252,12 @@ NDBool NDLocalServer::InitDumpFilePath()
 
 void NDLocalServer::run()
 {
-	NDShareBase::NDTimerManager::getInstance()->detectTimerList();
+	NDTimerEventManager::getInstance()->detectTimerList();
 }
 
 NDShareBase::NDTimerBoundSlotConn NDLocalServer::addTimer( const NDSubFunctorSlot& refSubFunctorSlot, const NDTimerEventArgs& refTimerEventArgs )
 {
-	return NDShareBase::NDTimerManager::getInstance()->addTimer( refSubFunctorSlot, refTimerEventArgs );
+	return NDTimerEventManager::getInstance()->addTimer( refSubFunctorSlot, refTimerEventArgs );
 }
 
 const NDServerCfgSytemInfo& NDLocalServer::getServerCfgSytemInfo() const
@@ -245,4 +279,16 @@ NDShareMemoryLogManager* NDLocalServer::smLogMgr()
 {
 	return m_pSMLogManager;
 }
+
+NDUint32 NDLocalServer::getLocalServerID()
+{
+	if ( NULL == m_pLocalServerInfo )
+	{
+		return (NDUint32)ND_INVALID_ID;
+	}
+
+	return m_pLocalServerInfo->getServerID();
+}
+
+
 

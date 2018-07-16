@@ -3,6 +3,11 @@
 
 //remote file;
 
+
+//data file;
+#include "main/data/NDGTWSPlayer.cpp"
+#include "main/data/NDGTWSPlayerManager.cpp"
+
 //message cpp
 #include "message/NDS2SRegisterCallBack.cpp"
 

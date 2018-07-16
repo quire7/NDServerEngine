@@ -25,6 +25,7 @@ protected:
 	NDUint32				m_nSessionID;				//会话的唯一标志ID;
 	NDUint32				m_nSocketSendBuf;			//m_pSocket的发送缓存区大小;
 
+	NDUint8					m_nDisconnectionType;		//断开连接类型(用于区分是我方主动断开连接还是对方主动断开连接);
 	NDUint8					m_nProtocolType;			//session要处理的协议类型;
 	NDUint8					m_nEventFlag;				//事件标志(EIOEventType);
 	NDBool					m_bAlive;					//会话是否存活标志;
@@ -65,6 +66,9 @@ public:
 	NDBool					isValidAddr() const;
 	NDBool					isConnected() const;
 
+	void					setDisconnectionType( NDUint8 nDisconnectionType )	{ m_nDisconnectionType = nDisconnectionType; }
+	NDUint8					getDisconnectionType() const						{ return m_nDisconnectionType; }
+
 	void					setProtocolType( NDUint8 nProtocolType )	{ m_nProtocolType = nProtocolType; };
 	NDUint8					getProtocolType() const						{ return m_nProtocolType; }
 
@@ -84,9 +88,6 @@ protected:
 	NDBool					parseRecvData();
 
 
-
-	////是否是这条链路的协议;
-	//NDBool					isSessionProtocolID( const NDProDataHead& refDataHeader );
 
 private:
 	//优化事件,在需要发送的时候才注册WRITE_EVENT;

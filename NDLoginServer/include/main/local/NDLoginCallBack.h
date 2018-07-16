@@ -5,8 +5,9 @@
 
 #include "message/NDS2SRegisterCallBack.h"
 #include "message/NDWS2LSCallBack.h"
+#include "message/NDC2LSCallBack.h"
 //#include "Message/NDL2ACallBack.h"
-//#include "Message/NDClient2LCallBack.h"
+
 
 class NDLoginCallBack : public NDProtocolCallBack
 {
@@ -26,6 +27,7 @@ private:
 private:
 	NDS2SRegisterCallBack		m_NDS2SRegisterCallBack;
 	NDWS2LSCallBack				m_NDWS2LSCallBack;
+	NDC2LSCallBack				m_NDC2LSCallBack;
 	//NDL2ACallBack				m_NDL2ACallBack;
 	//NDClient2LCallBack			m_NDClient2LCallBack;
 };

@@ -92,7 +92,7 @@ extern	NDBool	g_bConsole;
 		g_bConsole = bConsole;
 
 #define NDCONSOLE_LOG_INFO		(std::cerr<<NDConsoleColor(TNORMAL))
-#define NDCONSOLE_LOG_WARNGING	(std::cerr<<NDConsoleColor(TGREEN|TRED))
+#define NDCONSOLE_LOG_WARNING	(std::cerr<<NDConsoleColor(TGREEN|TRED))
 #define NDCONSOLE_LOG_ERROR		(std::cerr<<NDConsoleColor(TRED))
 #define NDCONSOLE_LOG_END		NDConsoleColor(TNORMAL)<<std::endl
 
@@ -102,6 +102,10 @@ class NDConsoleLog
 public:
 	NDConsoleLog(void);
 	~NDConsoleLog(void);
+
+	static void info( const char* info, ... );
+	static void warning( const char* info, ... );
+	static void error( const char* info, ... );
 };
 
 _NDSHAREBASE_END

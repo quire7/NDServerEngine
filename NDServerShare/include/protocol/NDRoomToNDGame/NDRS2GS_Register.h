@@ -8,6 +8,9 @@
 class NDRS2GS_Register_Req : public NDProtocol
 {
 public:
+	NDUint16		m_nRoomServerID;
+	NDSocketAddress	m_netAddress;
+public:
 	NDRS2GS_Register_Req() : NDProtocol( CMDP_NDRS2GS_Register_Req ) { clear(); }
 	~NDRS2GS_Register_Req() {}
 
@@ -29,20 +32,24 @@ public:
 		return NDTrue;
 	}
 
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_nRoomServerID) + sizeof(m_netAddress);
+	}
+
 	void   clear() 
 	{
 		m_nRoomServerID	= 0;
 		m_netAddress.clear();
 	}
-public:
-	NDUint16		m_nRoomServerID;
-	NDSocketAddress	m_netAddress;
 };
 
 class NDRS2GS_Register_Res : public NDProtocol
 {
 public:
-	NDRS2GS_Register_Res() : NDProtocol( CMDP_NDRS2GS_Register_Res ) {}
+	NDUint32 m_nErrorCode;
+public:
+	NDRS2GS_Register_Res() : NDProtocol( CMDP_NDRS2GS_Register_Res ) { clear(); }
 	~NDRS2GS_Register_Res() {}
 
 	NDBool serialize(NDOStream& stream)
@@ -61,8 +68,15 @@ public:
 		return NDTrue;
 	}
 
-public:
-	NDUint32 m_nErrorCode;
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_nErrorCode);
+	}
+
+	void   clear() 
+	{
+		m_nErrorCode = 0;
+	}
 };
 
 #endif

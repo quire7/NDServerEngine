@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\main">
+      <UniqueIdentifier>{921acd5a-d641-4986-a8c0-0f36fbb95b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\local">
+      <UniqueIdentifier>{2468297b-758b-4585-bdd7-c9d90e7bf92d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\remote">
+      <UniqueIdentifier>{f5da4522-fd77-4f2a-a8f6-35ba7ebe459f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\data">
+      <UniqueIdentifier>{649dbb62-6eb8-4e5a-a8da-1ad416397942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\message">
+      <UniqueIdentifier>{0d4b5dc3-04ff-468b-91e9-8ee9180aae77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\main">
+      <UniqueIdentifier>{77c28d59-1bc5-4ed9-9e14-b55234683eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\local">
+      <UniqueIdentifier>{41175220-0c32-4191-b2ba-ddbd357cf754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\remote">
+      <UniqueIdentifier>{ed457975-fee0-41be-bb95-96a402f3f015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\data">
+      <UniqueIdentifier>{12041199-7356-42b0-87d8-a5f4f487ca54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\message">
+      <UniqueIdentifier>{78a0b934-d8e6-4f55-a6e4-b39dbf12e938}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDGatewayServer_all.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDGatewayCallBack.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDGatewayConnectProcess.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDGatewayServer.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDPreCompiler.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDGTWSPlayer.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDGTWSPlayerManager.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDGS2GTWSCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDS2SRegisterCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\main\local\NDGatewayCallBack.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDGatewayConnectProcess.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDGatewayServer.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDPreCompiler.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDGTWSPlayer.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDGTWSPlayerManager.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDGS2GTWSCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDS2SRegisterCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

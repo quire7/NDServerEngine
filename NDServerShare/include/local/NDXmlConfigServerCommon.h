@@ -14,42 +14,51 @@
 #include "file/NDXmlConfigBase.h"
 #include "NDProtocolCommonEnums.h"
 
+#include "NDServerShareStructs.h"
+
 using NDShareBase::NDXmlConfigBase;
 
 #ifndef SYSCFG
-#define SYSCFG					"SystemCfg"
-#define SYSCFG_GAMENAMEID		"GameNameID"
-#define SYSCFG_COUNTRYID		"CountryID"
-#define SYSCFG_AGENTID			"AgentID"
-#define SYSCFG_GROUPID			"GroupID"
+#define SYSCFG							"SystemCfg"
+#define SYSCFG_GAMENAMEID				"GameNameID"
+#define SYSCFG_COUNTRYID				"CountryID"
+#define SYSCFG_AGENTID					"AgentID"
+#define SYSCFG_GROUPID					"GroupID"
 #endif
 
 #ifndef SERINFO
-#define SERINFO					
-#define SERINFO_COUNT			"Count"
-#define SERINFO_LISTENIP		"ListenIP"
-#define SERINFO_LISTENPORT		"ListenPort"
-#define SERINFO_DUMPPATH		"DumpPath"
-#define SERINFO_LOGPATH			"LogPath"
+#define SERINFO							
+#define SERINFO_COUNT					"Count"
+#define SERINFO_LISTENIP				"ListenIP"
+#define SERINFO_LISTENPORT				"ListenPort"
+#define SERINFO_DUMPPATH				"DumpPath"
+#define SERINFO_LOGPATH					"LogPath"
+#endif
+
+#ifndef SERINFO_EX
+#define SERINFO_EX					
+#define SERINFO_EX_SELECT_THREAD		"SelectThread"
+#define SERINFO_EX_UPDATE_THREAD		"UpdateThread"
 #endif
 
 #ifndef CONNINFO
-#define CONNINFO				"Conn"
-#define CONNINFO_COUNT			"Count"
-#define CONNINFO_SERVERNAME		"ServerName"
-#define CONNINFO_SERVERID		"ServerID"
+#define CONNINFO						"Conn"
+#define CONNINFO_COUNT					"Count"
+#define CONNINFO_SERVERNAME				"ServerName"
+#define CONNINFO_SERVERID				"ServerID"
 #endif
 
 
 #ifndef DBINFO
-#define DBINFO					"DataBase"
-#define DBINFO_TYPENAME			"DB"
-#define DBINFO_HOST				"Host"
-#define DBINFO_USER				"User"
-#define DBINFO_PASSWORD			"Pwd"
-#define DBINFO_PORT				"Port"
-#define DBINFO_DBNAME			"DBName"
-#define DBINFO_VERSION			"Version"
+#define DBINFO							"DataBase"
+#define DBINFO_COUNT					"Count"
+#define DBINFO_TYPENAME					"DB"
+#define DBINFO_HOST						"Host"
+#define DBINFO_USER						"User"
+#define DBINFO_PASSWORD					"Pwd"
+#define DBINFO_PORT						"Port"
+#define DBINFO_DBNAME					"DBName"
+#define DBINFO_VERSION					"Version"
 #endif
 
 struct NDServerCfgSytemInfo;
@@ -90,8 +99,13 @@ public:
 	void setLocalServerInfo( NDLocalServerInfo* pLocalServerInfo )			{ m_pLocalServerInfo = pLocalServerInfo; }
 
 protected:
-	virtual NDBool readXmlConfigContent( const TiXmlElement *pRootElement );
+	virtual NDBool	readXmlConfigContent( const TiXmlElement *pRootElement );
 
+	//具体SERVER字段下的延伸字段解析;(例如:DS1字段下:selectDBThreadNum属性);
+	virtual NDBool	readSerChildExtendInfoXmlCfgCommonContent( const TiXmlElement* ) { return NDTrue; }
+
+	//读取DataBase属性下的通用部分(即DS1下的相应字段);
+	NDBool readDBInfoXmlCfgCommonContent( const TiXmlElement *pDataBaseElement, NDUint32 nDBIndex, NDMysqlConnParam& refMysqlConnParam );
 private:
 	NDBool	readSystemCfgCommonContent( const TiXmlElement *pParentElement );
 	NDBool	readSerInfoXmlCfgCommonContent( const TiXmlElement *pParentElement, vector<ConnInfoBaseAttribute>& refConnInfoBaseAttributeVec );
@@ -107,30 +121,51 @@ private:
 
 namespace NDShareBase
 {
-	struct MysqlConnParam;
+	struct NDMysqlConnParam;
 }
 
-using NDShareBase::MysqlConnParam;
+using NDShareBase::NDMysqlConnParam;
 
+struct NDDSConfigBaseInfo;
 class NDDBServerConfig : public NDXmlConfigServerCommon 
 {
 private:
-	MysqlConnParam* m_pConnParam;
+	NDDSConfigBaseInfo*		m_pDSConfigBaseInfo;
+	NDMysqlConnParam*		m_pConnParam;
 
 public:
 	NDDBServerConfig();
 	virtual ~NDDBServerConfig(void);
 
-	void	setMysqlConnParam( MysqlConnParam* pMysqlConnParam ){ m_pConnParam = pMysqlConnParam; }
+	void	setMysqlConnParam( NDMysqlConnParam* pNDMysqlConnParam )		{ m_pConnParam = pNDMysqlConnParam; }
+	void	setDSConfigBaseInfo( NDDSConfigBaseInfo* pDSConfigBaseInfo )	{ m_pDSConfigBaseInfo = pDSConfigBaseInfo; }
 
 protected:
-	virtual NDBool readXmlConfigContent(const TiXmlElement *pRootElement);
+	virtual NDBool	readXmlConfigContent(const TiXmlElement *pRootElement);
+	
+	virtual NDBool	readSerChildExtendInfoXmlCfgCommonContent( const TiXmlElement *pParentElement );
 
 private:
-	NDBool readDBInfoXmlCfgCommonContent(const TiXmlElement *pRootElement);
-
+	NDBool	readDBInfoXmlCfgContent(const TiXmlElement *pRootElement);
 };
 
+
+class NDWSServerConfig : public NDXmlConfigServerCommon
+{
+private:
+	vector<NDWSDBAccountInfo>*			m_pNDWSDBAccountInfoVec;
+public:
+	NDWSServerConfig();
+	~NDWSServerConfig();
+
+	void	setWSDBAccountInfoVec( vector<NDWSDBAccountInfo>* pNDWSDBAccountInfoVec )		{ m_pNDWSDBAccountInfoVec = pNDWSDBAccountInfoVec; }
+
+protected:
+	NDBool	readXmlConfigContent( const TiXmlElement *pRootElement );
+
+private:
+	NDBool	readAllDBInfoXmlCfgCommonContent( const TiXmlElement *pRootElement );
+};
 
 
 #endif

@@ -4,5 +4,6 @@
 
 #include "NDServerShare.h"
 
+#include "NDDataServerEnums.h"
 
 #endif

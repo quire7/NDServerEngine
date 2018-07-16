@@ -82,7 +82,7 @@ NDBool NDClientNetIO::connect( const char* pszHostIP, NDUint16 nPort )
 
 	//NDSubFunctorSlot pingSubFunctorSlot(&NDClientNetIO::pingFunction, this);
 	NDTimerEventArgs pingSubFunctorSlotArgs( NDClientNetIO::s_szTimerPingProtocol, ND_PING_MILLISECONDS,  NDShareBaseGlobal::getCurMSTimeOfUTC() + ND_PING_MILLISECONDS );
-	m_timerPingConn = NDShareBase::NDTimerManager::getInstance()->addTimer( NDSubFunctorSlot(&NDClientNetIO::pingFunction, this), pingSubFunctorSlotArgs );
+	m_timerPingConn = NDShareBase::NDTimerEventManager::getInstance()->addTimer( NDSubFunctorSlot(&NDClientNetIO::pingFunction, this), pingSubFunctorSlotArgs );
 
 	return NDTrue;
 }
@@ -107,7 +107,7 @@ NDBool NDClientNetIO::sendToServer( NDProtocol& rProtocol, NDBool bCompression, 
 		return NDFalse;
 	}
 
-	NDUint8 nProDataHeadBitWise = 0;
+	NDUint16 nProDataHeadBitWise = 0;
 	if ( bCompression )	nProDataHeadBitWise |= ND_PDHMSG_COMPRESSION;
 	if ( bEncrypt )		nProDataHeadBitWise |= ND_PDHMSG_ENCRYPT;
 	if ( bCrc )			nProDataHeadBitWise |= ND_PDHMSG_CRC32;
@@ -149,7 +149,7 @@ NDUint32 NDClientNetIO::getSessionID() const
 	return m_pClientSession->getSessionID();
 }
 
-NDBool NDClientNetIO::setProtocolType( NDUint8 sessionProtocolType )
+NDBool NDClientNetIO::setSessionProtocolType( NDUint8 sessionProtocolType )
 {
 	if ( NULL == m_pClientSession )		return NDFalse;
 

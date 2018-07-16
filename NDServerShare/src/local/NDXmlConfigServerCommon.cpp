@@ -3,15 +3,22 @@
 #include "NDCLibFun.h"
 #include "NDShareBaseGlobal.h"
 #include "database/NDMysqlConst.h"
-
 #include "tinyxml/tinyxml.h"
 
+#include "file/NDLog.h"
+
+#include "NDServerShareStructs.h"
 #include "local/NDServerInfo.h"
 #include "local/NDLocalServer.h"
 #include "local/NDServerManager.h"
 
 using NDShareBase::NDShareBaseGlobal;
-
+using NDShareBase::NDConsoleColor;
+using NDShareBase::NDCLogManager;
+using NDShareBase::NDShareMemoryLogManager;
+using NDShareBase::g_bConsole;
+using NDShareBase::g_pFileLogManager;
+using NDShareBase::g_pSMLogManager;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -132,7 +139,7 @@ NDBool NDXmlConfigServerCommon::readSerInfoXmlCfgCommonContent(const TiXmlElemen
 	}
 
 	//重组要寻找的ServerTypeName;
-	char szServerTypeNameBuf[32] = {0};
+	char szServerTypeNameBuf[BUF_LEN_32] = {0};
 	ND_SNPRINTF( szServerTypeNameBuf, sizeof(szServerTypeNameBuf) - 1, "%s%u", pAppInfoBaseAttribute->szServerTypeName, nServerID );
 
 	//在pChildElement节点中寻找ServerTypeName子节点;
@@ -188,7 +195,7 @@ NDBool NDXmlConfigServerCommon::readSerChildInfoXmlCfgCommonContent( const TiXml
 
 	m_pLocalServerInfo->setLogPath( szPathBuf );
 
-	return NDTrue;	
+	return readSerChildExtendInfoXmlCfgCommonContent( pParentElement );
 }
 
 
@@ -215,7 +222,7 @@ NDBool NDXmlConfigServerCommon::readConnInfoCfgCommonContent( const TiXmlElement
 	for ( NDInt32 i = 1; i <= nCount; ++i )
 	{
 		//重组要寻找的Conn子节点;
-		char szConnNameBuf[32] = {0};
+		char szConnNameBuf[BUF_LEN_32] = {0};
 		ND_SNPRINTF( szConnNameBuf, sizeof(szConnNameBuf) - 1, "%s%d", CONNINFO, i );
 
 		//在pChildElement节点中寻找Conn子节点;
@@ -310,7 +317,7 @@ NDBool NDXmlConfigServerCommon::readAppChildInfoXmlCfgCommonContent( const TiXml
 	}
 
 	//重组要寻找的ServerTypeName;
-	char szServerTypeNameBuf[32] = {0};
+	char szServerTypeNameBuf[BUF_LEN_32] = {0};
 	ND_SNPRINTF( szServerTypeNameBuf, sizeof(szServerTypeNameBuf) - 1, "%s%u", pAppInfoBaseAttribute->szServerTypeName, refConnInfoBaseAttribute.nServerID );
 
 	//在pChildElement节点中寻找ServerTypeName子节点;
@@ -377,8 +384,64 @@ NDXmlConfigServerCommon::AppInfoBaseAttribute* NDXmlConfigServerCommon::getAppIn
 	return NULL;
 }
 
+NDBool NDXmlConfigServerCommon::readDBInfoXmlCfgCommonContent( const TiXmlElement *pDataBaseElement, NDUint32 nDBIndex, NDMysqlConnParam& refMysqlConnParam )
+{
+	//重组要寻找的DB;
+	char szDBBuf[BUF_LEN_32] = {0};
+	ND_SNPRINTF( szDBBuf, sizeof(szDBBuf) - 1, "%s%u", DBINFO_TYPENAME, nDBIndex );
+
+	//在pDataBaseElement节点中寻找DB子节点;
+	const TiXmlElement* pSonOfChildElement = pDataBaseElement->FirstChildElement( szDBBuf );
+	if ( NULL == pSonOfChildElement )
+	{
+		NDLOG_ERROR( " ServerConfig.xml can't find %s section.", szDBBuf );
+
+		return NDFalse;
+	}
+
+	const char* pContent = getElement2( pSonOfChildElement, DBINFO_HOST );
+	if ( NULL == pContent || '\0' == pContent[0] )
+	{
+		return NDFalse;
+	}
+	refMysqlConnParam.setHostName( string(pContent) );
+
+	pContent = getElement2( pSonOfChildElement, DBINFO_USER );
+	if ( NULL == pContent || '\0' == pContent[0] )
+	{
+		return NDFalse;
+	}
+	refMysqlConnParam.setUserName( string(pContent) );
+
+
+	pContent = getElement2(pSonOfChildElement, DBINFO_PASSWORD);
+	if ( NULL == pContent || '\0' == pContent[0] )
+	{
+		return NDFalse;
+	}
+	refMysqlConnParam.setPassWord( string(pContent) );
+
+	NDInt32 nIntValue = 0;
+	if ( !getElement2( pSonOfChildElement, DBINFO_PORT, nIntValue ) )
+	{
+		return NDFalse;
+	}
+	refMysqlConnParam.setPort( nIntValue );
+
+
+	pContent = getElement2( pSonOfChildElement, DBINFO_DBNAME );
+	if ( NULL == pContent || '\0' == pContent[0] )
+	{
+		return NDFalse;
+	}
+	refMysqlConnParam.setDBName( string(pContent) );
+
+	return NDTrue;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 NDDBServerConfig::NDDBServerConfig():
+m_pDSConfigBaseInfo(NULL),
 m_pConnParam(NULL)
 {
 }
@@ -394,13 +457,13 @@ NDBool NDDBServerConfig::readXmlConfigContent(const TiXmlElement *pRootElement)
 		return NDFalse;
 	}
 
-	return readDBInfoXmlCfgCommonContent(pRootElement);
+	return readDBInfoXmlCfgContent(pRootElement);
 }
 
 
-NDBool NDDBServerConfig::readDBInfoXmlCfgCommonContent(const TiXmlElement *pRootElement)
+NDBool NDDBServerConfig::readDBInfoXmlCfgContent(const TiXmlElement *pRootElement)
 {
-	if ( NULL == m_pConnParam )
+	if ( NULL == m_pConnParam || NULL == m_pLocalServerInfo )
 	{
 		return NDFalse;
 	}
@@ -411,56 +474,95 @@ NDBool NDDBServerConfig::readDBInfoXmlCfgCommonContent(const TiXmlElement *pRoot
 		return NDFalse;
 	}
 
-	//重组要寻找的DB;
-	char szDBBuf[32] = {0};
-	ND_SNPRINTF( szDBBuf, sizeof(szDBBuf) - 1, "%s%u", DBINFO_TYPENAME, m_pLocalServerInfo->getServerID() );
+	return readDBInfoXmlCfgCommonContent( pChildElement, m_pLocalServerInfo->getServerID(), *m_pConnParam );
+}
 
-	//在pChildElement节点中寻找DB子节点;
-	const TiXmlElement* pSonOfChildElement = pChildElement->FirstChildElement( szDBBuf );
-	if ( NULL == pSonOfChildElement )
+NDBool NDDBServerConfig::readSerChildExtendInfoXmlCfgCommonContent(const TiXmlElement *pParentElement)
+{
+	if ( NULL == pParentElement ||  NULL == m_pDSConfigBaseInfo )
 	{
 		return NDFalse;
 	}
-
-	const char* pContent = getElement2( pSonOfChildElement, DBINFO_HOST );
-	if ( NULL == pContent )
-	{
-		return NDFalse;
-	}
-	m_pConnParam->setHostName( string(pContent) );
-
-	pContent = getElement2( pSonOfChildElement, DBINFO_USER );
-	if ( NULL == pContent )
-	{
-		return NDFalse;
-	}
-	m_pConnParam->setUserName( string(pContent) );
-	
-
-	pContent = getElement2(pSonOfChildElement, DBINFO_PASSWORD);
-	if ( NULL == pContent )
-	{
-		return NDFalse;
-	}
-	m_pConnParam->setPassWord( string(pContent) );
-	
 
 	NDInt32 nIntValue = 0;
-	if ( !getElement2( pSonOfChildElement, DBINFO_PORT, nIntValue ) )
+	if ( !getElement2( pParentElement, SERINFO_EX_SELECT_THREAD, nIntValue ) )
 	{
 		return NDFalse;
 	}
-	m_pConnParam->setPort( nIntValue );
+	m_pDSConfigBaseInfo->m_nSelectDBThread = (NDUint8)nIntValue;
 	
+	nIntValue = 0;
+	if ( !getElement2( pParentElement, SERINFO_EX_UPDATE_THREAD, nIntValue ) )
+	{
+		return NDFalse;
+	}
+	m_pDSConfigBaseInfo->m_nUpdateDBThread = (NDUint8)nIntValue;
 
-	pContent = getElement2( pSonOfChildElement, DBINFO_DBNAME );
-	if ( NULL == pContent )
-	{
-		return NDFalse;
-	}
-	m_pConnParam->setDBName( string(pContent) );
-	
 	return NDTrue;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+NDWSServerConfig::NDWSServerConfig():
+m_pNDWSDBAccountInfoVec(NULL)
+{
+}
+
+NDWSServerConfig::~NDWSServerConfig()
+{
+}
+
+NDBool NDWSServerConfig::readXmlConfigContent(const TiXmlElement *pRootElement)
+{
+	if ( !NDXmlConfigServerCommon::readXmlConfigContent( pRootElement ) )
+	{
+		return NDFalse;
+	}
+
+	return readAllDBInfoXmlCfgCommonContent(pRootElement);
+}
+
+NDBool NDWSServerConfig::readAllDBInfoXmlCfgCommonContent(const TiXmlElement *pRootElement)
+{
+	if ( NULL == m_pNDWSDBAccountInfoVec )
+	{
+		return NDFalse;
+	}
+
+	const TiXmlElement* pChildElement = pRootElement->FirstChildElement(DBINFO);
+	if ( NULL == pChildElement )
+	{
+		return NDFalse;
+	}
+
+	NDInt32 nIntValue = 0;
+	if ( !getElement2( pChildElement, DBINFO_COUNT, nIntValue ) )
+	{
+		return NDFalse;
+	}
+	if ( nIntValue <= 0 )
+	{
+		return NDFalse;
+	}
+
+	NDUint32 nDBCount = nIntValue;
+	m_pNDWSDBAccountInfoVec->resize( nDBCount );
+
+	for ( NDUint32 i = 1; i <= nDBCount; ++i )
+	{
+		NDWSDBAccountInfo& refNDWSDBAccountInfo = (*m_pNDWSDBAccountInfoVec)[i - 1];
+		NDMysqlConnParam&	refMysqlConnParam	= refNDWSDBAccountInfo.mysqlConnParam;
+		
+		if ( NDFalse == readDBInfoXmlCfgCommonContent( pChildElement, i, refMysqlConnParam ) )
+		{
+			return NDFalse;
+		}
+	}
+
+
+	return NDTrue;
+}
+
 
 

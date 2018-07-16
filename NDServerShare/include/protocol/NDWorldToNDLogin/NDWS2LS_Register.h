@@ -23,7 +23,6 @@ public:
 		NDOSTREAM_WRITE( stream, m_szWorldName, ND_WORLDNAME_LEN )
 		NDOSTREAM_WRITE( stream, &m_netAddress, sizeof(m_netAddress) )
 
-
 		return NDTrue;
 	}
 
@@ -34,6 +33,11 @@ public:
 		NDISTREAM_READ( stream, &m_netAddress, sizeof(m_netAddress) )
 					
 		return NDTrue;
+	}
+
+	NDUint16	getSize() const 
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_szWorldName) + sizeof(m_netAddress);
 	}
 
 	void clear()
@@ -51,7 +55,7 @@ public:
 	NDUint32	m_uiErrCode;
 
 public:
-	NDLS2WS_Register_Res() : NDProtocol( CMDP_NDLS2WS_Register_Res ) {}
+	NDLS2WS_Register_Res() : NDProtocol( CMDP_NDLS2WS_Register_Res ) { clear(); }
 	~NDLS2WS_Register_Res() {}
 
 	NDBool serialize( NDOStream& stream )
@@ -62,10 +66,21 @@ public:
 
 		return NDTrue;
 	}
+
 	NDBool deserialize( NDIStream& stream )
 	{
 		NDISTREAM_READ( stream, &m_uiErrCode, sizeof(m_uiErrCode) )
 		return NDTrue;
+	}
+
+	NDUint16	getSize() const 
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_uiErrCode);
+	}
+
+	void clear()
+	{
+		m_uiErrCode = 0;
 	}
 };
 
@@ -78,7 +93,7 @@ public:
 	NDSocketAddress	m_stBestGateAddr;
 
 public:
-	NDWS2LS_LoadFactor_Nty() : NDProtocol( CMDP_NDWS2LS_LoadFactor_Nty ) {}
+	NDWS2LS_LoadFactor_Nty() : NDProtocol( CMDP_NDWS2LS_LoadFactor_Nty ) { clear(); }
 	~NDWS2LS_LoadFactor_Nty() {}
 
 	NDBool serialize( NDOStream& stream )
@@ -88,6 +103,7 @@ public:
 
 		NDOSTREAM_WRITE( stream, &m_nBestGateSessionID, sizeof(m_nBestGateSessionID) )
 		NDOSTREAM_WRITE( stream, &m_stBestGateAddr, sizeof(m_stBestGateAddr) )
+
 		
 		return NDTrue;
 	}
@@ -100,6 +116,11 @@ public:
 		NDISTREAM_READ( stream, &m_stBestGateAddr, sizeof(m_stBestGateAddr) )
 		
 		return NDTrue;
+	}
+
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_stLoadFactor) + sizeof(m_nBestGateSessionID) + sizeof(m_stBestGateAddr);
 	}
 
 	void clear()

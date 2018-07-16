@@ -9,7 +9,7 @@
 
 NDLoginCallBack::NDLoginCallBack(void)
 {
-	NDRegisterCallBackMACRO( sNDLoginServer.dataProcess(), CMDP_PING, this )
+	NDRegisterCallBackMACRO( sNDLoginServer.dataProcess(), CMDP_PING_Req, this )
 	NDRegisterCallBackMACRO( sNDLoginServer.dataProcess(), CMDP_DISCONNECT_NOTIFY, this )
 	//NDRegisterCallBackMACRO( sNDLoginServer.dataProcess(), CMD_TIMER_NOTIFY, this )
 }
@@ -24,7 +24,7 @@ NDBool NDLoginCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocol
 
 	switch (protocolHeader.m_nProtocolID)
 	{
-	case CMDP_PING:
+	case CMDP_PING_Req:
 		{
 			bRet = pingProtocolDispose( rIStream, protocolHeader );
 		}
@@ -63,20 +63,13 @@ NDBool NDLoginCallBack::disconnectNotifyDispose( NDIStream& rIStream, NDProtocol
 		NDRemoteWorldServerInfo* pWorldServerInfo	= dynamic_cast<NDRemoteWorldServerInfo*>(pRemoteServerInfo);
 		const NDSocketAddress& rNetAddress	= pWorldServerInfo->getNetAddress();
 
-		ostringstream& oStr = sNDLoginServer.getostringstream();
-		oStr<< " "
-			<< pWorldServerInfo->getServerName()	<< "["
-			<< rNetAddress.getIP()					<< ":"
-			<< rNetAddress.getPort()				<< "]"
-			<< "[WorldName:"
-			<< pWorldServerInfo->getWorldName()		<< "]"
-			<< "[WorldID:"
-			<< pWorldServerInfo->getWorldID()		<< "]"
-			<< " offline! ";
-		string oStrTemp( oStr.str() );
-		NDLOG_ERROR( oStrTemp.c_str() )
-		oStr.clear();
-		oStr.str("");
+		NDLOG_ERROR(" %s [%s:%d] [WorldName:%s] [WorldID:%d] offline!", 
+					pWorldServerInfo->getServerName(), 
+					rNetAddress.getIP(), 
+					rNetAddress.getPort(), 
+					pWorldServerInfo->getWorldName(),
+					pWorldServerInfo->getWorldID())
+
 
 		sNDLoginServer.worldManager()->removeRemoteServer( protocolHeader.m_nSessionID );
 

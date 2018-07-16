@@ -49,6 +49,13 @@ int main(int argc, char ** argv)
 		NDMessageManager::getInstance()->RegisterMessage();
 
 		NDSessionManager::getInstance();
+		NDSessionManager::getInstance()->setMaxSessionType( NDSessionProtocolType_MAX );
+		NDSessionManager::getInstance()->setSpecialProtocol( CMDP_Special_Start, CMDP_Special_End );
+
+		//客户端到服务器LOGIN类型;
+		NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_C2LS, 0, 2 );
+
+
 
 		do 
 		{
@@ -60,7 +67,7 @@ int main(int argc, char ** argv)
 
 			NDServerTask::getInstance()->taskProcess();
 
-			NDShareBase::NDTimerManager::getInstance()->detectTimerList();
+			NDShareBase::NDTimerEventManager::getInstance()->detectTimerList();
 
 			//printf(" sleep before = %lld. \n", NDShareBaseGlobal::getCurMSTimeOfLoacl() );
 			NDShareBaseGlobal::sleep( 500 );

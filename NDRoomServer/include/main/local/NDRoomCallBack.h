@@ -15,10 +15,13 @@ public:
 	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
-	//client ping protocol dispose;
+	//client ping req protocol dispose;
 	NDBool pingProtocolDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 	//client disconnect dispose;
 	NDBool disconnectNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+
+	//server ping res protocol dispose;
+	NDBool pingResProtocolDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 	//NDBool timerNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 

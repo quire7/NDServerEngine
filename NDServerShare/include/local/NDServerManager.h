@@ -10,8 +10,7 @@ using std::map;
 #include "net/socket/NDSocketAddress.h"
 #include "function/NDSingleton.h"
 
-#include "NDProtocolBase.h"
-
+#include "NDProtocolCommonEnums.h"
 
 namespace NDShareBase
 {
@@ -39,6 +38,7 @@ class NDServerInfo;
 class NDLocalServerInfo;
 class NDConnectProcess;
 class NDLocalServer;
+class NDRemoteServerManager;
 
 class NDServerManager : public NDSingleton<NDServerManager>
 {
@@ -76,19 +76,30 @@ public:
 	NDBool					getClientAddress( NDUint32 nSessionID, NDSocketAddress& refClientAddress );
 	NDBool					disConnectClient( NDUint32 nSessionID );
 
-	NDBool					setSessionProtocolType( NDUint32 nSessionID, NDSessionProtocolType sessionProtocolType );
+	//设置Session的协议类型;
+	NDBool					setServerSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
+	NDBool					setClientSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
 
 	//send protocol to client(real client);
 	NDBool					sendToClient( NDProtocol& protocol, NDUint32 nSessionID, NDBool bCompression=NDFalse, NDBool bEncrypt=NDFalse, NDBool bCrc=NDFalse );
 
 	//处理客户端的PING协议;
 	NDBool					pingProtocolCommonDispose( NDUint32 nSessionID );
+	//处理客户端的断开连接的协议(服务器内部POP的断开连接的协议);
+	NDBool					disconnectNotifyCommonDispose( NDUint32 nSessionID, NDUint8 nDisconnectionType, NDRemoteServerManager* pRemoteServerManager );
+	//处理客户端的断开连接的协议的错误处理;
+	void					disconnectNotifyCommonErrorDispose( NDUint32 nSessionID, NDUint8 nDisconnectionType, const char* szServerName );
+	//处理服务器返回客户端的PING_RES协议;
+	NDBool					pingResProtocolCommonDispose( NDUint32 nSessionID );
+	//处理服务器内部注册的返回处理;
+	NDBool					registerResCommonDispose( NDUint32 nSessionID, NDUint32 nResCode );
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	/* connect server dispose start */
 
 	// get connect server Info;
 	const NDServerInfo*		getConnServerInfo( NDUint32 nSessionID );
+	const NDServerInfo*		getConnServerInfo( SERVERTYPE servType, NDUint32 nServerID );
 
 	// register remote server(need to connect server);
 	void					registerConnServer( NDServerInfo* pServerInfo );
@@ -124,8 +135,10 @@ private:
 	NDClientNetIO*			removeConnServerClientNetIO( NDUint32 nSessionID );
 
 	//设置服务器要处理的协议类型;
-	void					setDisposeProtocol();
+	void					setDisposeSessionProtocol();
 
+	//获得DisconnectionType的字符串;
+	const char*				getDisconnectionTypeStr( NDUint8 nDisconnectionType );
 };
 
 

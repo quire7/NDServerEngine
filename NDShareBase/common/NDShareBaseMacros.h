@@ -37,9 +37,9 @@
 #define MSGBUF_POOL_SIZE	( 1000 )
 #endif
 
-//最大消息包长度64k=(64*1024字节);
+//最大消息包长度60k=(60*1024字节);
 #ifndef MAX_MSGPACKET_SIZE
-#define MAX_MSGPACKET_SIZE	( 65536 )
+#define MAX_MSGPACKET_SIZE	( 61440 )
 #endif
 
 #ifndef MAX_MSGBUF_SIZE
@@ -62,6 +62,10 @@
 #define MAX_STRING_LEN		HUGE_STRING_LEN
 #endif
 
+#ifndef BUF_LEN_32
+#define BUF_LEN_32			( 32 )
+#endif
+
 #ifndef BUF_LEN_64
 #define BUF_LEN_64			( 64 )
 #endif
@@ -76,6 +80,10 @@
 
 #ifndef BUF_LEN_512
 #define BUF_LEN_512			( 512 )
+#endif
+
+#ifndef BUF_LEN_1024
+#define BUF_LEN_1024		( 1024 )
 #endif
 
 #ifndef MAX_SERVER_NAME
@@ -103,13 +111,6 @@
 #define ND_TIME_STRLEN_MIN	( 20 )	//时间字符串最少需要的字节;
 #endif
 
-#ifndef NDACCOUNT_TABLE_USERNAME_LEN
-#define NDACCOUNT_TABLE_USERNAME_LEN			(36)			//real use 32 byte
-#endif
-
-#ifndef NDACCOUNT_TABLE_PASSWORD_LEN
-#define NDACCOUNT_TABLE_PASSWORD_LEN			(20)			//real use 16 byte
-#endif
 
 //SHA1 table length
 #ifndef ND_SHA1_LEN
@@ -156,12 +157,23 @@
 #define ND_PING_MILLISECONDS					(30000)			//30000 milli seconds;
 #endif
 
+//main loop heartbeat milli seconds;
 #ifndef ND_MAIN_PROC_MILLISECONDS
 #define ND_MAIN_PROC_MILLISECONDS				(100)			//100 milli seconds;
 #endif
 
 #ifndef ND_SMU_LOCK_LOOP_MAX
 #define ND_SMU_LOCK_LOOP_MAX					(10)			//获得Sharememory单元轮询最大次数;
+#endif
+
+//打印NDMemoryPoolExManager内存情况,时间为600s;
+#ifndef ND_PRINT_OBJMEMEX_INFO_MILLISECONDS
+#define ND_PRINT_OBJMEMEX_INFO_MILLISECONDS		(600000)		//600 second;
+#endif
+
+
+#ifndef ND_THREAD_NAME_MAX
+#define ND_THREAD_NAME_MAX						(64)			//thread name max length;
 #endif
 
 

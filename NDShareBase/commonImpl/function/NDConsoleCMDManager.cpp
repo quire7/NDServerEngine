@@ -42,9 +42,7 @@ NDBool NDConsoleCMDManager::process( const string& strMsg )
 
 	if (strVec.empty())
 	{
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " message: %s not dispose. ", strMsg.c_str() );
-		NDLOG_ERROR( szErrBuf )
+		NDLOG_ERROR( " message: %s not dispose. ", strMsg.c_str() );
 
 		return NDFalse;
 	}
@@ -52,9 +50,7 @@ NDBool NDConsoleCMDManager::process( const string& strMsg )
 	ConsoleCMDMapIter iterFind = m_consoleCMDMap.find( strVec[0] );
 	if ( iterFind == m_consoleCMDMap.end() )
 	{
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " message: %s not dispose. ", strMsg.c_str() );
-		NDLOG_ERROR( szErrBuf )
+		NDLOG_ERROR( " message: %s not dispose. ", strMsg.c_str() );
 
 		return NDFalse;
 	}
@@ -62,9 +58,7 @@ NDBool NDConsoleCMDManager::process( const string& strMsg )
 	NDConsoleCommand* pNDConsoleCommand = iterFind->second;
 	if ( NULL == pNDConsoleCommand )
 	{
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " message: %s not dispose. ", strMsg.c_str() );
-		NDLOG_ERROR( szErrBuf )
+		NDLOG_ERROR( " message: %s not dispose. ", strMsg.c_str() );
 
 		return NDFalse;
 	}

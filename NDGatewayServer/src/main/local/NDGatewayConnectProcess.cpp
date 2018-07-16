@@ -30,6 +30,8 @@ void NDGatewayConnectProcess::connected( const NDServerInfo* pServerInfo )
 			registerReq.m_netAddress    = pLocalServerInfo->getNetAddress();
 
 			NDServerManager::getSingleton().sendToServer( registerReq, pServerInfo->getSessionID() );
+
+			NDServerManager::getSingleton().setClientSessionProtocolType( pServerInfo->getSessionID(), NDSessionProtocolType_GS2GTWS );
 		}
 		break;
 	case ROOM_SERVER:
@@ -39,6 +41,8 @@ void NDGatewayConnectProcess::connected( const NDServerInfo* pServerInfo )
 			registerReq.m_netAddress    = pLocalServerInfo->getNetAddress();
 
 			NDServerManager::getSingleton().sendToServer( registerReq, pServerInfo->getSessionID() );
+
+			NDServerManager::getSingleton().setClientSessionProtocolType( pServerInfo->getSessionID(), NDSessionProtocolType_RS2GTWS );
 		}
 		break;
 	default:

@@ -25,7 +25,7 @@ NDBool NDS2SRegisterCallBack::process( NDIStream& rIStream, NDProtocolHeader& pr
 	{
 	case CMDP_NDWS2LS_Register_Req:
 		{
-			bRet = c2lRegisterReqDispose( rIStream, protocolHeader );
+			bRet = ws2lsRegisterReqDispose( rIStream, protocolHeader );
 		}
 		break;
 	//case CMD_NDL2A_Register_Res:
@@ -38,7 +38,7 @@ NDBool NDS2SRegisterCallBack::process( NDIStream& rIStream, NDProtocolHeader& pr
 	return bRet;
 }
 
-NDBool NDS2SRegisterCallBack::c2lRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
+NDBool NDS2SRegisterCallBack::ws2lsRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
 	NDWS2LS_Register_Req registerReq;
 	if ( NDFalse == registerReq.deserialize(rIStream) )
@@ -64,16 +64,14 @@ NDBool NDS2SRegisterCallBack::c2lRegisterReqDispose( NDIStream& rIStream, NDProt
 
 	sNDLoginServer.worldManager()->addRemoteServer( pWorld );
 
-	//NDServerManager::getSingleton().SetSessionProtocolType( protocolHeader.m_nSessionID, NDSessionProtocolType_CS2L );
+	NDServerManager::getSingleton().setServerSessionProtocolType( protocolHeader.m_nSessionID, NDSessionProtocolType_WS2LS );
 
 	const NDSocketAddress& rNetAddress = registerReq.m_netAddress;
 
-	char szBuf[BUF_LEN_256] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [WorldName:%s] connected. ",	pWorld->getServerName(),
-																						rNetAddress.getIP(),
-																						rNetAddress.getPort(),
-																						pWorld->getWorldName() );
-	NDLOG_INFO( szBuf )
+	NDLOG_INFO( " %s [%s:%u] [WorldName:%s] connected. ", pWorld->getServerName(),
+														rNetAddress.getIP(),
+														rNetAddress.getPort(),
+														pWorld->getWorldName() );
 
 
 	NDLS2WS_Register_Res response;

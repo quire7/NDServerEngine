@@ -26,6 +26,8 @@
 #include "stl/NDSTLExtend.h"
 #include "stl/NDSortedVector.h"
 
+#include "memory/object/NDMemoryPoolExManager.h"
+
 //用using避免使用完全限定名;
 using NDShareBase::NDProtocolHeader;
 using NDShareBase::NDProtocolCallBack;
@@ -42,8 +44,13 @@ using NDShareBase::IsObjEqualUnary;
 using NDShareBase::ObjGreatCmp;
 using NDShareBase::safe_advance;
 
+using NDShareBase::NDMemoryPoolExManager;
 
 //self 工程头文件;
+#include "NDServerShareEnums.h"
+#include "NDServerShareMacros.h"
+#include "NDServerShareStructs.h"
+
 #include "local/NDXmlConfigServerCommon.h"
 #include "local/NDServerInfo.h"
 #include "local/NDLocalServer.h"

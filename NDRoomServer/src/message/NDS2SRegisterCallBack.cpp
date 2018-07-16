@@ -58,29 +58,8 @@ NDBool NDS2SRegisterCallBack::rs2wsRegisterResDispose( NDIStream& rIStream, NDPr
 		return NDFalse;
 	}
 
-	const NDServerInfo* pWorldServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pWorldServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::rs2wsRegisterResDispose] pWorldServerInfo is NULL!" )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_nErrorCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pWorldServerInfo->getServerName(),
-																									pWorldServerInfo->getServerIP(),
-																									pWorldServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. nErrorCode=%u. ",	pWorldServerInfo->getServerName(),
-																												pWorldServerInfo->getServerIP(),
-																												pWorldServerInfo->getServerPort(),
-																												registerRes.m_nErrorCode );
-		NDLOG_ERROR( szBuf )
-	}
+	//WS回复RS注册消息;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_nErrorCode );
 
 	return NDTrue;
 }
@@ -95,29 +74,8 @@ NDBool NDS2SRegisterCallBack::rs2gsRegisterResDispose( NDIStream& rIStream, NDPr
 		return NDFalse;
 	}
 
-	const NDServerInfo* pGameServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pGameServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::rs2gsRegisterResDispose] pGameServerInfo is NULL!" )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_nErrorCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pGameServerInfo->getServerName(),
-																									pGameServerInfo->getServerIP(),
-																									pGameServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. nErrorCode=%u. ",	pGameServerInfo->getServerName(),
-																												pGameServerInfo->getServerIP(),
-																												pGameServerInfo->getServerPort(),
-																												registerRes.m_nErrorCode );
-		NDLOG_ERROR( szBuf )
-	}
+	//GS回复RS注册消息;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_nErrorCode );
 
 	return NDTrue;
 }
@@ -154,16 +112,14 @@ NDBool NDS2SRegisterCallBack::gws2rsRegisterReqDispose( NDIStream& rIStream, NDP
  
 	pGatewayServerMgr->addRemoteServer( pGatewayServerInfo );
 
-	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GT2CS );
+	NDServerManager::getSingleton().setServerSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GTWS2RS );
 
 	const NDSocketAddress& rNetAddress = pGatewayServerInfo->getNetAddress();
 
-	char szBuf[BUF_LEN_128] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [GatewayServerID:%u] connected. ",	pGatewayServerInfo->getServerName(),
-																							rNetAddress.getIP(),
-																							rNetAddress.getPort(),
-																							pGatewayServerInfo->getServerID() );
-	NDLOG_INFO( szBuf )
+	NDLOG_INFO( " %s [%s:%u] [GatewayServerID:%u] connected. ", pGatewayServerInfo->getServerName(),
+																rNetAddress.getIP(),
+																rNetAddress.getPort(),
+																pGatewayServerInfo->getServerID() );
 
 	NDGWS2RS_Register_Res	registerRes;
 	registerRes.m_nErrorCode = eND_SRS_OK;

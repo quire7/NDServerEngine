@@ -239,10 +239,19 @@ NDBool NDCLogManager::initFile()
 
 NDBool NDCLogManager::write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, ... )
 {
+	va_list ap;
+	va_start( ap, pFormat );
+	NDBool bRet = write( pFile, nLine, nLevel, pFormat, ap );
+	va_end(ap);
+	return bRet;
+}
+
+NDBool NDCLogManager::write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, va_list ap )
+{
 	if ( NULL == m_pLogFile )				return NDFalse;
 	if ( NDFalse == m_pLogFile->isopen() )	return NDFalse;
 
-	if ( m_pLogFile->size() >= m_nLogMaxSize  )
+	if ( m_pLogFile->size() >= m_nLogMaxSize )
 	{
 		delete m_pLogFile;
 		m_pLogFile = NULL;
@@ -253,11 +262,7 @@ NDBool NDCLogManager::write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, c
 		}
 	}
 
-	va_list ap;
-	va_start( ap, pFormat );
-	NDBool bRet = m_pLogFile->write( pFile, nLine, nLevel, pFormat, ap );
-	va_end(ap);
-	return bRet;
+	return m_pLogFile->write( pFile, nLine, nLevel, pFormat, ap );
 }
 
 void NDCLogManager::close()

@@ -810,6 +810,18 @@ void NDByteBufferImpl::RollBack()
 	{
 		m_nHeadPos = m_nLastHeadPos;
 		m_nTailPos = m_nLastTailPos;
+
+		if (m_nLastTailPos > m_nLastHeadPos) {
+			m_nDataSize= (m_nLastTailPos - m_nLastHeadPos);
+		} else {
+			if (m_nLastTailPos == m_nLastHeadPos) {
+				m_nHeadPos = 0;
+				m_nTailPos = 0;
+				m_nDataSize= 0;
+			} else {
+				m_nDataSize = (m_nCapacitySize - m_nHeadPos) + m_nTailPos;
+			}
+		}
 	}	
 }
 

@@ -10,6 +10,7 @@
 //message file;
 #include "message/NDS2SRegisterCallBack.cpp"
 #include "message/NDWS2LSCallBack.cpp"
+#include "message/NDC2LSCallBack.cpp"
 
 
 

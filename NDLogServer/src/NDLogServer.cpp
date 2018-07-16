@@ -10,6 +10,7 @@
 
 #include "NDLogServer.h"
 
+
 #include "NDShareBaseGlobal.h"
 #include "sharememory/NDShareMemoryUnitManager.h"
 #include "function/NDRefCounted.h"
@@ -36,7 +37,6 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-
 int mainWapper( int argc, char** argv )
 {
 #ifdef	WIN32
@@ -49,6 +49,30 @@ int mainWapper( int argc, char** argv )
 		return 1;
 	}
 #endif
+
+	//for test start;
+	NDUint16 nDestValue = 0;
+	NDUint16 nOld = 0;
+	NDUint16 nSet = 10;
+	
+	int nNum = 10;
+
+	//NDUint16 nRet = NDShareBaseGlobal::atomic_cas(&nDestValue, nOld, nSet);
+	if (NDShareBaseGlobal::spin_lock_unlock(&nDestValue, nOld, nSet))
+	{
+		nNum = 20;
+	}
+
+	nOld = 10;
+	nSet = 0;
+
+	//nRet = NDShareBaseGlobal::atomic_cas(&nDestValue, nOld, nSet);
+	if (NDShareBaseGlobal::spin_lock_unlock(&nDestValue, nOld, nSet))
+	{
+		nNum = 10;
+	}
+
+	//for test end;
 
 	if ( NDFalse == refNDLogServer->init() )
 	{
@@ -88,22 +112,22 @@ BOOL WINAPI handlerRoutine( DWORD dwCtrlType )
 	switch( dwCtrlType )
 	{
 	case CTRL_C_EVENT:
-		//NDLOG_WARNGING( " CTRL_C_EVENT " )
+		//NDLOG_WARNING( " CTRL_C_EVENT " )
 		break;
 	case CTRL_BREAK_EVENT:
-		//NDLOG_WARNGING( " CTRL_BREAK_EVENT " )
+		//NDLOG_WARNING( " CTRL_BREAK_EVENT " )
 		break;
 	case CTRL_CLOSE_EVENT:
-		//NDLOG_WARNGING( " CTRL_CLOSE_EVENT " )
+		//NDLOG_WARNING( " CTRL_CLOSE_EVENT " )
 		break;
 	case CTRL_LOGOFF_EVENT:
-		//NDLOG_WARNGING( " CTRL_LOGOFF_EVENT " )
+		//NDLOG_WARNING( " CTRL_LOGOFF_EVENT " )
 		break;
 	case CTRL_SHUTDOWN_EVENT:
-		//NDLOG_WARNGING( " CTRL_SHUTDOWN_EVENT " )
+		//NDLOG_WARNING( " CTRL_SHUTDOWN_EVENT " )
 		break;
 	default:
-		//NDLOG_WARNGING( " default " )
+		//NDLOG_WARNING( " default " )
 		break;
 	}
 
@@ -224,6 +248,10 @@ NDBool NDLogServer::loop()
 
 			bInvalid		= NDFalse;
 			nLastOpUnitTime	= pNDShareLogCacheSMU->getSaveTime();
+			if ( 0 == nLastOpUnitTime )
+			{   //Î´Ê¹ÓÃ;
+				continue;
+			}
 			if ( ( nCurSeconds - nLastOpUnitTime ) > 180 )
 			{
 				bInvalid = NDTrue;

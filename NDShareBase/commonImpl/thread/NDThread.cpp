@@ -1,90 +1,122 @@
 #include "thread/NDThread.h"
 
-#ifdef WIN32
-#include "../windows/thread/NDWindowsThreadImpl.h"
-#elif defined(LINUX)
-#include "../linux/thread/NDLinuxThreadImpl.h"
-#endif
-
-
-
 
 _NDSHAREBASE_BEGIN
 
 NDThread::NDThread()
 {
+	m_nThreadID		= 0;
+	m_eThreadStatus	= EThreadStatus_invalid;
+
+	memset( m_szName, 0, sizeof(m_szName) );
+
 #ifdef WIN32
-	m_pNDThreadImpl = new NDWindowsThreadImpl;
-#elif defined(LINUX)
-	m_pNDThreadImpl = new NDLiunxThreadImpl;
+	m_hThread		= NULL;
 #endif
 }
 
 NDThread::~NDThread()
 {
-	if ( NULL == m_pNDThreadImpl )
-	{
-		delete m_pNDThreadImpl;
-		m_pNDThreadImpl = NULL;
-	}
+	m_nThreadID		= 0;
+	m_eThreadStatus	= EThreadStatus_exit;
 }
 
 void NDThread::start()
 {
-	if( NULL == m_pNDThreadImpl )	return;
-	m_pNDThreadImpl->start();
+#ifdef WIN32
+	m_hThread	= (HANDLE)::_beginthreadex( NULL, 0, myThreadProcess, this, 0, &m_nThreadID );
+#elif defined(LINUX)
+	pthread_create( &m_nThreadID, NULL, myThreadProcess, this );
+#endif
 }
 
 void NDThread::exit( void* pRetVal )
 {
-	if( NULL == m_pNDThreadImpl )	return;
-	m_pNDThreadImpl->exit( pRetVal );
+#ifdef WIN32
+	pRetVal;
+	if ( m_hThread )
+	{
+		::CloseHandle( m_hThread );
+		m_hThread = NULL;
+	}
+#elif defined(LINUX)
+	pthread_exit( pRetVal );
+#endif
 }
 
 void NDThread::run()
 {
-	if( NULL == m_pNDThreadImpl )	return;
-	m_pNDThreadImpl->run();
 }
 
 void NDThread::stop()
 {
-	if( NULL == m_pNDThreadImpl )	return;
-	m_pNDThreadImpl->stop();
-}
-
-ThreadID NDThread::getThreadID() const
-{
-	if( NULL == m_pNDThreadImpl )	return 0;
-	return m_pNDThreadImpl->getThreadID();
-}
-
-EThreadStatus NDThread::getStatus() const
-{	
-	if( NULL == m_pNDThreadImpl )	return EThreadStatus_invalid;
-	return m_pNDThreadImpl->getStatus();
-}
-
-void NDThread::setStatus( EThreadStatus eStatus )
-{
-	if( NULL == m_pNDThreadImpl )	return;
-
-	m_pNDThreadImpl->setStatus( eStatus );
-}
-
-const char* NDThread::getName() const
-{
-	if( NULL == m_pNDThreadImpl )	return NULL;
-
-	return m_pNDThreadImpl->getName();
 }
 
 void NDThread::setName( const char* szName )
 {
-	if( NULL == m_pNDThreadImpl )	return;
+	if ( NULL == szName || '\0' == szName[0])
+	{
+		return;
+	}
 
-	m_pNDThreadImpl->setName( szName );
+	NDUint32 nSize = (NDUint32)strlen( szName );
+	if ( nSize >= ND_THREAD_NAME_MAX )
+	{
+		nSize = ND_THREAD_NAME_MAX - 1;
+	}
+
+	memcpy( m_szName, szName, nSize );
+
+	m_szName[nSize] = '\0';
 }
 
+#ifdef WIN32
+unsigned int WINAPI NDThread::myThreadProcess(void* pDerivedThread)
+{
+	NDThread* pthread = (NDThread*)pDerivedThread;
+	if ( NULL == pthread )
+	{
+		return 0;
+	}
+
+	//set thread's status to "running";
+	pthread->setStatus( EThreadStatus_running );
+
+	//here - polymorphism used.( derived::run() called .);
+	pthread->run();
+
+	//set thread's status to "exit";
+	pthread->setStatus( EThreadStatus_exit );
+
+	pthread->exit( NULL );
+
+	::_endthreadex(0);
+
+	return 0;
+}
+#elif defined(LINUX)
+void*	NDThread::myThreadProcess( void* pDerivedThread )
+{
+	NDThread* pthread = (NDThread*)pDerivedThread;
+	if ( NULL == pthread )
+	{
+		return 0;
+	}
+
+	//set thread's status to "running";
+	pthread->setStatus( EThreadStatus_running );
+
+	//here - polymorphism used.( derived::run() called .);
+	pthread->run();
+
+	//set thread's status to "exit";
+	pthread->setStatus( EThreadStatus_exit );
+
+	//int nRet = 0;
+	//pthread->exit( &nRet );
+
+	return 0;
+}
+#endif
 
 _NDSHAREBASE_END

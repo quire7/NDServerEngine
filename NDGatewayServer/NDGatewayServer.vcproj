@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -195,7 +195,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -343,13 +343,6 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="UnityDebug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<Filter
 				Name="main"
@@ -410,10 +403,42 @@
 					Name="remote"
 					>
 				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\src\main\data\NDGTWSPlayer.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\data\NDGTWSPlayerManager.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="message"
 				>
+				<File
+					RelativePath=".\src\message\NDGS2GTWSCallBack.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\src\message\NDS2SRegisterCallBack.cpp"
 					>
@@ -460,10 +485,26 @@
 					Name="remote"
 					>
 				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\include\main\data\NDGTWSPlayer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDGTWSPlayerManager.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="message"
 				>
+				<File
+					RelativePath=".\include\message\NDGS2GTWSCallBack.h"
+					>
+				</File>
 				<File
 					RelativePath=".\include\message\NDS2SRegisterCallBack.h"
 					>

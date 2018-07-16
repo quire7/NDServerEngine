@@ -57,17 +57,21 @@ NDBool NDS2SRegisterCallBack::gs2dsRegisterReqDispose( NDIStream& rIStream, NDPr
 
 	sNDDataServer.gameServerManager()->addRemoteServer( pGameServerInfo );
 
-	//NDServerManager::getSingleton().SetSessionProtocolType( protocolHeader.m_nSessionID, NDSessionProtocolType_CS2L );
+	NDServerManager::getSingleton().setServerSessionProtocolType( protocolHeader.m_nSessionID, NDSessionProtocolType_GS2DS );
 
 	const NDSocketAddress& rNetAddress = registerReq.m_netAddress;
 
-	char szBuf[BUF_LEN_256] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [GameServerID:%u] connected. ",	pGameServerInfo->getServerName(),
-																						rNetAddress.getIP(),
-																						rNetAddress.getPort(),
-																						pGameServerInfo->getServerID() );
-	NDLOG_INFO( szBuf )
+	
+	NDLOG_INFO( " %s [%s:%u] [GameServerID:%u] connected. ", pGameServerInfo->getServerName(),
+															rNetAddress.getIP(),
+															rNetAddress.getPort(),
+															pGameServerInfo->getServerID() );
 
+	//for test, must delete (fxd);
+	NDDSWaitingAccount waitingAccount;
+	waitingAccount.nGameServerID	= 1;
+	waitingAccount.nPlayerGUID		= 1;
+	sNDDataServer.dataManager()->addWaitingQueue( waitingAccount );
 
 	NDGS2DS_Register_Res response;
 	response.m_nErrorCode = eND_SRS_OK;

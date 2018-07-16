@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\main">
+      <UniqueIdentifier>{03dc314f-8843-422a-b4fa-e13d00ab3a05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\local">
+      <UniqueIdentifier>{6cb3f5b9-291b-4df6-aadb-69bc7373ddaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\remote">
+      <UniqueIdentifier>{dfbae086-aba4-4ed5-8a22-103ba3fe92d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\message">
+      <UniqueIdentifier>{f6178094-9366-4357-bd1c-c43065a6a28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\main">
+      <UniqueIdentifier>{a3620d94-4f6c-4d79-af99-99a9fa5d7694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\local">
+      <UniqueIdentifier>{64ee7f8d-0a82-462a-94d8-c280edec4628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\remote">
+      <UniqueIdentifier>{33ce523d-97a9-46f3-8b8f-639af692acc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\message">
+      <UniqueIdentifier>{9d4c4bb5-4add-4cd9-b68a-ad455c9839cc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDRoomServer_all.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDPreCompiler.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDRoomCallBack.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDRoomConnectProcess.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDRoomServer.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDS2SRegisterCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\main\local\NDPreCompiler.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDRoomCallBack.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDRoomConnectProcess.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDRoomServer.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDS2SRegisterCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

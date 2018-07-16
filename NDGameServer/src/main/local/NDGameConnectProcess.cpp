@@ -35,6 +35,8 @@ void NDGameConnectProcess::connected( const NDServerInfo* pServerInfo )
 			registerReq.m_netAddress    = pLocalServerInfo->getNetAddress();
 
 			NDServerManager::getSingleton().sendToServer( registerReq, pServerInfo->getSessionID() );
+
+			NDServerManager::getSingleton().setClientSessionProtocolType( pServerInfo->getSessionID(), NDSessionProtocolType_WS2GS );
 		}
 		break;
 	case DB_SERVER:
@@ -44,6 +46,8 @@ void NDGameConnectProcess::connected( const NDServerInfo* pServerInfo )
 			registerReq.m_netAddress	= pLocalServerInfo->getNetAddress();
 
 			NDServerManager::getSingleton().sendToServer( registerReq, pServerInfo->getSessionID() );
+
+			NDServerManager::getSingleton().setClientSessionProtocolType( pServerInfo->getSessionID(), NDSessionProtocolType_DS2GS );
 		}	
 		break;
 	default:

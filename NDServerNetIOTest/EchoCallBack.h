@@ -5,6 +5,9 @@
 
 #include "net/stream/NDProtocolPacket.h"
 #include "net/process/NDDataProcess.h"
+#include "net/session/NDSessionManager.h"
+#include "NDProtocolCommonEnums.h"
+
 #include "NDEchoProtocol.h"
 
 using namespace NDShareBase;
@@ -24,7 +27,8 @@ public:
 		std::cout << "Session ID is :" << rNDProtocolHeader.m_nSessionID << std::endl;
 		std::cout << "protocol data is :" << echoProtocol.m_strData << std::endl;
 
-		//pServerNetIO.SetSessionProtocolType( rNDProtocolHeader.m_nSessionID, NDSessionProtocolType_CLIENT2GT  );
+		NDSessionManager::getInstance()->setServerSessionProtocolType( rNDProtocolHeader.m_nSessionID, NDSessionProtocolType_C2LS );
+		
 
 		return pServerNetIO.sendToClient(echoProtocol, rNDProtocolHeader.m_nSessionID, NDFalse, NDFalse, NDTrue );
 	}

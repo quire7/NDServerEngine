@@ -1,12 +1,14 @@
 #include "main/local/NDWorldCallBack.h"
 
+#include "special/NDSpecialProtocol.h"
 
 #include "main/local/NDWorldServer.h"
 
 
 NDWorldCallBack::NDWorldCallBack(void)
 {
-	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_PING, this )
+	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_PING_Req, this )
+	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_PING_Res, this )
 	NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMDP_DISCONNECT_NOTIFY, this )
 	//NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMD_TIMER_NOTIFY, this )
 }
@@ -27,9 +29,14 @@ NDBool NDWorldCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocol
 
 	switch (protocolHeader.m_nProtocolID)
 	{
-	case CMDP_PING:
+	case CMDP_PING_Req:
 		{
 			bRet = pingProtocolDispose( rIStream, protocolHeader );
+		}
+		break;
+	case CMDP_PING_Res:
+		{			
+			bRet = pingResProtocolDispose( rIStream, protocolHeader );
 		}
 		break;
 	case CMDP_DISCONNECT_NOTIFY:
@@ -54,49 +61,40 @@ NDBool NDWorldCallBack::process( NDIStream& rIStream, NDProtocolHeader& protocol
 
 NDBool NDWorldCallBack::disconnectNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {
-	NDRemoteServerInfo* pRemoteServerInfo = sNDWorldServer.gameServerManager()->getRemoteServerInfoBySessionID( protocolHeader.m_nSessionID );
-	if ( NULL != pRemoteServerInfo )
-	{	//dispose NDGameServer offline;
-		//NDRemoteGameServerCommonInfo* pGameServerInfo	= dynamic_cast<NDRemoteGameServerCommonInfo*>(pRemoteServerInfo);
-		NDRemoteServerInfo* pGameServerInfo = pRemoteServerInfo;
-		const NDSocketAddress& rNetAddress	= pGameServerInfo->getNetAddress();
-
-		char szBuf[BUF_LEN_128] = {0};
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [GameServerID:%u] offline. ",	pGameServerInfo->getServerName(),
-																							rNetAddress.getIP(),
-																							rNetAddress.getPort(),
-																							pGameServerInfo->getServerID());
-		NDLOG_ERROR( szBuf )
-
-		sNDWorldServer.gameServerManager()->removeRemoteServer( protocolHeader.m_nSessionID );
-
-		return NDTrue;
+	NDDisconnectNtyProtocol disconnectNty;
+	if ( NDFalse == disconnectNty.deserialize( rIStream ) )
+	{
+		NDLOG_ERROR( " [NDGameCallBack::disconnectNotifyDispose] NDDisconnectNtyProtocol deserialize failed! " )
+			return NDFalse;
 	}
-	
-	pRemoteServerInfo = sNDWorldServer.roomServerManager()->getRemoteServerInfoBySessionID( protocolHeader.m_nSessionID );
-	if ( NULL != pRemoteServerInfo )
-	{	//dispose NDRoomServer offline;
-		//NDRemoteRoomServerCommonInfo* pRoomServerInfo	= dynamic_cast<NDRemoteRoomServerCommonInfo*>(pRemoteServerInfo);
-		NDRemoteServerInfo* pRoomServerInfo = pRemoteServerInfo;
-		const NDSocketAddress& rNetAddress	= pRoomServerInfo->getNetAddress();
-
-		char szBuf[BUF_LEN_128] = {0};
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [RoomServerID:%u] offline. ",	pRoomServerInfo->getServerName(),
-																							rNetAddress.getIP(),
-																							rNetAddress.getPort(),
-																							pRoomServerInfo->getServerID() );
-		NDLOG_ERROR( szBuf )
-
-		sNDWorldServer.roomServerManager()->removeRemoteServer( protocolHeader.m_nSessionID );
-
+	//dispose NDRoomServer offline;
+	if ( NDTrue == NDServerManager::getSingleton().disconnectNotifyCommonDispose( protocolHeader.m_nSessionID, disconnectNty.m_nDisconnectionType, sNDWorldServer.roomServerManager() ) )
+	{
 		return NDTrue;
 	}
 
-	char szErrorBuf[BUF_LEN_128] = {0};
-	ND_SNPRINTF( szErrorBuf, sizeof(szErrorBuf) - 1, " NDWorldCallBack::disconnectNotifyDispose connect error link. SessionID=%u. ", protocolHeader.m_nSessionID );
-	NDLOG_ERROR( szErrorBuf )
+	//dispose NDGameServer offline;
+	if ( NDTrue == NDServerManager::getSingleton().disconnectNotifyCommonDispose( protocolHeader.m_nSessionID, disconnectNty.m_nDisconnectionType, sNDWorldServer.gameServerManager() ) )
+	{
+		return NDTrue;
+	}
+
+	//走到这里就TM的错了,根据设计有NDRoomServer和NDGameServer连接NDWorldServer.(除非设计改变);
+	NDServerManager::getSingleton().disconnectNotifyCommonErrorDispose( protocolHeader.m_nSessionID, disconnectNty.m_nDisconnectionType, "NDWorldServer" );
 
 	return NDFalse;
+}
+
+NDBool NDWorldCallBack::pingResProtocolDispose(NDIStream& rIStream, NDProtocolHeader& protocolHeader)
+{
+	NDPingResProtocol pingRes;
+	if ( NDFalse == pingRes.deserialize(rIStream) ) 
+	{
+		NDLOG_ERROR( " [NDWorldCallBack::pingResProtocolDispose] NDPingResProtocol deserialize failed!" )
+		return NDFalse;
+	}
+
+	return NDServerManager::getSingleton().pingResProtocolCommonDispose( protocolHeader.m_nSessionID );
 }
 
 //NDBool NDWorldCallBack::timerNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )

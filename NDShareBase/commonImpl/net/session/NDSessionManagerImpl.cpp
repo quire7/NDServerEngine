@@ -1,6 +1,6 @@
 #include "NDSessionManagerImpl.h"
 
-
+#include "NDShareBaseEnums.h"
 #include "NDShareBaseGlobal.h"
 #include "thread/NDMutex.h"
 
@@ -154,7 +154,7 @@ NDSessionManagerImpl::~NDSessionManagerImpl(void)
 }
 
 
-NDBool NDSessionManagerImpl::sendData( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise, NDBool bClient )
+NDBool NDSessionManagerImpl::sendData( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise, NDBool bClient )
 {
 	NDByteBuffer* pMsgBuf = NDByteBufferPool::getInstance()->createByteBuffer();
 	if ( NULL == pMsgBuf )
@@ -199,12 +199,12 @@ NDBool NDSessionManagerImpl::sendData( NDProtocol& rProtocol, NDUint32 nSessionI
 	return NDFalse;
 }
 
-NDBool NDSessionManagerImpl::sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise )
+NDBool NDSessionManagerImpl::sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise )
 {	
 	return sendData( rProtocol, nSessionID, nProDataHeadBitWise, NDFalse );
 }
 
-NDBool NDSessionManagerImpl::sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise )
+NDBool NDSessionManagerImpl::sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise )
 {	
 	return sendData( rProtocol, nSessionID, nProDataHeadBitWise, NDTrue );
 }
@@ -454,7 +454,7 @@ void NDSessionManagerImpl::updateReleaseSessionMap()
 
 void NDSessionManagerImpl::updateServerSessionMap()
 {
-	UINTDeque  destorySessionDeque;
+	//UINTDeque  destorySessionDeque;
 	SessionMap serverSessionMapCopy;
 	//copy current session map
 	do 
@@ -475,33 +475,35 @@ void NDSessionManagerImpl::updateServerSessionMap()
 		{
 			if ( SOCKET_PING_TIMEOUT <= ( NDShareBaseGlobal::getDiffMilliSecondTime( nCurrentANSISecondTime, pSession->getLastPingSecondTime() ) ) )
 			{
-				destorySessionDeque.push_back( iterBegin->first );
+				pSession->setDisconnectionType( ESessionDisconnectionType_PING_BEYOND_TIME_ACTIVE );
+				pSession->handleClose();	//这个地方不需要删除m_serverSessionMap中的session,你懂的,仔细看;
+				//destorySessionDeque.push_back( iterBegin->first );
 			}
 		}
 	}
 
-	if ( false == destorySessionDeque.empty() )
-	{
-		do 
-		{
-			UINTDequeIter UINTDequeIterBegin  = destorySessionDeque.begin();
-			UINTDequeIter UINTDequeIterEnd	  = destorySessionDeque.end();
+	//if ( false == destorySessionDeque.empty() )
+	//{
+	//	do 
+	//	{
+	//		UINTDequeIter UINTDequeIterBegin  = destorySessionDeque.begin();
+	//		UINTDequeIter UINTDequeIterEnd	  = destorySessionDeque.end();
 
-			NDGuardLock locker( *m_pServerMutex );
-			for ( ;	UINTDequeIterBegin != UINTDequeIterEnd; ++UINTDequeIterBegin )
-			{
-				SessionMapIter destoryIterFind = m_serverSessionMap.find( *UINTDequeIterBegin );
-				if ( destoryIterFind != m_serverSessionMap.end() )
-				{
-					pSession = (NDServerSession*)destoryIterFind->second;
-					if ( NULL != pSession )
-					{
-						pSession->handleClose();	
-					}
-				}
-			}
-		} while (0);
-	}
+	//		NDGuardLock locker( *m_pServerMutex );
+	//		for ( ;	UINTDequeIterBegin != UINTDequeIterEnd; ++UINTDequeIterBegin )
+	//		{
+	//			SessionMapIter destoryIterFind = m_serverSessionMap.find( *UINTDequeIterBegin );
+	//			if ( destoryIterFind != m_serverSessionMap.end() )
+	//			{
+	//				pSession = (NDServerSession*)destoryIterFind->second;
+	//				if ( NULL != pSession )
+	//				{
+	//					pSession->handleClose();	
+	//				}
+	//			}
+	//		}
+	//	} while (0);
+	//}
 }
 
 
@@ -654,7 +656,7 @@ NDBool NDSessionManagerImpl::setCommonDisconnectNtyProtocol( NDProtocol* pDiscon
 	return NDTrue;
 }
 
-NDBool NDSessionManagerImpl::popCommonDisconnectNtyProtocol( NDUint32 nSessionID )
+NDBool NDSessionManagerImpl::popCommonDisconnectNtyProtocol( NDUint32 nSessionID, NDUint8 nDisconnectionType )
 {
 	if ( NULL == m_pDisconnectNtyProtocol )	return NDFalse;
 	
@@ -673,6 +675,11 @@ NDBool NDSessionManagerImpl::popCommonDisconnectNtyProtocol( NDUint32 nSessionID
 		return NDFalse;
 	}
 
+	//NDDisconnectNtyProtocol特殊处理(由于底层不知道具体协议中的结构,所以在这个地方做特色处理,;
+	//NDDisconnectNtyProtocol中serialize函数中不需要写入结构,直接在底层写入,deserialize函数中;
+	//要做读处理跟其他协议一样);
+	pProtocolBuf->writeBuffer( (const char*)&nDisconnectionType, sizeof(nDisconnectionType) );
+
 	//put msg into  msg dispose deque;
 	NDServerTask::getInstance()->putQueue( pProtocolBuf );
 
@@ -684,87 +691,50 @@ void NDSessionManagerImpl::setSessionParsePacketFun( PParsePacketFun parsePacket
 	NDSession::setParsePacketFun( parsePacketFun );
 }
 
+NDBool NDSessionManagerImpl::setServerSessionProtocolType(NDUint32 nSessionID, NDUint8 nSessionProtocolType)
+{
+	//相对于客户端的连接,但是实质是服务器的Session;
+	NDSession* pSession = findServerSession( nSessionID );
+	if ( NULL == pSession )
+	{
+		return NDFalse;
+	}
 
-//NDBool NDSessionManagerImpl::isSessionTypeProtocol( NDInt8 sessionProtocolType, NDUint32 nProtocolID )
-//{
-//	if ( sessionProtocolType < NDSessionProtocolType_CLIENT2L || sessionProtocolType >= NDSessionProtocolType_MAX )
-//	{
-//		return NDFalse;
-//	}
-//
-//	//先处理特殊情况;
-//	if ( nProtocolID == CMD_PING_PROTOCOL || nProtocolID == CMD_TIMER_NOTIFY || nProtocolID == CMD_DISCONNECT_NOTIFY )
-//	{	
-//		return NDTrue;
-//	}
-//
-//	NDUint32* pProtocolNumArray = m_protocolNumArray[sessionProtocolType];
-//
-//	for ( NDUint8 i = 0; i < ND_PROTOCOL_SEND_LAYER_MAXNUM; ++i )
-//	{
-//		if ( ( nProtocolID > pProtocolNumArray[i] ) && ( nProtocolID < pProtocolNumArray[i+1] ) )
-//		{
-//			return NDTrue;
-//		}
-//	}
-//
-//	return NDTrue;
-//}
-//
-//void NDSessionManagerImpl::setSessionTypeProtocol( NDSessionProtocolType eType, NDUint32 nBeginProtocol, NDUint32 nEndProtocol )
-//{
-//	if ( eType >= NDSessionProtocolType_MAX || eType < NDSessionProtocolType_CLIENT2L )
-//	{
-//		return;
-//	}
-//
-//	for ( NDUint32 i = 0; i < ND_PROTOCOL_SEND_LAYER_MAXNUM; ++i )
-//	{
-//		if ( ( m_protocolNumArray[eType][i] <= nBeginProtocol ) && ( m_protocolNumArray[eType][i+1] >= nEndProtocol ) )
-//		{
-//			return;
-//		}
-//
-//		if ( ( m_protocolNumArray[eType][i] == 0 ) && ( m_protocolNumArray[eType][i+1] == 0 ) )
-//		{	
-//			m_protocolNumArray[eType][i]	= nBeginProtocol;
-//			m_protocolNumArray[eType][i+1]	= nEndProtocol;
-//			return;
-//		}
-//		
-//		continue;
-//	}
-//	
-//	//m_protocolNumArray[NDSessionProtocolType_CLIENT2L][0] = CMD_NDClient2L_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_CLIENT2L][1] = CMD_NDClient2L_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_CLIENT2GT][0] = CMD_NDClient2Gate_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_CLIENT2GT][1] = CMD_NDClient2Gate_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_GT2CS][0] = CMD_NDG2CS_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_GT2CS][1] = CMD_NDG2CS_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_GT2M][0] = CMD_NDG2M_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_GT2M][1] = CMD_NDG2M_End;
-//
-//	////m_protocolNumArray[NDSessionProtocolType_GT2ML][0] = 0;
-//	////m_protocolNumArray[NDSessionProtocolType_GT2ML][1] = 0;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_M2CS][0] = CMD_NDM2CS_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_M2CS][1] = CMD_NDM2CS_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_M2GDB][0] = CMD_NDM2GDB_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_M2GDB][1] = CMD_NDM2GDB_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_CS2L][0] = CMD_NDCS2L_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_CS2L][1] = CMD_NDCS2L_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_CS2GDB][0] = CMD_NDCS2GDB_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_CS2GDB][1] = CMD_NDCS2GDB_End;
-//
-//	//m_protocolNumArray[NDSessionProtocolType_L2ADB][0] = CMD_NDL2A_Start;
-//	//m_protocolNumArray[NDSessionProtocolType_L2ADB][1] = CMD_NDL2A_End;
-//}
+	pSession->setProtocolType( nSessionProtocolType );
+
+	return NDTrue;
+}
+
+NDBool NDSessionManagerImpl::setClientSessionProtocolType(NDUint32 nSessionID, NDUint8 nSessionProtocolType)
+{
+	NDSession* pSession = findClientSession( nSessionID );
+	if ( NULL == pSession )
+	{
+		return NDFalse;
+	}
+
+	pSession->setProtocolType( nSessionProtocolType );
+
+	return NDTrue;
+}
+
+void NDSessionManagerImpl::setMaxSessionType(NDUint8 nMaxSessionType)
+{
+	NDProtocolPacket::setMaxSessionType( nMaxSessionType );
+}
+
+void NDSessionManagerImpl::setSpecialProtocol(NDUint16 nSpecialProtocolStart, NDUint16 nSpecialProtocolEnd)
+{
+	NDProtocolPacket::setSpecialProtocol( nSpecialProtocolStart, nSpecialProtocolEnd );
+}
+
+NDBool NDSessionManagerImpl::setDisposeSessionProtocol(NDUint8 nSessionType, NDUint16 nProtocolStart, NDUint16 nProtocolEnd)
+{
+	return NDProtocolPacket::setDisposeSessionProtocol( nSessionType, nProtocolStart, nProtocolEnd );
+}
+
+
+
 
 
 

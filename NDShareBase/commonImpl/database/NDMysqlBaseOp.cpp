@@ -18,26 +18,24 @@
 
 _NDSHAREBASE_BEGIN
 
-NDMysqlBaseOp::NDMysqlBaseOp() :m_nConnCount(0), m_pHanldeMutex( new NDMutexLock ), m_pConnHandle( NULL ), m_pConnParam( new MysqlConnParam )
+NDMysqlBaseOp::NDMysqlBaseOp() :m_nConnCount(0), m_pHanldeMutex( new NDMutexLock ), m_pConnHandle( NULL ), m_pConnParam( new NDMysqlConnParam )
 {
 }
 
 NDMysqlBaseOp::~NDMysqlBaseOp()
 {
-	disConnectDB();
-	SAFE_DELETE( m_pHanldeMutex );
-	SAFE_DELETE( m_pConnParam );
+	release();
 }
 
 
-NDBool NDMysqlBaseOp::initialize( const MysqlConnParam& connParam, NDUint32 nConnCount )
+NDBool NDMysqlBaseOp::initialize( const NDMysqlConnParam& connParam, NDUint32 nConnCount )
 {
 	NDBool bRet = NDFalse;
 
 	m_nConnCount	= nConnCount;
 	*m_pConnParam	= connParam;
-	m_pConnHandle	= new MysqlConn[nConnCount];
-	memset( m_pConnHandle, 0, nConnCount * sizeof(MysqlConn) );
+	m_pConnHandle	= new NDMysqlConnHandle[nConnCount];
+	memset( m_pConnHandle, 0, nConnCount * sizeof(NDMysqlConnHandle) );
 
 	for ( NDUint32 i = 0; i < nConnCount; ++i )
 	{
@@ -58,7 +56,15 @@ NDBool NDMysqlBaseOp::initialize( const MysqlConnParam& connParam, NDUint32 nCon
 	return bRet;
 }
 
-NDBool NDMysqlBaseOp::connectDB( MysqlConn* pConn )
+
+void NDMysqlBaseOp::release()
+{
+	disConnectDB();
+	SAFE_DELETE( m_pHanldeMutex );
+	SAFE_DELETE( m_pConnParam );
+}
+
+NDBool NDMysqlBaseOp::connectDB( NDMysqlConnHandle* pConn )
 {
 	MYSQL* pMysql = mysql_init(NULL);
 	if ( NULL == pMysql )
@@ -89,14 +95,12 @@ NDBool NDMysqlBaseOp::connectDB( MysqlConn* pConn )
 	}
 
 	pConn->m_pMysql = mysql_real_connect( pMysql, m_pConnParam->getHostName().c_str(), m_pConnParam->getUserName().c_str(), m_pConnParam->getPassWord().c_str(),
-											"", m_pConnParam->getPort(), NULL, 0 );
+										  "", m_pConnParam->getPort(), NULL, CLIENT_MULTI_STATEMENTS );
 
 	NDBool bRet = NDFalse;
 	if ( NULL == pConn->m_pMysql )
 	{
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " [NDMysqlBaseOp::connectDB] mysql: Connection failed. Reason was:%s. ", mysql_error(pMysql) );
-		NDLOG_ERROR( szErrBuf )
+		NDLOG_ERROR( " [NDMysqlBaseOp::connectDB] mysql: Connection failed. Reason was:%s. ", mysql_error(pMysql) );
 		return bRet;
 	}
 	else
@@ -108,9 +112,7 @@ NDBool NDMysqlBaseOp::connectDB( MysqlConn* pConn )
 		}
 		else
 		{
-			char szErrBuf[BUF_LEN_256] = {0};
-			ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " [NDMysqlBaseOp::connectDB] mysql: select of Database:[%s] failed due to [%s]. ", szDBName, mysql_error(pMysql) );
-			NDLOG_ERROR( szErrBuf )
+			NDLOG_ERROR( " [NDMysqlBaseOp::connectDB] mysql: select of Database:[%s] failed due to [%s]. ", szDBName, mysql_error(pMysql) );
 		}
 	}
 
@@ -129,7 +131,7 @@ void NDMysqlBaseOp::disConnectDB()
 }
 
 
-void NDMysqlBaseOp::disConnectDB( MysqlConn* pConn )
+void NDMysqlBaseOp::disConnectDB( NDMysqlConnHandle* pConn )
 {
 	if ( NULL != pConn->m_pMysql )
 	{
@@ -141,10 +143,30 @@ void NDMysqlBaseOp::disConnectDB( MysqlConn* pConn )
 
 NDBool NDMysqlBaseOp::checkConnections()
 {
+	NDGuardLock handleLocker( *m_pHanldeMutex );
+	for ( NDUint32 i = 0; i < m_nConnCount; ++i )
+	{
+		if ( m_pConnHandle[i].m_bBusy == NDTrue )
+		{
+			continue;
+		}
+
+		m_pConnHandle[i].m_bBusy = NDTrue;
+		if ( mysql_ping( m_pConnHandle[i].m_pMysql ) )
+		{
+			if ( NDFalse == connectDB( &m_pConnHandle[i] ) )
+			{	
+				m_pConnHandle[i].m_bBusy = NDFalse;
+				NDLOG_ERROR( " [NDMysqlBaseOp::checkConnections] connectDB failed. " )
+				return NDFalse;
+			}
+		}
+		m_pConnHandle[i].m_bBusy = NDFalse;
+	}
 	return NDTrue;
 }
 
-NDMysqlBaseOp::MysqlConn* NDMysqlBaseOp::getIdleHandle()
+NDMysqlBaseOp::NDMysqlConnHandle* NDMysqlBaseOp::getIdleHandle()
 {
 	NDGuardLock handleLocker( *m_pHanldeMutex );
 	for ( NDUint32 i = 0; i < m_nConnCount; ++i )
@@ -160,7 +182,7 @@ NDMysqlBaseOp::MysqlConn* NDMysqlBaseOp::getIdleHandle()
 }
 
 
-void NDMysqlBaseOp::setIdleHandle( MysqlConn* pConn )
+void NDMysqlBaseOp::setIdleHandle( NDMysqlConnHandle* pConn )
 {
 	if ( pConn->m_nIndex < m_nConnCount )
 	{
@@ -169,7 +191,7 @@ void NDMysqlBaseOp::setIdleHandle( MysqlConn* pConn )
 	}
 }
 
-string NDMysqlBaseOp::escapeString( MysqlConn* pConn, const char* pszBuf, NDUint32 nSize )
+string NDMysqlBaseOp::escapeString( NDMysqlConnHandle* pConn, const char* pszBuf, NDUint32 nSize )
 {
 	char* pNewBuf = new char[nSize*2 + 1];
 	memset( pNewBuf, 0, nSize*2 + 1 );
@@ -192,7 +214,7 @@ string NDMysqlBaseOp::escapeString( const char* pszBuf, NDUint32 nSize )
 		return string("");
 	}
 
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return string("");
@@ -204,185 +226,192 @@ string NDMysqlBaseOp::escapeString( const char* pszBuf, NDUint32 nSize )
 	return strBuf;
 }
 
-MYSQL_RES* NDMysqlBaseOp::selectSql( const char *szSql , NDUint32 nSize, NDBool bChinese )
+NDBool NDMysqlBaseOp::selectSql( const char *szSql , NDUint32 nSqlSize, MYSQL_RES* &pRefMysqlRes, NDUint32 &nRefFieldCount, NDUint32 &nRefRowCount, NDBool bChinese )
 {
-	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSize) )
+	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSqlSize) )
 	{
-		return NULL;
+		return NDFalse;
 	}
 	
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
-		return NULL;
+		return NDFalse;
 	}
 
-	
-	if ( NDTrue == bChinese )
+	NDBool bRet = NDFalse;
+	do 
 	{
-		if ( NDFalse == setChineseFont( pConn ) )
+		if ( NDTrue == bChinese )
 		{
-			setIdleHandle( pConn );
-			return NULL;
+			if ( NDFalse == setChineseFont( pConn ) )
+			{
+				break;
+			}
 		}
-	}
 
-	MYSQL_RES* pMysqlRes = NULL;
-	if ( mysql_real_query( pConn->m_pMysql, szSql, nSize ) )
-	{
-		NDLOG_ERROR( " NDMysqlBaseOp::selectSql query failed! " )
-		NDLOG_ERROR( szSql )
-		
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " mysql query error info:%s. ", mysql_error(pConn->m_pMysql) );
-		NDLOG_ERROR( szErrBuf )
-	}
-	else
-	{
-		NDUint32 nRow		= (NDUint32)mysql_affected_rows( pConn->m_pMysql );
-		NDUint32 nField		= mysql_field_count( pConn->m_pMysql );
+		//使用存储过程的时候一定要循环执行,把所有的结果集合都取到,直到为空,这个时候当前数据库连接才可以安全归还回去;
+		//(即使已经调用了mysql_free_result(pResult);释放当前结果,不调用下面的语句,再次执行时还是会错);
+		freeStoredResults( pConn->m_pMysql );
 
-		if ( (0 == nRow) || (0 == nField) )
+		if ( mysql_real_query( pConn->m_pMysql, szSql, nSqlSize ) )
 		{
-			mysql_free_result( pMysqlRes );
+			NDLOG_ERROR( " NDMysqlBaseOp::selectSql query failed, SQL:[%s], errorInfo:[%s], errorCode:[%u]. ", szSql, mysql_error(pConn->m_pMysql), mysql_errno(pConn->m_pMysql) );
+
+			break;
 		}
 		else
 		{
-			pMysqlRes = mysql_store_result( pConn->m_pMysql );
+			pRefMysqlRes = mysql_store_result( pConn->m_pMysql );
+			if ( NULL != pRefMysqlRes )
+			{
+				nRefFieldCount	= mysql_num_fields( pRefMysqlRes );
+				nRefRowCount	= (NDUint32)mysql_num_rows( pRefMysqlRes );
+			}
+
+			bRet = NDTrue;
 		}
-	}
+	} while (0);
+
 	setIdleHandle( pConn );
 
-	return pMysqlRes;
+	return bRet;
 }
 
-NDUint32 NDMysqlBaseOp::updateSql( const char *szSql , NDUint32 nSize, NDBool bChinese )
+NDBool NDMysqlBaseOp::updateSql( const char *szSql , NDUint32 nSqlSize, NDUint32 &refAffectedRows, NDBool bChinese )
 {
-	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSize) )
+	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSqlSize) )
 	{
-		return 0;
+		return NDFalse;
 	}
 
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
-		return 0;
+		return NDFalse;
 	}
 
-	if ( NDTrue == bChinese )
+	NDBool bRet = NDFalse;
+	do 
 	{
-		if ( NDFalse == setChineseFont( pConn ) )
+		if ( NDTrue == bChinese )
 		{
-			setIdleHandle( pConn );
-			return 0;
+			if ( NDFalse == setChineseFont( pConn ) )
+			{
+				break;
+			}
 		}
-	}
 
-	NDUint32 nRet = 0;
-	if ( mysql_real_query( pConn->m_pMysql, szSql, nSize ) )
-	{
-		NDLOG_ERROR( " NDMysqlBaseOp::updateSql query failed! " )
-		NDLOG_ERROR( szSql )
+		if ( mysql_real_query( pConn->m_pMysql, szSql, nSqlSize ) )
+		{
+			NDLOG_ERROR( " NDMysqlBaseOp::updateSql query failed, SQL:[%s], errorInfo:[%s], errorCode:[%u]. ", szSql, mysql_error(pConn->m_pMysql), mysql_errno(pConn->m_pMysql) );
 
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " mysql query error info:%s. ", mysql_error(pConn->m_pMysql) );
-		NDLOG_ERROR( szErrBuf )
-	}
-	else
-	{
-		nRet = (NDUint32)mysql_affected_rows(pConn->m_pMysql);
-	}
+			break;
+		}
+		else
+		{
+			refAffectedRows = (NDUint32)mysql_affected_rows( pConn->m_pMysql );
+
+			bRet = NDTrue;
+		}
+	} while (0);
+
 	setIdleHandle( pConn );
 
-	return nRet;
+	return bRet;
 }
 
-NDUint32 NDMysqlBaseOp::insertSql( const char *szSql , NDUint32 nSize, NDBool bChinese )
+NDBool NDMysqlBaseOp::insertSql( const char *szSql , NDUint32 nSqlSize, NDUint32 &refAffectedRows, NDUint32 &refLastInsertID, NDBool bChinese )
 {
-	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSize) )
+	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSqlSize) )
 	{
-		return 0;
+		return NDFalse;
 	}
 
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
-		return 0;
+		return NDFalse;
 	}
 
-	if ( NDTrue == bChinese )
+	NDBool bRet = NDFalse;
+	do 
 	{
-		if ( NDFalse == setChineseFont( pConn ) )
+		if ( NDTrue == bChinese )
 		{
-			setIdleHandle( pConn );
-			return 0;
+			if ( NDFalse == setChineseFont( pConn ) )
+			{
+				break;
+			}
 		}
-	}
 
-	NDUint32 nRet = 0;
-	if ( mysql_real_query( pConn->m_pMysql, szSql, nSize ) )
-	{
-		NDLOG_ERROR( " NDMysqlBaseOp::insertSql query failed! " )
-		NDLOG_ERROR( szSql )
+		if ( mysql_real_query( pConn->m_pMysql, szSql, nSqlSize ) )
+		{
+			NDLOG_ERROR( " NDMysqlBaseOp::insertSql query failed, SQL:[%s], errorInfo:[%s], errorCode:[%u]. ", szSql, mysql_error(pConn->m_pMysql), mysql_errno(pConn->m_pMysql) );
 
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " mysql query error info:%s. ", mysql_error(pConn->m_pMysql) );
-		NDLOG_ERROR( szErrBuf )
-	}
-	else
-	{
-		nRet = (NDUint32)mysql_insert_id(pConn->m_pMysql);
-	}
+			break;
+		}
+		else
+		{
+			refAffectedRows = (NDUint32)mysql_affected_rows( pConn->m_pMysql );
+			refLastInsertID = (NDUint32)mysql_insert_id( pConn->m_pMysql );
+
+			bRet = NDTrue;
+		}
+	} while (0);
+
 	setIdleHandle( pConn );
 
-	return nRet;
+	return bRet;
 }
 
-NDUint32 NDMysqlBaseOp::deleteSql( const char *szSql , NDUint32 nSize, NDBool bChinese )
+NDBool NDMysqlBaseOp::deleteSql( const char *szSql , NDUint32 nSqlSize, NDUint32 &refAffectedRows, NDBool bChinese )
 {
-	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSize) )
+	if ( (NULL == szSql) || ('\0' == szSql[0]) || (0 >= nSqlSize) )
 	{
-		return 0;
+		return NDFalse;
 	}
 
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
-		return 0;
+		return NDFalse;
 	}
 
-	if ( NDTrue == bChinese )
+	NDBool bRet = NDFalse;
+	do
 	{
-		if ( NDFalse == setChineseFont( pConn ) )
+		if ( NDTrue == bChinese )
 		{
-			setIdleHandle( pConn );
-			return 0;
+			if ( NDFalse == setChineseFont( pConn ) )
+			{
+				break;
+			}
 		}
-	}
 
-	NDUint32 nRet = 0;
-	if ( mysql_real_query( pConn->m_pMysql, szSql, nSize ) )
-	{
-		NDLOG_ERROR( " NDMysqlBaseOp::deleteSql query failed! " )
-		NDLOG_ERROR( szSql )
+		if ( mysql_real_query( pConn->m_pMysql, szSql, nSqlSize ) )
+		{
+			NDLOG_ERROR( " NDMysqlBaseOp::deleteSql query failed, SQL:[%s], errorInfo:[%s], errorCode:[%u]. ", szSql, mysql_error(pConn->m_pMysql), mysql_errno(pConn->m_pMysql) );
 
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " mysql query error info:%s. ", mysql_error(pConn->m_pMysql) );
-		NDLOG_ERROR( szErrBuf )
-	}
-	else
-	{
-		nRet = (NDUint32)mysql_affected_rows(pConn->m_pMysql);
-	}
+			break;
+		}
+		else
+		{
+			refAffectedRows = (NDUint32)mysql_affected_rows( pConn->m_pMysql );
+
+			bRet = NDTrue;
+		}
+	} while (0);
+
 	setIdleHandle( pConn );
 
-	return nRet;
+	return bRet;
 }
 
 
 void NDMysqlBaseOp::transBegin()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return ;
@@ -392,10 +421,7 @@ void NDMysqlBaseOp::transBegin()
 	if ( mysql_real_query( pConn->m_pMysql, pBuf, (unsigned long)strlen(pBuf) ) )
 	{
 		NDLOG_ERROR( " NDMysqlBaseOp::transBegin query failed! " )
-		
-		char szErrBuf[BUF_LEN_256] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " mysql query error info:%s. ", mysql_error(pConn->m_pMysql) );
-		NDLOG_ERROR( szErrBuf )
+		NDLOG_ERROR( " mysql query error info:%s. ", mysql_error(pConn->m_pMysql) );
 	}
 
 	setIdleHandle( pConn );
@@ -403,7 +429,7 @@ void NDMysqlBaseOp::transBegin()
 
 void NDMysqlBaseOp::transCommit()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return ;
@@ -415,7 +441,7 @@ void NDMysqlBaseOp::transCommit()
 
 void NDMysqlBaseOp::transRollback()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return ;
@@ -428,7 +454,7 @@ void NDMysqlBaseOp::transRollback()
 
 string NDMysqlBaseOp::getState()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return string("");
@@ -442,7 +468,7 @@ string NDMysqlBaseOp::getState()
 
 string NDMysqlBaseOp::getServerInfo()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return string("");
@@ -456,7 +482,7 @@ string NDMysqlBaseOp::getServerInfo()
 
 string NDMysqlBaseOp::getHostInfo()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return string("");
@@ -475,7 +501,7 @@ string NDMysqlBaseOp::getClientInfo()
 
 NDUint32 NDMysqlBaseOp::getProtocolInfo()
 {
-	MysqlConn* pConn = getIdleHandle();
+	NDMysqlConnHandle* pConn = getIdleHandle();
 	if ( NULL == pConn)
 	{
 		return 0;
@@ -488,7 +514,7 @@ NDUint32 NDMysqlBaseOp::getProtocolInfo()
 }
 
 
-NDBool NDMysqlBaseOp::setChineseFont( MysqlConn* pConn )
+NDBool NDMysqlBaseOp::setChineseFont( NDMysqlConnHandle* pConn )
 {
 	NDBool bRet		= NDFalse;
 	char* szChinese = "SET NAMES GB2312";
@@ -504,12 +530,18 @@ NDBool NDMysqlBaseOp::setChineseFont( MysqlConn* pConn )
 	return bRet;
 }
 
-
-
-
-
-
-
+void NDMysqlBaseOp::freeStoredResults(MYSQL* pMysql)
+{
+	MYSQL_RES* pResult = NULL;
+	do 
+	{
+		if ( ( pResult = mysql_store_result(pMysql) ) != NULL )
+		{
+			mysql_free_result(pResult);
+			pResult = NULL;
+		}
+	} while ( !mysql_next_result( pMysql ) );
+}
 
 
 
@@ -530,6 +562,7 @@ NDMysqlQueryResult::NDMysqlQueryResult( MYSQL_RES* pResult, NDUint32 nFieldCount
 NDMysqlQueryResult::~NDMysqlQueryResult()
 {
 	mysql_free_result( m_pQueryResult );
+	m_pQueryResult = NULL;
 	SAFE_DELETE_ARRAY( m_pCurrentRow );
 }
 

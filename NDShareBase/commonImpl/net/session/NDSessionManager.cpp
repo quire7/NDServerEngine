@@ -31,12 +31,12 @@ void NDSessionManager::releaseInstance()
 	SAFE_DELETE( m_pSessionManager );
 }
 
-NDBool NDSessionManager::sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise )
+NDBool NDSessionManager::sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise )
 {
 	return m_pSessionManagerImpl->sendToServer( rProtocol, nSessionID, nProDataHeadBitWise );
 }
 
-NDBool NDSessionManager::sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise )
+NDBool NDSessionManager::sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise )
 {
 	return m_pSessionManagerImpl->sendToClient( rProtocol, nSessionID, nProDataHeadBitWise );
 }
@@ -134,9 +134,9 @@ NDBool NDSessionManager::setCommonDisconnectNtyProtocol( NDProtocol* pDisconnect
 	return m_pSessionManagerImpl->setCommonDisconnectNtyProtocol( pDisconnectNtyProtocol );
 }
 
-NDBool NDSessionManager::popCommonDisconnectNtyProtocol( NDUint32 nSessionID )
+NDBool NDSessionManager::popCommonDisconnectNtyProtocol( NDUint32 nSessionID, NDUint8 nDisconnectionType )
 {
-	return m_pSessionManagerImpl->popCommonDisconnectNtyProtocol( nSessionID );
+	return m_pSessionManagerImpl->popCommonDisconnectNtyProtocol( nSessionID, nDisconnectionType );
 }
 
 void NDSessionManager::setSessionParsePacketFun( PParsePacketFun parsePacketFun )
@@ -144,17 +144,30 @@ void NDSessionManager::setSessionParsePacketFun( PParsePacketFun parsePacketFun 
 	return m_pSessionManagerImpl->setSessionParsePacketFun( parsePacketFun );
 }	
 
+NDBool NDSessionManager::setServerSessionProtocolType(NDUint32 nSessionID, NDUint8 nSessionProtocolType)
+{
+	return m_pSessionManagerImpl->setServerSessionProtocolType( nSessionID, nSessionProtocolType );
+}
 
+NDBool NDSessionManager::setClientSessionProtocolType(NDUint32 nSessionID, NDUint8 nSessionProtocolType)
+{
+	return m_pSessionManagerImpl->setClientSessionProtocolType( nSessionID, nSessionProtocolType );
+}
 
-//NDBool NDSessionManager::isSessionTypeProtocol( NDInt8 sessionProtocolType, NDUint32 nProtocolID )
-//{
-//	return m_pSessionManagerImpl->isSessionTypeProtocol( sessionProtocolType, nProtocolID );
-//}
-//
-//void NDSessionManager::setSessionTypeProtocol( NDSessionProtocolType eType, NDUint32 nBeginProtocol, NDUint32 nEndProtocol )
-//{
-//	return m_pSessionManagerImpl->setSessionTypeProtocol( eType, nBeginProtocol, nEndProtocol );
-//}
+void NDSessionManager::setMaxSessionType(NDUint8 nMaxSessionType)
+{
+	return m_pSessionManagerImpl->setMaxSessionType( nMaxSessionType );
+}
+
+void NDSessionManager::setSpecialProtocol(NDUint16 nSpecialProtocolStart, NDUint16 nSpecialProtocolEnd)
+{
+	return m_pSessionManagerImpl->setSpecialProtocol( nSpecialProtocolStart, nSpecialProtocolEnd );
+}
+
+NDBool NDSessionManager::setDisposeSessionProtocol(NDUint8 nSessionType, NDUint16 nProtocolStart, NDUint16 nProtocolEnd)
+{
+	return m_pSessionManagerImpl->setDisposeSessionProtocol( nSessionType, nProtocolStart, nProtocolEnd );
+}
 
 
 _NDSHAREBASE_END

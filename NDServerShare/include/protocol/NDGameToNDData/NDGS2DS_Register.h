@@ -32,6 +32,11 @@ public:
 		return NDTrue;
 	}
 
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_nMapID) + sizeof(m_netAddress);
+	}
+
 	void clear()
 	{
 		m_netAddress.clear();
@@ -59,6 +64,16 @@ public:
 	{
 		NDISTREAM_READ( stream, &m_nErrorCode, sizeof(m_nErrorCode) )
 		return NDTrue;
+	}
+
+	NDUint16	getSize() const
+	{ 
+		return sizeof(m_unProtocolID) + sizeof(m_nErrorCode);
+	}
+
+	void   clear() 
+	{
+		m_nErrorCode = 0;
 	}
 };
 

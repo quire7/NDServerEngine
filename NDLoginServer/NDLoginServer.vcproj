@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -195,7 +195,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -428,6 +428,18 @@
 				Name="message"
 				>
 				<File
+					RelativePath=".\src\message\NDC2LSCallBack.cpp"
+					>
+					<FileConfiguration
+						Name="UnityDebug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\src\message\NDS2SRegisterCallBack.cpp"
 					>
 					<FileConfiguration
@@ -493,6 +505,10 @@
 			<Filter
 				Name="message"
 				>
+				<File
+					RelativePath=".\include\message\NDC2LSCallBack.h"
+					>
+				</File>
 				<File
 					RelativePath=".\include\message\NDS2SRegisterCallBack.h"
 					>

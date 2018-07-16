@@ -432,10 +432,98 @@ public:
 	** function DESCRIPTION:
 	**  sharememory unit lock and unlock function;
 	************************************************************************/
-	static NDBool		sm_try_lock( NDUint8& refUnitOwnType, NDUint8 nSetType );
-	static NDBool		sm_try_unlock( NDUint8& refUnitOwnType, NDUint8 nSetType );
+	static NDBool		sm_try_lock( NDUint16* pUnitOwnType, NDUint16 nLockType );
+	static NDBool		sm_try_unlock(NDUint16* pUnitOwnType, NDUint16 nUnlockType);
+
+	/************************************************************************
+	** function DESCRIPTION:
+	**  atomic compare and set value;
+	**  IN WINDOWS: Can use short,int,__int64 , use char error.
+	************************************************************************/
+	template <typename T>
+	static T atomic_cas( T* pLock, T old, T set )
+	{
+#       if defined(WIN32)
+			int nSize = sizeof(T);
+			switch (nSize)
+			{
+			case 1:
+				return (T)InterlockedCompareExchangePointer((PVOID*)&pLock, (PVOID)&set, (PVOID)&old);
+			case 2:
+				return (T)InterlockedCompareExchange16((short*)pLock, (short)set, (short)old);
+			case 4:
+				return (T)InterlockedCompareExchange((long*)pLock, (long)set, (long)old);
+			case 8:
+				return (T)InterlockedCompareExchange64((__int64*)pLock, (__int64)set, (__int64)old);
+			default:
+				return (T)InterlockedCompareExchangePointer((PVOID*)&pLock, (PVOID)&set, (PVOID)&old);
+			}
+			
+#       elif defined(LINUX) || defined(FREEBSD) || defined(OSX)
+			int nSize = sizeof(T);
+			T prev;
+			switch (nSize)
+			{
+			case 1:
+				asm volatile ("lock; cmpxchgb %b1, %2"
+								: "=a" (prev)
+								: "q" (set), "m" (*pLock), "0"(old)
+								: "memory", "cc");
+				return prev;
+			case 2:
+				asm volatile ("lock; cmpxchgw %w1, %2"
+								: "=a" (prev)
+								: "r" (set), "m" (*pLock), "0"(old)
+								: "memory", "cc");
+				return prev;
+			case 4:
+				asm volatile ("lock; cmpxchgl %1, %2"
+								: "=a" (prev)
+								: "r" (set), "m" (*pLock), "0"(old)
+								: "memory", "cc");
+				return prev;
+			case 8:
+				asm volatile ("lock; cmpxchgq %1, %2"
+								: "=a" (prev)
+								: "r" (set), "m" (*pLock), "0"(old)
+								: "memory", "cc");
+				return prev;
+			}
+			return set;
+#       endif
+	}
+
+	/************************************************************************
+	** function DESCRIPTION:
+	**  spin lock and unlock function;
+	************************************************************************/
+	template <typename T>
+	static bool spin_lock_unlock(T* pLock, T old, T set)
+	{
+		NDUint8 nLockCount = 0;
+		NDBool	bRet = NDFalse;
+		do
+		{
+			if (old == atomic_cas(pLock, old, set))
+			{
+				bRet = NDTrue;
+				break;
+			}
+
+			++nLockCount;
+			sleep2(1);
+			if (nLockCount > ND_SMU_LOCK_LOOP_MAX)
+				break;
+		} while (1);
+
+		return bRet;
+	}
 
 
+	/************************************************************************
+	** function DESCRIPTION:
+	**  get log type name;
+	************************************************************************/
 	static const char*	getLogTypeName( NDInt32 nLogLevel );
 
 #ifdef USING_BIG_ENDIAN

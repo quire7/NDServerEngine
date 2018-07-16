@@ -16,10 +16,10 @@
  *	命令字定义规则:;
  *	const NDUint32 m_unProtocolID = value;
  *	value取值为协义流向的最终目标类型 (SERVERTYPE) + n.;
- *	n取值范围:0~0x000FFFFF.;
+ *	n取值范围:0~0x00000FFF.;
  *	 定义规范:	以16进制方式递增，0~0xF保留;
- *				0x10~0xFFF服务器间协议字;
- *				0x1000及以上用于服务器与客户端交互;
+ *				0x10~0x7FF服务器间协议字;
+ *				0x800及以上用于服务器与客户端交互;
  *				每组协议(req,res,[nty])建议n的值尽量使用相同值开始;(如果该组协议有nty消息，则顺序+1);
 */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,6 +39,7 @@ enum eToGateWayServerCMDProtocolID
 	//NDGameServer向NDGatewayServer发送的协议号;
 	CMDP_NDGS2GTWS_Start							=	GATEWAY_SERVER		+ 0x010,
 	CMDP_NDGWS2GS_Register_Res,
+	CMDP_NDGS2GTWS_PlayerLoginDataSuccess_Nty,
 	CMDP_NDGS2GTWS_End								=	GATEWAY_SERVER		+ 0x300,
 
 	//NDRoomServer向NDGatewayServer发送的协议号;
@@ -75,7 +76,9 @@ enum eToGameServerCMDProtocolID
 
 	//NDDataServer向NDGameServer发送的协议号;
 	CMDP_NDDS2GS_Start								=	GAME_SERVER			+ 0x021,
-	CMDP_NDGS2DS_Register_Res,						
+	CMDP_NDGS2DS_Register_Res,
+	CMDP_NDGS2DS_PlayerLogin_Res,
+	CMDP_NDDS2GS_SendPlayerMain_Nty,
 	CMDP_NDDS2GS_End								=	GAME_SERVER			+ 0x090,
 	
 	//NDRoomServer向NDGameServer发送的协议号;
@@ -118,6 +121,8 @@ enum eToDBServerCMDProtocolID
 	//NDGameServer向NDDataServer发送的协议号;
 	CMDP_NDGS2DS_Start								=	DB_SERVER			+ 0x021,
 	CMDP_NDGS2DS_Register_Req,
+	CMDP_NDGS2DS_PlayerLogin_Req,
+	CMDP_NDGS2DS_UpdatePlayerMain_Nty,
 	CMDP_NDGS2DS_End								=	DB_SERVER			+ 0x090,
 	
 };

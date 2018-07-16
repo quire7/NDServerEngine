@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\main">
+      <UniqueIdentifier>{410d219a-f20c-4d52-848c-522f16ff0cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\local">
+      <UniqueIdentifier>{0dc402a9-0745-4efa-83c3-a4d23b5dde38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\remote">
+      <UniqueIdentifier>{b79fd7ad-3097-417c-95de-1d41c6771ed1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\message">
+      <UniqueIdentifier>{017388d2-3b66-4134-aab4-38d3c68cd54c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\main">
+      <UniqueIdentifier>{545acc0f-7c9a-4d97-bbbf-4de02256b738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\local">
+      <UniqueIdentifier>{f9effb15-270a-4a70-a5b8-fef44f6a2b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\remote">
+      <UniqueIdentifier>{2e9bb409-7442-4d7d-9f6a-2ac00d1961e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\message">
+      <UniqueIdentifier>{7425181b-bdb7-461d-ab29-c7e89e06f021}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDLoginServer_all.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDLoginCallBack.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDLoginServer.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDPreCompiler.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\remote\NDRemoteWorldServerInfo.cpp">
+      <Filter>src\main\remote</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\remote\NDRemoteWorldServerManager.cpp">
+      <Filter>src\main\remote</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDC2LSCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDS2SRegisterCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDWS2LSCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\main\local\NDLoginCallBack.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDLoginServer.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDPreCompiler.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\remote\NDRemoteWorldServerInfo.h">
+      <Filter>include\main\remote</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\remote\NDRemoteWorldServerManager.h">
+      <Filter>include\main\remote</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDC2LSCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDS2SRegisterCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDWS2LSCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

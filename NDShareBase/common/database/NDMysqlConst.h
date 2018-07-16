@@ -15,14 +15,22 @@
 
 _NDSHAREBASE_BEGIN
 
-struct MysqlConnParam
+struct NDMysqlConnParam
 {
-	MysqlConnParam() : m_nPort(0) {}
-	MysqlConnParam( NDUint32 nPort, const string& strHost, const string& strUser, const string& strPassWord, const string& strDBName ):
+private:
+	NDUint32						m_nPort;									//端口;
+	string							m_strHost;									//主机名或IP;
+	string							m_strUser;									//用户名;
+	string							m_strPassWord;								//密码;
+	string							m_strDBName;								//数据库名;
+
+public:
+	NDMysqlConnParam() : m_nPort(0) {}
+	NDMysqlConnParam( NDUint32 nPort, const string& strHost, const string& strUser, const string& strPassWord, const string& strDBName ):
 	m_nPort(nPort), m_strHost(strHost), m_strUser(strUser), m_strPassWord(strPassWord), m_strDBName(strDBName) {}
-	MysqlConnParam( const MysqlConnParam& other ) : m_nPort(other.m_nPort), m_strHost(other.m_strHost), m_strUser(other.m_strUser),
+	NDMysqlConnParam( const NDMysqlConnParam& other ) : m_nPort(other.m_nPort), m_strHost(other.m_strHost), m_strUser(other.m_strUser),
 													m_strPassWord(other.m_strPassWord), m_strDBName(other.m_strDBName) {}
-	MysqlConnParam& operator = ( const MysqlConnParam& other )
+	NDMysqlConnParam& operator = ( const NDMysqlConnParam& other )
 	{
 		if ( this == &other )	return *this;
 		
@@ -46,12 +54,6 @@ struct MysqlConnParam
 	const string&	getUserName()	{ return m_strUser; }
 	const string&	getPassWord()	{ return m_strPassWord; }
 	const string&	getDBName()		{ return m_strDBName; }
-private:
-	NDUint32						m_nPort;									//端口
-	string							m_strHost;									//主机名或IP
-	string							m_strUser;									//用户名
-	string							m_strPassWord;								//密码
-	string							m_strDBName;								//数据库名
 };
 
 _NDSHAREBASE_END

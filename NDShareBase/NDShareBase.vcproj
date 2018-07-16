@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="common;common/mysql;common/zlib;common/lua;commonImpl;windows"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -168,7 +168,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="common;common/mysql;common/zlib;common/lua;commonImpl;windows"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -328,6 +328,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\common\thread\NDDBThread.h"
+					>
+				</File>
+				<File
 					RelativePath=".\common\thread\NDMutex.h"
 					>
 				</File>
@@ -359,6 +363,22 @@
 					RelativePath=".\common\memory\NDMessageQueue.h"
 					>
 				</File>
+				<Filter
+					Name="object"
+					>
+					<File
+						RelativePath=".\common\memory\object\NDMemoryPoolEx.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\memory\object\NDMemoryPoolExManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\common\memory\object\NDObjectPool.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="math"
@@ -381,10 +401,6 @@
 				</File>
 				<File
 					RelativePath=".\common\function\NDDistributeID.h"
-					>
-				</File>
-				<File
-					RelativePath=".\common\function\NDObjectPool.h"
 					>
 				</File>
 				<File
@@ -461,6 +477,14 @@
 				</File>
 				<File
 					RelativePath=".\common\database\NDMysqlConst.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\database\NDSelectTableBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\common\database\NDTableBase.h"
 					>
 				</File>
 			</Filter>
@@ -1056,6 +1080,18 @@
 					>
 				</File>
 				<File
+					RelativePath=".\commonImpl\thread\NDDBThread.cpp"
+					>
+					<FileConfiguration
+						Name="UnityDebug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\commonImpl\thread\NDMutex.cpp"
 					>
 					<FileConfiguration
@@ -1078,10 +1114,6 @@
 							Name="VCCLCompilerTool"
 						/>
 					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\commonImpl\thread\NDThreadImpl.h"
-					>
 				</File>
 			</Filter>
 			<Filter
@@ -1139,6 +1171,22 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<Filter
+					Name="object"
+					>
+					<File
+						RelativePath=".\commonImpl\memory\object\NDMemoryPoolExManager.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="function"
@@ -1353,6 +1401,30 @@
 				</File>
 				<File
 					RelativePath=".\commonImpl\database\NDMysqlBaseOp.cpp"
+					>
+					<FileConfiguration
+						Name="UnityDebug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\commonImpl\database\NDSelectTableBase.cpp"
+					>
+					<FileConfiguration
+						Name="UnityDebug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\commonImpl\database\NDTableBase.cpp"
 					>
 					<FileConfiguration
 						Name="UnityDebug|Win32"
@@ -2219,46 +2291,6 @@
 						/>
 					</FileConfiguration>
 				</File>
-				<File
-					RelativePath=".\linux\thread\NDLinuxThreadImpl.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="UnityDebug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\linux\thread\NDLinuxThreadImpl.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="UnityDebug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
 			</Filter>
 			<Filter
 				Name="net"
@@ -2349,22 +2381,6 @@
 				</File>
 				<File
 					RelativePath=".\windows\thread\NDWindowsMutexLockImpl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\windows\thread\NDWindowsThreadImpl.cpp"
-					>
-					<FileConfiguration
-						Name="UnityDebug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\windows\thread\NDWindowsThreadImpl.h"
 					>
 				</File>
 			</Filter>

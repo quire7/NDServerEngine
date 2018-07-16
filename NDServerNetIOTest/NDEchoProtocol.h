@@ -113,6 +113,8 @@ public:
 		return true;
 	}
 
+	NDUint16	getSize() const { return (NDUint16)( sizeof(m_unProtocolID) +  m_strData.size() ); }
+
 	void   Clear() 
 	{
 		m_strData.clear();

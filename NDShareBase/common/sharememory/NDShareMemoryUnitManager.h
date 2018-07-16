@@ -21,7 +21,7 @@ template<typename T>
 class NDShareMemoryUnitPool
 {
 private:
-	NDUint8						m_nOwnPoolType;		//所有者类型;
+	NDUint16					m_nOwnPoolType;		//所有者类型;
 	NDBool						m_bAlive;			//是不是存活的;
 	NDShareMemoryAccessObject*	m_pAccessObjPtr;	//SMO对象的引用;
 	T						  **m_pObjs;			//SMU对象数组;
@@ -165,6 +165,7 @@ public:
 
 		m_pObjs[nDelIndex]->setPoolID( nDelIndex );
 		m_pObjs[nPosition]->setPoolID( (NDUint32)ND_INVALID_ID );
+		m_pObjs[nPosition]->setSaveTime( 0 );
 		m_pObjs[nPosition]->tryUnlock( m_nOwnPoolType );
 
 		m_pAccessObjPtr->setUnitSize( nPosition );

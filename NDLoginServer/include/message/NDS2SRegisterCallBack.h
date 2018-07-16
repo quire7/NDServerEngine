@@ -12,7 +12,7 @@ public:
 	NDBool process( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 
 private:
-	NDBool c2lRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
+	NDBool ws2lsRegisterReqDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 	//NDBool l2aRegisterResDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader );
 };
 

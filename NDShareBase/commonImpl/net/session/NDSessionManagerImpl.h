@@ -8,10 +8,10 @@
 
 #include "NDTypes.h"
 #include "NDShareBaseMacros.h"
-#include "function/NDObjectPool.h"
+#include "memory/object/NDObjectPool.h"
 #include "memory/NDByteBuffer.h"
 #include "net/socket/NDSelect.h"
-//#include "NDProtocolHead.h"
+
 
 #ifndef CREATE_SESSION_NUM
 #define CREATE_SESSION_NUM	5
@@ -73,7 +73,6 @@ private:
 	SessionDeque		m_createClientSessionDeque;		// create server session deque;
 
 	NDProtocol*			m_pDisconnectNtyProtocol;		// server session disconnect pop DisconnectNtyProtocol(客户端断开连接时服务器端相应SESSION向上层抛出的协议);
-	//NDUint32			m_protocolNumArray[NDSessionProtocolType_MAX][ND_PROTOCOL_SEND_LAYER_MAXNUM*2];	//存储某种协议类型要处理的协议号起始ID;
 
 private:
 	NDSelect			m_select;						// select事件的句柄;
@@ -97,8 +96,8 @@ public:
 	NDSession*	findServerSession( NDUint32 nSessionID );
 	NDSession*	findClientSession( NDUint32 nSessionID );
 
-	NDBool		sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise );
-	NDBool		sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise );
+	NDBool		sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise );
+	NDBool		sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise );
 
 	void		releaseServerSession( NDUint32 nSessionID );
 	void		releaseClientSession( NDUint32 nSessionID );
@@ -121,14 +120,21 @@ public:
 
 	//设置通用客户端断开连接时的内部向上层抛出的DisconnectNtyProtocol;
 	NDBool		setCommonDisconnectNtyProtocol( NDProtocol* pDisconnectNtyProtocol );
-	NDBool		popCommonDisconnectNtyProtocol( NDUint32 nSessionID );
+	NDBool		popCommonDisconnectNtyProtocol( NDUint32 nSessionID, NDUint8 nDisconnectionType );
 	
 	//设置Session接收的数据包的解析函数;
 	void		setSessionParsePacketFun( PParsePacketFun parsePacketFun );
-	//是否要处理的协议;
-	//NDBool		isSessionTypeProtocol( NDInt8 sessionProtocolType, NDUint32 nProtocolID );
 
-	//void			setSessionTypeProtocol(  NDSessionProtocolType eType, NDUint32 nBeginProtocol, NDUint32 nEndProtocol );
+	//设置Session的协议类型;
+	NDBool		setServerSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
+	NDBool		setClientSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
+
+	//设置SessionProtocolType类型总数;
+	void		setMaxSessionType( NDUint8 nMaxSessionType );
+	//设置SessionProtocolType类型要处理的特殊协议号起始ID;
+	void		setSpecialProtocol( NDUint16 nSpecialProtocolStart, NDUint16 nSpecialProtocolEnd );
+	//设置SessionProtocolType类型要处理的协议号起始ID;
+	NDBool		setDisposeSessionProtocol( NDUint8 nSessionType, NDUint16 nProtocolStart, NDUint16 nProtocolEnd );
 
 private:
 
@@ -137,7 +143,7 @@ private:
 	void		createServerSessionDeque();
 	void		createClientSessionDeque();
 
-	NDBool		sendData( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise, NDBool bClient );
+	NDBool		sendData( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise, NDBool bClient );
 };
 
 _NDSHAREBASE_END

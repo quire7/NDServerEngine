@@ -1,7 +1,6 @@
 #include "main/local/NDWorldConnectProcess.h"
 
 #include "protocol/NDWorldToNDLogin/NDWS2LS_Register.h"
-//#include "../NDServerShare/include/Protocol/NDCenterToNDGameDB/NDC2GDB_Register.h"
 
 #include "main/local/NDWorldServer.h"
 
@@ -41,6 +40,8 @@ void NDWorldConnectProcess::connected( const NDServerInfo* pServerInfo )
 			//memcpy( registerReq.m_szWorldName, pLocalServerInfo->getServerName(), ND_WORLDNAME_LEN );
 
 			NDServerManager::getSingleton().sendToServer( registerReq, pServerInfo->getSessionID() );
+
+			NDServerManager::getSingleton().setClientSessionProtocolType( pServerInfo->getSessionID(), NDSessionProtocolType_LS2WS );
 		}
 		break;
 	//case GAMEDB_SERVER:

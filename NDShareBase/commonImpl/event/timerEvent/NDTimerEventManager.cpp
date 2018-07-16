@@ -3,6 +3,8 @@
 #include "NDShareBaseMacros.h"
 #include "NDShareBaseGlobal.h"
 
+#include "NDCLibFun.h"
+#include "file/NDLog.h"
 
 
 _NDSHAREBASE_BEGIN
@@ -10,25 +12,25 @@ _NDSHAREBASE_BEGIN
 
 ///////////////////////////////////////////////////////////
 
-NDTimerManager* NDTimerManager::s_pNDTimerManager = NULL;
+NDTimerEventManager* NDTimerEventManager::s_pNDTimerEventManager = NULL;
 
 
-NDTimerManager* NDTimerManager::getInstance()
+NDTimerEventManager* NDTimerEventManager::getInstance()
 {
-	if ( NULL == s_pNDTimerManager )
+	if ( NULL == s_pNDTimerEventManager )
 	{
-		s_pNDTimerManager = new NDTimerManager;
+		s_pNDTimerEventManager = new NDTimerEventManager;
 	}
 
-	return s_pNDTimerManager;
+	return s_pNDTimerEventManager;
 }
 
-void NDTimerManager::releaseInstance()
+void NDTimerEventManager::releaseInstance()
 {
-	SAFE_DELETE( s_pNDTimerManager );
+	SAFE_DELETE( s_pNDTimerEventManager );
 }
 
-NDTimerManager::NDTimerManager()
+NDTimerEventManager::NDTimerEventManager()
 {
 	m_nStartMSTime = NDShareBaseGlobal::getCurMSTimeOfUTC();
 	
@@ -39,7 +41,7 @@ NDTimerManager::NDTimerManager()
 	}
 }
 
-NDTimerManager::~NDTimerManager()
+NDTimerEventManager::~NDTimerEventManager()
 {
 	for (int i = 0; i < WHEEL_NUM; ++i)
 	{
@@ -51,7 +53,7 @@ NDTimerManager::~NDTimerManager()
 	}
 }
 
-void NDTimerManager::addTimerNode( NDTime nMillSeconds, STimerNode* node )
+void NDTimerEventManager::addTimerNode( NDTime nMillSeconds, STimerNode* node )
 {
 	SNodeLink *spoke = NULL;
 	NDUint32 interval	= (NDUint32)(nMillSeconds / GRANULARITY);
@@ -83,7 +85,7 @@ void NDTimerManager::addTimerNode( NDTime nMillSeconds, STimerNode* node )
 	spoke->prev = nodelink;	
 }
 
-NDShareBase::NDTimerBoundSlotConn NDTimerManager::addTimer( const NDSubFunctorSlot& refSubFunctorSlot, const NDTimerEventArgs& refTimerEventArgs )
+NDShareBase::NDTimerBoundSlotConn NDTimerEventManager::addTimer( const NDSubFunctorSlot& refSubFunctorSlot, const NDTimerEventArgs& refTimerEventArgs )
 {
 	STimerNode *node = new STimerNode( refSubFunctorSlot, refTimerEventArgs );
 
@@ -93,7 +95,7 @@ NDShareBase::NDTimerBoundSlotConn NDTimerManager::addTimer( const NDSubFunctorSl
 	return node->timerBoundConn;
 }
 
-void NDTimerManager::detectTimerList()
+void NDTimerEventManager::detectTimerList()
 {
 	NDTime	nNowMSTime	= NDShareBaseGlobal::getCurMSTimeOfUTC();
 
@@ -124,7 +126,7 @@ void NDTimerManager::detectTimerList()
 	doTimeOutCallBack();
 }
 
-void NDTimerManager::addToReadyNode( STimerNode* node )
+void NDTimerEventManager::addToReadyNode( STimerNode* node )
 {
 	SNodeLink *nodelink		= &(node->link);
 	nodelink->prev			= m_readnodes.prev;
@@ -133,7 +135,7 @@ void NDTimerManager::addToReadyNode( STimerNode* node )
 	m_readnodes.prev		= nodelink;
 }
 
-void NDTimerManager::doTimeOutCallBack()
+void NDTimerEventManager::doTimeOutCallBack()
 {
 	SNodeLink *link = m_readnodes.next;
 	//if (link != &readynodes_) {Dump();}
@@ -170,7 +172,7 @@ void NDTimerManager::doTimeOutCallBack()
 	m_readnodes.next = m_readnodes.prev = &m_readnodes;
 }
 
-NDUint32 NDTimerManager::cascade( NDUint32 nWheelIndex )
+NDUint32 NDTimerEventManager::cascade( NDUint32 nWheelIndex )
 {
 	if (nWheelIndex < 1 || nWheelIndex >= WHEEL_NUM) {
 		return 0;
@@ -208,7 +210,7 @@ NDUint32 NDTimerManager::cascade( NDUint32 nWheelIndex )
 	return casnum;	
 }
 
-void NDTimerManager::removeTimer( STimerNode* node )
+void NDTimerEventManager::removeTimer( STimerNode* node )
 {
 	SNodeLink *nodelink = &(node->link);
 	if (nodelink->prev) {
@@ -223,26 +225,41 @@ void NDTimerManager::removeTimer( STimerNode* node )
 	node = NULL;
 }
 
-void NDTimerManager::printTimerList()
+NDBool NDTimerEventManager::printTimerList( const NDEventArgs& )
 {
-	//BS_XLOG(XLOG_DEBUG, "CTimerManager::%s ===== \n", __FUNCTION__);
+	NDLOG_INFO( " [timerlist] NDTimerEventManager::printTimerList start." )
+
 	for (int i = 0; i < WHEEL_NUM; ++i) {
 		SWheel *wheel = m_wheels[i];
-		//BS_XLOG(XLOG_DEBUG, "    wheel[%d].size[%u], spokeindex[%u]:\n", i, wheel->size, wheel->spokeindex);
+
+		
+		NDLOG_INFO( " [timerlist] wheel[%d], wheel_size[%u], spokeindex[%u].", i, wheel->size, wheel->spokeindex );
+		
 		for (NDUint32 j = 0; j < wheel->size; ++j) {
 			SNodeLink *spoke = wheel->spokes + j;
 			SNodeLink *link = spoke->next;
 			if (link != spoke) {
-				//BS_XLOG(XLOG_DEBUG, "       spoke index[%d], addr[%p], next[%p], prev[%p]\n", j, spoke, spoke->next, spoke->prev);
+
+				NDLOG_INFO( " [timerlist] spoke index[%d], addr[%p], next[%p], prev[%p].", j, spoke, spoke->next, spoke->prev );
+				
 			}
 			while (link != spoke) {
 				STimerNode *node = (STimerNode *)link;
-				//BS_XLOG(XLOG_DEBUG, "          node[%p], next[%p], prev[%p] interval[%u], dead_time[%lld]\n",
-				//	link, link->next, link->prev, node->timer->GetInterval(), node->dead_time);
+
+				
+				NDLOG_INFO( " [timerlist] node[%p], next[%p], prev[%p] fireEventName:[%s], interval:[%lld], dead_time:[%lld].", link, link->next, link->prev,
+																																node->timerBoundConn->getFireEventName(),
+																																node->timerBoundConn->getFireEventIntervalTimes(),
+																																node->timerBoundConn->getFireEventTimes() );
+
 				link = node->link.next;
 			}
 		}
 	}
+
+	NDLOG_INFO( " [timerlist] NDTimerEventManager::printTimerList end." )
+
+	return NDTrue;
 }
 
 

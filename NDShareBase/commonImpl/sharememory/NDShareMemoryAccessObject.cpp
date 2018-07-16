@@ -229,24 +229,24 @@ NDUint32 NDShareMemoryAccessObject::getUnitCapacity() const
 }
 
 
-NDBool NDShareMemoryAccessObject::tryLockHead( NDUint8 nSetType )
+NDBool NDShareMemoryAccessObject::tryLockHead( NDUint16 nLockType )
 {
 	if ( NULL == m_pNDShareMemory || NULL == m_pHeader )
 	{
 		return NDFalse;
 	}
 
-	return NDShareBaseGlobal::sm_try_lock( ((NDSMHead*)m_pHeader)->m_nOwnType, nSetType  );
+	return NDShareBaseGlobal::sm_try_lock( &((NDSMHead*)m_pHeader)->m_nOwnType, nLockType  );
 }
 
-NDBool NDShareMemoryAccessObject::tryUnLockHead( NDUint8 nSetType )
+NDBool NDShareMemoryAccessObject::tryUnLockHead( NDUint16 nUnlockType )
 {
 	if ( NULL == m_pNDShareMemory || NULL == m_pHeader )
 	{
 		return NDFalse;
 	}
 
-	return NDShareBaseGlobal::sm_try_unlock( ((NDSMHead*)m_pHeader)->m_nOwnType, nSetType  );
+	return NDShareBaseGlobal::sm_try_unlock( &((NDSMHead*)m_pHeader)->m_nOwnType, nUnlockType  );
 }
 
 NDBool NDShareMemoryAccessObject::dumpToFile( const char* szFilePath )

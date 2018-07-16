@@ -1,0 +1,614 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UnityDebug|Win32">
+      <Configuration>UnityDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UnityRelease|Win32">
+      <Configuration>UnityRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7F413C18-33FC-415E-82AD-23DE97BF6167}</ProjectGuid>
+    <RootNamespace>NDShareBase</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>../DebugBin/lib\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">
+    <OutDir>../UnityDebugBin/lib\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>common;common/mysql;common/zlib;common/lua;commonImpl;windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4127;4131;4244;4310;4702;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>ws2_32.lib;libmysql.lib;GMemPool.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>dep/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>common;common/mysql;common/zlib;common/lua;commonImpl;windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4127;4131;4244;4310;4702;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>ws2_32.lib;libmysql.lib;GMemPool.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>dep/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="common\NDCLibFun.h" />
+    <ClInclude Include="common\NDCPUCfg.h" />
+    <ClInclude Include="common\NDShareBaseEnums.h" />
+    <ClInclude Include="common\NDShareBaseGlobal.h" />
+    <ClInclude Include="common\NDShareBaseMacros.h" />
+    <ClInclude Include="common\NDTypes.h" />
+    <ClInclude Include="common\stl\NDSortedVector.h" />
+    <ClInclude Include="common\stl\NDSTLExtend.h" />
+    <ClInclude Include="common\stl\NDSTLFunctor.h" />
+    <ClInclude Include="common\thread\NDAtomicInt32.h" />
+    <ClInclude Include="common\thread\NDCondition.h" />
+    <ClInclude Include="common\thread\NDDBThread.h" />
+    <ClInclude Include="common\thread\NDMutex.h" />
+    <ClInclude Include="common\thread\NDThread.h" />
+    <ClInclude Include="common\memory\GMemPool.h" />
+    <ClInclude Include="common\memory\NDBufferPool.h" />
+    <ClInclude Include="common\memory\NDByteBuffer.h" />
+    <ClInclude Include="common\memory\NDByteBufferPool.h" />
+    <ClInclude Include="common\memory\NDMessageQueue.h" />
+    <ClInclude Include="common\memory\object\NDMemoryPoolEx.h" />
+    <ClInclude Include="common\memory\object\NDMemoryPoolExManager.h" />
+    <ClInclude Include="common\memory\object\NDObjectPool.h" />
+    <ClInclude Include="common\math\NDLocationVector.h" />
+    <ClInclude Include="common\math\NDRectangle.h" />
+    <ClInclude Include="common\function\NDConsoleCMDManager.h" />
+    <ClInclude Include="common\function\NDDistributeID.h" />
+    <ClInclude Include="common\function\NDRefCounted.h" />
+    <ClInclude Include="common\function\NDSingleton.h" />
+    <ClInclude Include="common\function\NDStatWatcher.h" />
+    <ClInclude Include="common\function\NDWordFilter.h" />
+    <ClInclude Include="common\file\NDCFile.h" />
+    <ClInclude Include="common\file\NDCLogFile.h" />
+    <ClInclude Include="common\file\NDConfig.h" />
+    <ClInclude Include="common\file\NDConsoleLog.h" />
+    <ClInclude Include="common\file\NDExcelFile.h" />
+    <ClInclude Include="common\file\NDIniFile.h" />
+    <ClInclude Include="common\file\NDLog.h" />
+    <ClInclude Include="common\file\NDShareMemroyLogFile.h" />
+    <ClInclude Include="common\file\NDXmlConfigBase.h" />
+    <ClInclude Include="common\database\NDField.h" />
+    <ClInclude Include="common\database\NDMysqlBase.h" />
+    <ClInclude Include="common\database\NDMysqlBaseOp.h" />
+    <ClInclude Include="common\database\NDMysqlConst.h" />
+    <ClInclude Include="common\database\NDSelectTableBase.h" />
+    <ClInclude Include="common\database\NDTableBase.h" />
+    <ClInclude Include="common\net\socket\NDClientSocket.h" />
+    <ClInclude Include="common\net\socket\NDSelect.h" />
+    <ClInclude Include="common\net\socket\NDServerSocket.h" />
+    <ClInclude Include="common\net\socket\NDSocket.h" />
+    <ClInclude Include="common\net\socket\NDSocketAcceptor.h" />
+    <ClInclude Include="common\net\socket\NDSocketAddress.h" />
+    <ClInclude Include="common\net\socket\NDSocketEnv.h" />
+    <ClInclude Include="common\net\socket\NDSockOps.h" />
+    <ClInclude Include="common\net\session\NDClientSession.h" />
+    <ClInclude Include="common\net\session\NDServerSession.h" />
+    <ClInclude Include="common\net\session\NDSession.h" />
+    <ClInclude Include="common\net\session\NDSessionManager.h" />
+    <ClInclude Include="common\net\stream\NDIStream.h" />
+    <ClInclude Include="common\net\stream\NDOStream.h" />
+    <ClInclude Include="common\net\stream\NDProtocol.h" />
+    <ClInclude Include="common\net\stream\NDProtocolPacket.h" />
+    <ClInclude Include="common\net\process\NDDataProcess.h" />
+    <ClInclude Include="common\net\process\NDProcess.h" />
+    <ClInclude Include="common\net\process\NDServerTask.h" />
+    <ClInclude Include="common\net\netio\NDClientNetIO.h" />
+    <ClInclude Include="common\net\netio\NDServerNetIO.h" />
+    <ClInclude Include="common\authentic\NDCrypt.h" />
+    <ClInclude Include="common\tinyxml\tinystr.h" />
+    <ClInclude Include="common\tinyxml\tinyxml.h" />
+    <ClInclude Include="common\event\functor\NDCopyFunctorSlot.h" />
+    <ClInclude Include="common\event\functor\NDEventArgs.h" />
+    <ClInclude Include="common\event\functor\NDFreeFunctorSlot.h" />
+    <ClInclude Include="common\event\functor\NDMemberFunctorSlot.h" />
+    <ClInclude Include="common\event\functor\NDPointerFunctorSlot.h" />
+    <ClInclude Include="common\event\functor\NDReferenceFunctorSlot.h" />
+    <ClInclude Include="common\event\functor\NDReferenceFunctorSlotBinder.h" />
+    <ClInclude Include="common\event\functor\NDSlotFunctorBase.h" />
+    <ClInclude Include="common\event\functor\NDSubFunctorSlot.h" />
+    <ClInclude Include="common\event\timerEvent\NDTimerBoundSlot.h" />
+    <ClInclude Include="common\event\timerEvent\NDTimerEventManager.h" />
+    <ClInclude Include="common\event\event\NDBoundSlot.h" />
+    <ClInclude Include="common\event\event\NDEvent.h" />
+    <ClInclude Include="common\event\event\NDEventSet.h" />
+    <ClInclude Include="common\sharememory\NDShareMemory.h" />
+    <ClInclude Include="common\sharememory\NDShareMemoryAccessObject.h" />
+    <ClInclude Include="common\sharememory\NDShareMemoryBase.h" />
+    <ClInclude Include="common\sharememory\NDShareMemoryUnitManager.h" />
+    <ClInclude Include="common\zlib\zconf.h" />
+    <ClInclude Include="common\zlib\zlib.h" />
+    <ClInclude Include="common\mysql\base64.h" />
+    <ClInclude Include="common\mysql\decimal.h" />
+    <ClInclude Include="common\mysql\errmsg.h" />
+    <ClInclude Include="common\mysql\keycache.h" />
+    <ClInclude Include="common\mysql\m_ctype.h" />
+    <ClInclude Include="common\mysql\m_string.h" />
+    <ClInclude Include="common\mysql\my_aes.h" />
+    <ClInclude Include="common\mysql\my_alloc.h" />
+    <ClInclude Include="common\mysql\my_attribute.h" />
+    <ClInclude Include="common\mysql\my_compiler.h" />
+    <ClInclude Include="common\mysql\my_config.h" />
+    <ClInclude Include="common\mysql\my_dbug.h" />
+    <ClInclude Include="common\mysql\my_dir.h" />
+    <ClInclude Include="common\mysql\my_getopt.h" />
+    <ClInclude Include="common\mysql\my_global.h" />
+    <ClInclude Include="common\mysql\my_list.h" />
+    <ClInclude Include="common\mysql\my_net.h" />
+    <ClInclude Include="common\mysql\my_pthread.h" />
+    <ClInclude Include="common\mysql\my_rdtsc.h" />
+    <ClInclude Include="common\mysql\my_sys.h" />
+    <ClInclude Include="common\mysql\my_time.h" />
+    <ClInclude Include="common\mysql\my_xml.h" />
+    <ClInclude Include="common\mysql\mysql.h" />
+    <ClInclude Include="common\mysql\mysql_com.h" />
+    <ClInclude Include="common\mysql\mysql_embed.h" />
+    <ClInclude Include="common\mysql\mysql_time.h" />
+    <ClInclude Include="common\mysql\mysql_version.h" />
+    <ClInclude Include="common\mysql\mysqld_ername.h" />
+    <ClInclude Include="common\mysql\mysqld_error.h" />
+    <ClInclude Include="common\mysql\sql_common.h" />
+    <ClInclude Include="common\mysql\sql_state.h" />
+    <ClInclude Include="common\mysql\sslopt-case.h" />
+    <ClInclude Include="common\mysql\sslopt-longopts.h" />
+    <ClInclude Include="common\mysql\sslopt-vars.h" />
+    <ClInclude Include="common\mysql\typelib.h" />
+    <ClInclude Include="common\mysql\mysql\client_plugin.h" />
+    <ClInclude Include="common\mysql\mysql\innodb_priv.h" />
+    <ClInclude Include="common\mysql\mysql\plugin.h" />
+    <ClInclude Include="common\mysql\mysql\plugin_audit.h" />
+    <ClInclude Include="common\mysql\mysql\plugin_auth.h" />
+    <ClInclude Include="common\mysql\mysql\plugin_auth_common.h" />
+    <ClInclude Include="common\mysql\mysql\plugin_ftparser.h" />
+    <ClInclude Include="common\mysql\mysql\service_my_snprintf.h" />
+    <ClInclude Include="common\mysql\mysql\service_thd_alloc.h" />
+    <ClInclude Include="common\mysql\mysql\service_thd_wait.h" />
+    <ClInclude Include="common\mysql\mysql\service_thread_scheduler.h" />
+    <ClInclude Include="common\mysql\mysql\services.h" />
+    <ClInclude Include="common\mysql\mysql\thread_pool_priv.h" />
+    <ClInclude Include="common\mysql\mysql\psi\mysql_file.h" />
+    <ClInclude Include="common\mysql\mysql\psi\mysql_thread.h" />
+    <ClInclude Include="common\mysql\mysql\psi\psi.h" />
+    <ClInclude Include="common\mysql\mysql\psi\psi_abi_v1.h" />
+    <ClInclude Include="common\mysql\mysql\psi\psi_abi_v2.h" />
+    <ClInclude Include="common\lua\lauxlib.h" />
+    <ClInclude Include="common\lua\lua.h" />
+    <ClInclude Include="common\lua\lua.hpp" />
+    <ClInclude Include="common\lua\luaconf.h" />
+    <ClInclude Include="common\lua\lualib.h" />
+    <ClInclude Include="common\luabridge\LuaBridge.h" />
+    <ClInclude Include="common\luabridge\RefCountedObject.h" />
+    <ClInclude Include="common\luabridge\RefCountedPtr.h" />
+    <ClInclude Include="common\luabridge\detail\CFunctions.h" />
+    <ClInclude Include="common\luabridge\detail\ClassInfo.h" />
+    <ClInclude Include="common\luabridge\detail\Constructor.h" />
+    <ClInclude Include="common\luabridge\detail\dump.h" />
+    <ClInclude Include="common\luabridge\detail\FuncTraits.h" />
+    <ClInclude Include="common\luabridge\detail\Iterator.h" />
+    <ClInclude Include="common\luabridge\detail\LuaException.h" />
+    <ClInclude Include="common\luabridge\detail\LuaHelpers.h" />
+    <ClInclude Include="common\luabridge\detail\LuaRef.h" />
+    <ClInclude Include="common\luabridge\detail\Namespace.h" />
+    <ClInclude Include="common\luabridge\detail\Stack.h" />
+    <ClInclude Include="common\luabridge\detail\TypeList.h" />
+    <ClInclude Include="common\luabridge\detail\TypeTraits.h" />
+    <ClInclude Include="common\luabridge\detail\Userdata.h" />
+    <ClInclude Include="commonImpl\thread\NDConditionImpl.h" />
+    <ClInclude Include="commonImpl\memory\NDByteBufferImpl.h" />
+    <ClInclude Include="commonImpl\file\NDCFileImpl.h" />
+    <ClInclude Include="commonImpl\net\session\NDSessionManagerImpl.h" />
+    <ClInclude Include="commonImpl\net\stream\NDIStreamImpl.h" />
+    <ClInclude Include="commonImpl\net\stream\NDOStreamImpl.h" />
+    <ClInclude Include="commonImpl\zlib\crc32.h" />
+    <ClInclude Include="commonImpl\zlib\deflate.h" />
+    <ClInclude Include="commonImpl\zlib\gzguts.h" />
+    <ClInclude Include="commonImpl\zlib\inffast.h" />
+    <ClInclude Include="commonImpl\zlib\inffixed.h" />
+    <ClInclude Include="commonImpl\zlib\inflate.h" />
+    <ClInclude Include="commonImpl\zlib\inftrees.h" />
+    <ClInclude Include="commonImpl\zlib\trees.h" />
+    <ClInclude Include="commonImpl\zlib\zutil.h" />
+    <ClInclude Include="commonImpl\lua\lapi.h" />
+    <ClInclude Include="commonImpl\lua\lcode.h" />
+    <ClInclude Include="commonImpl\lua\lctype.h" />
+    <ClInclude Include="commonImpl\lua\ldebug.h" />
+    <ClInclude Include="commonImpl\lua\ldo.h" />
+    <ClInclude Include="commonImpl\lua\lfunc.h" />
+    <ClInclude Include="commonImpl\lua\lgc.h" />
+    <ClInclude Include="commonImpl\lua\llex.h" />
+    <ClInclude Include="commonImpl\lua\llimits.h" />
+    <ClInclude Include="commonImpl\lua\lmem.h" />
+    <ClInclude Include="commonImpl\lua\lobject.h" />
+    <ClInclude Include="commonImpl\lua\lopcodes.h" />
+    <ClInclude Include="commonImpl\lua\lparser.h" />
+    <ClInclude Include="commonImpl\lua\lprefix.h" />
+    <ClInclude Include="commonImpl\lua\lstate.h" />
+    <ClInclude Include="commonImpl\lua\lstring.h" />
+    <ClInclude Include="commonImpl\lua\ltable.h" />
+    <ClInclude Include="commonImpl\lua\ltm.h" />
+    <ClInclude Include="commonImpl\lua\lundump.h" />
+    <ClInclude Include="commonImpl\lua\lvm.h" />
+    <ClInclude Include="commonImpl\lua\lzio.h" />
+    <CustomBuild Include="linux\NDLinuxCommon.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="linux\thread\NDLinuxConditionImpl.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="linux\thread\NDLinuxMutexLockImpl.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="linux\net\socket\NDLinuxEpoll.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClInclude Include="windows\NDWindowsCommon.h" />
+    <ClInclude Include="windows\thread\NDWindowsConditionImpl.h" />
+    <ClInclude Include="windows\thread\NDWindowsMutexLockImpl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="commonImpl\NDShareBaseGlobal.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDCondition.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDDBThread.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDMutex.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDThread.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDBufferPool.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDByteBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDByteBufferImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDByteBufferPool.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\object\NDMemoryPoolExManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDConsoleCMDManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDDistributeID.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDStatWatcher.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDWordFilter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\math\NDRectangle.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDCFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDCFileImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDCLogFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDConfig.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDConsoleLog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDExcelFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDIniFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDShareMemroyLogFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDXmlConfigBase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDField.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDMysqlBase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDMysqlBaseOp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDSelectTableBase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDTableBase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDClientSocket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSelect.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSocket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSocketAcceptor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSocketEnv.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSockOps.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDClientSession.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDServerSession.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDSession.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDSessionManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDSessionManagerImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\stream\NDIStreamImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\stream\NDOStreamImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\stream\NDProtocolPacket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\process\NDDataProcess.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\process\NDServerTask.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\netio\NDClientNetIO.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\netio\NDServerNetIO.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\authentic\NDCrypt.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinystr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinyxml.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinyxmlerror.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinyxmlparser.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\timerEvent\NDTimerBoundSlot.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\timerEvent\NDTimerEventManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\event\NDBoundSlot.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\event\NDEvent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\event\NDEventSet.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\sharememory\NDShareMemory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\sharememory\NDShareMemoryAccessObject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\adler32.c" />
+    <ClCompile Include="commonImpl\zlib\compress.c" />
+    <ClCompile Include="commonImpl\zlib\crc32.c" />
+    <ClCompile Include="commonImpl\zlib\deflate.c" />
+    <ClCompile Include="commonImpl\zlib\gzclose.c" />
+    <ClCompile Include="commonImpl\zlib\gzlib.c" />
+    <ClCompile Include="commonImpl\zlib\gzread.c" />
+    <ClCompile Include="commonImpl\zlib\gzwrite.c" />
+    <ClCompile Include="commonImpl\zlib\infback.c" />
+    <ClCompile Include="commonImpl\zlib\inffast.c" />
+    <ClCompile Include="commonImpl\zlib\inflate.c" />
+    <ClCompile Include="commonImpl\zlib\inftrees.c" />
+    <ClCompile Include="commonImpl\zlib\trees.c" />
+    <ClCompile Include="commonImpl\zlib\uncompr.c" />
+    <ClCompile Include="commonImpl\zlib\zutil.c" />
+    <ClCompile Include="commonImpl\lua\lapi.c" />
+    <ClCompile Include="commonImpl\lua\lauxlib.c" />
+    <ClCompile Include="commonImpl\lua\lbaselib.c" />
+    <ClCompile Include="commonImpl\lua\lbitlib.c" />
+    <ClCompile Include="commonImpl\lua\lcode.c" />
+    <ClCompile Include="commonImpl\lua\lcorolib.c" />
+    <ClCompile Include="commonImpl\lua\lctype.c" />
+    <ClCompile Include="commonImpl\lua\ldblib.c" />
+    <ClCompile Include="commonImpl\lua\ldebug.c" />
+    <ClCompile Include="commonImpl\lua\ldo.c" />
+    <ClCompile Include="commonImpl\lua\ldump.c" />
+    <ClCompile Include="commonImpl\lua\lfunc.c" />
+    <ClCompile Include="commonImpl\lua\lgc.c" />
+    <ClCompile Include="commonImpl\lua\linit.c" />
+    <ClCompile Include="commonImpl\lua\liolib.c" />
+    <ClCompile Include="commonImpl\lua\llex.c" />
+    <ClCompile Include="commonImpl\lua\lmathlib.c" />
+    <ClCompile Include="commonImpl\lua\lmem.c" />
+    <ClCompile Include="commonImpl\lua\loadlib.c" />
+    <ClCompile Include="commonImpl\lua\lobject.c" />
+    <ClCompile Include="commonImpl\lua\lopcodes.c" />
+    <ClCompile Include="commonImpl\lua\loslib.c" />
+    <ClCompile Include="commonImpl\lua\lparser.c" />
+    <ClCompile Include="commonImpl\lua\lstate.c" />
+    <ClCompile Include="commonImpl\lua\lstring.c" />
+    <ClCompile Include="commonImpl\lua\lstrlib.c" />
+    <ClCompile Include="commonImpl\lua\ltable.c" />
+    <ClCompile Include="commonImpl\lua\ltablib.c" />
+    <ClCompile Include="commonImpl\lua\ltm.c" />
+    <ClCompile Include="commonImpl\lua\lua.c" />
+    <ClCompile Include="commonImpl\lua\luac.c" />
+    <ClCompile Include="commonImpl\lua\lundump.c" />
+    <ClCompile Include="commonImpl\lua\lutf8lib.c" />
+    <ClCompile Include="commonImpl\lua\lvm.c" />
+    <ClCompile Include="commonImpl\lua\lzio.c" />
+    <ClCompile Include="linux\NDShareBaseLinuxAll.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="linux\thread\NDLinuxConditionImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="linux\net\socket\NDLinuxEpoll.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="windows\NDShareBaseWindowsAll.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="windows\thread\NDWindowsConditionImpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

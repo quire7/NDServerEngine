@@ -131,14 +131,21 @@ int main(int argc, char ** argv)
 		NDClientNetIO::setProcessor( NDMessageManager::getInstance()->getDataProcess() );
 		NDMessageManager::getInstance()->RegisterMessage();
 
+		NDSessionManager::getInstance()->setMaxSessionType( NDSessionProtocolType_MAX );
+		NDSessionManager::getInstance()->setSpecialProtocol( CMDP_Special_Start, CMDP_Special_End );
+		//服务器LOGIN到客户端类型;
+		NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GTWS2C, 0, 2 );
+
 
 		for ( NDUint32 i = 0; i < 500; ++i )
 		{
 			NDClientNetIO* pClientNetIO = new NDClientNetIO;
 			//NDProtocol* pPingProtocol	= new NDPingProtocol;
-			pClientNetIO->setPingProtocol( new NDPingProtocol );
+			pClientNetIO->setPingProtocol( new NDPingReqProtocol );
 			if (pClientNetIO->connect( strIP.c_str(), nPort ))
 			{
+				pClientNetIO->setSessionProtocolType( NDSessionProtocolType_GTWS2C );
+
 				NDEchoProtocol echoProtocol;
 				echoProtocol.m_strData = strEchoData;
 				
@@ -150,7 +157,7 @@ int main(int argc, char ** argv)
 
 				NDServerTask::getInstance()->taskProcess();
 
-				NDShareBase::NDTimerManager::getInstance()->detectTimerList();
+				NDShareBase::NDTimerEventManager::getInstance()->detectTimerList();
 			}
 			else
 			{
@@ -166,7 +173,7 @@ int main(int argc, char ** argv)
 
 			NDServerTask::getInstance()->taskProcess();
 
-			NDShareBase::NDTimerManager::getInstance()->detectTimerList();
+			NDShareBase::NDTimerEventManager::getInstance()->detectTimerList();
 
 			Sleep( 100 );
 		}

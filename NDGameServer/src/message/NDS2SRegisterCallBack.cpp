@@ -64,29 +64,8 @@ NDBool NDS2SRegisterCallBack::gs2dsRegisterResDispose( NDIStream& rIStream, NDPr
 		return NDFalse;
 	}
 		
-	const NDServerInfo* pDataServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pDataServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::gs2dsRegisterResDispose] pDataServerInfo is NULL! " )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_nErrorCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pDataServerInfo->getServerName(),
-																									pDataServerInfo->getServerIP(),
-																									pDataServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. nErrorCode=%u. ",	pDataServerInfo->getServerName(),
-																												pDataServerInfo->getServerIP(),
-																												pDataServerInfo->getServerPort(),
-																												registerRes.m_nErrorCode );
-		NDLOG_ERROR( szBuf )
-	}
+	//DS回复GS注册消息;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_nErrorCode );
 
 	return NDTrue;
 }
@@ -100,30 +79,8 @@ NDBool NDS2SRegisterCallBack::gs2wsRegisterResDispose( NDIStream& rIStream, NDPr
 		NDLOG_ERROR( " [NDS2SRegisterCallBack::gs2wsRegisterResDispose] NDGS2WS_Register_Res deserialize failed!" )
 		return NDFalse;
 	}
-
-	const NDServerInfo* pWorldServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pWorldServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::gs2wsRegisterResDispose] pWorldServerInfo is NULL!" )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_nErrorCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pWorldServerInfo->getServerName(),
-																									pWorldServerInfo->getServerIP(),
-																									pWorldServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. nErrorCode=%u. ",	pWorldServerInfo->getServerName(),
-																												pWorldServerInfo->getServerIP(),
-																												pWorldServerInfo->getServerPort(),
-																												registerRes.m_nErrorCode );
-		NDLOG_ERROR( szBuf )
-	}
+	//WS回复GS注册消息;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_nErrorCode );
 
 	return NDTrue;
 }
@@ -160,16 +117,14 @@ NDBool NDS2SRegisterCallBack::rs2gsRegisterReqDispose( NDIStream& rIStream, NDPr
 
 	pRoomServerMgr->addRemoteServer( pRoomServerInfo );
 
-	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GT2CS );
+	NDServerManager::getSingleton().setServerSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_RS2GS );
 
 	const NDSocketAddress& rNetAddress = pRoomServerInfo->getNetAddress();
 
-	char szBuf[BUF_LEN_128] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [RoomServerID:%u] connected. ",	pRoomServerInfo->getServerName(),
-																						rNetAddress.getIP(),
-																						rNetAddress.getPort(),
-																						pRoomServerInfo->getServerID() );
-	NDLOG_INFO( szBuf )
+	NDLOG_INFO( " %s [%s:%u] [RoomServerID:%u] connected. ", pRoomServerInfo->getServerName(),
+															rNetAddress.getIP(),
+															rNetAddress.getPort(),
+															pRoomServerInfo->getServerID() );
 
 
 	NDRS2GS_Register_Res	registerRes;
@@ -204,16 +159,15 @@ NDBool NDS2SRegisterCallBack::gws2gsRegisterReqDispose( NDIStream& rIStream, NDP
 	sNDGameServer.gatewayServerManager()->addRemoteServer( pGatewayServerInfo );
 
 
-	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_M2CS );
+	NDServerManager::getSingleton().setServerSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GTWS2GS );
 
 	const NDSocketAddress& rNetAddress = pGatewayServerInfo->getNetAddress();
 
-	char szBuf[BUF_LEN_128] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [GatewayServerID:%u] connected. ",	pGatewayServerInfo->getServerName(),
-																							rNetAddress.getIP(),
-																							rNetAddress.getPort(),
-																							pGatewayServerInfo->getServerID() );
-	NDLOG_INFO( szBuf )
+	
+	NDLOG_INFO( " %s [%s:%u] [GatewayServerID:%u] connected. ", pGatewayServerInfo->getServerName(),
+																rNetAddress.getIP(),
+																rNetAddress.getPort(),
+																pGatewayServerInfo->getServerID() );
 
 
 	NDGWS2GS_Register_Res	m2cRegisterRes;

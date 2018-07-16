@@ -1,0 +1,1148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{b644003b-0bf2-44e2-a39a-881e92b88ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\stl">
+      <UniqueIdentifier>{e03cc128-de1f-4f87-8197-688b99a2da80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\thread">
+      <UniqueIdentifier>{8f00b175-ca5b-456c-aa95-3f994a808d2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\memory">
+      <UniqueIdentifier>{3f050051-d0a8-47f0-81bd-bf7aae85c3f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\memory\object">
+      <UniqueIdentifier>{af8067eb-2267-4f41-9993-1dde07b20f58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\math">
+      <UniqueIdentifier>{8c79d044-eecb-4ed8-9356-04515a63f26c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\function">
+      <UniqueIdentifier>{9d8f1a7e-a73c-4e37-b263-8d7af86b2073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\file">
+      <UniqueIdentifier>{6e6f8177-de8a-4dd6-8067-2d9930445a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\database">
+      <UniqueIdentifier>{52e77b97-59ac-4f10-a3b8-819f97aaa27b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net">
+      <UniqueIdentifier>{d56b0caf-73e9-4019-b2b4-f8be37787e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net\socket">
+      <UniqueIdentifier>{9f1b6e7c-214b-462d-85a6-685cad708ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net\session">
+      <UniqueIdentifier>{c692fcd8-ec21-48ed-bf7b-4b21a1fba922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net\stream">
+      <UniqueIdentifier>{4ab76fe3-8945-44f0-ba2c-f5e8cfc56e41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net\process">
+      <UniqueIdentifier>{f2660fc6-d992-4d34-8608-1f45b48e52ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net\netio">
+      <UniqueIdentifier>{7004e5bf-1f7f-4aed-b638-c305f140809a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\authentic">
+      <UniqueIdentifier>{71472226-8300-480e-aeca-d816b47f8ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\tinyxml">
+      <UniqueIdentifier>{897e0c1f-a6dc-41bf-9568-3c8da7a45950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\event">
+      <UniqueIdentifier>{42f8e71d-d13f-40d3-9cd6-ad99773adf06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\event\functor">
+      <UniqueIdentifier>{e8b9e527-1014-475f-905b-b3a360041169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\event\timerEvent">
+      <UniqueIdentifier>{e4d8ec4d-bd0f-41a9-931d-e7f928d32cdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\event\event">
+      <UniqueIdentifier>{a4be867f-346b-4891-9f59-f7bb1fd6d685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\sharememory">
+      <UniqueIdentifier>{4713e20b-4d5b-4fbe-b3f4-0176e45178c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\zlib">
+      <UniqueIdentifier>{7fa81597-224a-47b6-a292-0803e624e2e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\mysql">
+      <UniqueIdentifier>{b4044195-a5c3-44c4-8378-217849c27446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\mysql\mysql">
+      <UniqueIdentifier>{051b6b0c-5314-4afd-bdbc-42e927622c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\mysql\mysql\psi">
+      <UniqueIdentifier>{f889ec81-3c13-4406-84fb-446e297eb382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\lua">
+      <UniqueIdentifier>{50653d0c-9bd9-4619-a61a-8d6b34068883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\luabridge">
+      <UniqueIdentifier>{dc6bb8af-8923-4d79-b774-f542720f3cc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\luabridge\detail">
+      <UniqueIdentifier>{fa621a85-7836-4791-b20f-e1d90284cfca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl">
+      <UniqueIdentifier>{ddaef935-3a8e-4399-b7ba-cfd103eee412}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\thread">
+      <UniqueIdentifier>{a4ba87a7-543d-44c7-a46e-734afd6b7861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\memory">
+      <UniqueIdentifier>{d90e9c78-851f-464c-a8a8-1d2543551b4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\memory\object">
+      <UniqueIdentifier>{dd190bfa-924d-41dc-baff-2e6a0fc5e596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\function">
+      <UniqueIdentifier>{bb318e21-e6a1-4cdb-893a-52a60bef84f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\math">
+      <UniqueIdentifier>{c53eb717-5036-4d49-afe7-6c126fadb3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\file">
+      <UniqueIdentifier>{e08f56e8-37e8-4087-8617-948e17bdc34a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\database">
+      <UniqueIdentifier>{efd28c42-b043-40ad-b7d0-b9b1caea5e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\net">
+      <UniqueIdentifier>{9c6f10d4-d27a-44fd-980e-d238596e4844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\net\socket">
+      <UniqueIdentifier>{c092e1e4-c831-4a96-bd0f-c47fbf1db24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\net\session">
+      <UniqueIdentifier>{d9ef53e9-a527-4060-bd16-635712fd2ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\net\stream">
+      <UniqueIdentifier>{9e5a9920-524f-4b00-9250-b38f4f206e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\net\process">
+      <UniqueIdentifier>{358adf0d-40c7-4de7-82f4-2975fd99678a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\net\netio">
+      <UniqueIdentifier>{e30a0810-d79e-49ee-b5fa-43f6ddfc5077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\authentic">
+      <UniqueIdentifier>{2639e3b4-0b8a-4acf-abc1-3a4c87ec0f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\tinyxml">
+      <UniqueIdentifier>{afb3f868-f114-46d2-a34b-34477fe73991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\event">
+      <UniqueIdentifier>{005b2834-436f-4744-a9d8-9e22eea98eb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\event\timerEvent">
+      <UniqueIdentifier>{c6e73dd3-329b-4f95-bb8c-91380ebc85af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\event\event">
+      <UniqueIdentifier>{e9ca6ba5-0a9d-4727-a639-f62cfea37d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\sharememory">
+      <UniqueIdentifier>{20e42034-e1b3-44e6-8912-24d89033e66a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\zlib">
+      <UniqueIdentifier>{ee05346a-0d13-4cf8-88cd-bd8fe8c82f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commonImpl\lua">
+      <UniqueIdentifier>{07766eb5-0060-420b-9123-cb754837be12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linux">
+      <UniqueIdentifier>{e985db40-7094-4c6b-9374-9ec1713ea37d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linux\thread">
+      <UniqueIdentifier>{296d2fee-fc7a-462f-94ac-827250fa7820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linux\net">
+      <UniqueIdentifier>{6cbb711d-314d-4827-80d0-133a1b6818da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linux\net\socket">
+      <UniqueIdentifier>{7415a4be-e68f-4794-90e5-5281c5444339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windows">
+      <UniqueIdentifier>{764b4174-1735-4d1a-8be3-6e8eb60c8344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windows\thread">
+      <UniqueIdentifier>{dff3c29c-d0a8-41d5-9dbe-1fd9a1793697}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\NDCLibFun.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\NDCPUCfg.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\NDShareBaseEnums.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\NDShareBaseGlobal.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\NDShareBaseMacros.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\NDTypes.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\stl\NDSortedVector.h">
+      <Filter>common\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="common\stl\NDSTLExtend.h">
+      <Filter>common\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="common\stl\NDSTLFunctor.h">
+      <Filter>common\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="common\thread\NDAtomicInt32.h">
+      <Filter>common\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="common\thread\NDCondition.h">
+      <Filter>common\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="common\thread\NDDBThread.h">
+      <Filter>common\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="common\thread\NDMutex.h">
+      <Filter>common\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="common\thread\NDThread.h">
+      <Filter>common\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\GMemPool.h">
+      <Filter>common\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\NDBufferPool.h">
+      <Filter>common\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\NDByteBuffer.h">
+      <Filter>common\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\NDByteBufferPool.h">
+      <Filter>common\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\NDMessageQueue.h">
+      <Filter>common\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\object\NDMemoryPoolEx.h">
+      <Filter>common\memory\object</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\object\NDMemoryPoolExManager.h">
+      <Filter>common\memory\object</Filter>
+    </ClInclude>
+    <ClInclude Include="common\memory\object\NDObjectPool.h">
+      <Filter>common\memory\object</Filter>
+    </ClInclude>
+    <ClInclude Include="common\math\NDLocationVector.h">
+      <Filter>common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="common\math\NDRectangle.h">
+      <Filter>common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="common\function\NDConsoleCMDManager.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="common\function\NDDistributeID.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="common\function\NDRefCounted.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="common\function\NDSingleton.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="common\function\NDStatWatcher.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="common\function\NDWordFilter.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDCFile.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDCLogFile.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDConfig.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDConsoleLog.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDExcelFile.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDIniFile.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDLog.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDShareMemroyLogFile.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDXmlConfigBase.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
+    <ClInclude Include="common\database\NDField.h">
+      <Filter>common\database</Filter>
+    </ClInclude>
+    <ClInclude Include="common\database\NDMysqlBase.h">
+      <Filter>common\database</Filter>
+    </ClInclude>
+    <ClInclude Include="common\database\NDMysqlBaseOp.h">
+      <Filter>common\database</Filter>
+    </ClInclude>
+    <ClInclude Include="common\database\NDMysqlConst.h">
+      <Filter>common\database</Filter>
+    </ClInclude>
+    <ClInclude Include="common\database\NDSelectTableBase.h">
+      <Filter>common\database</Filter>
+    </ClInclude>
+    <ClInclude Include="common\database\NDTableBase.h">
+      <Filter>common\database</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDClientSocket.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDSelect.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDServerSocket.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDSocket.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDSocketAcceptor.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDSocketAddress.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDSocketEnv.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\socket\NDSockOps.h">
+      <Filter>common\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\session\NDClientSession.h">
+      <Filter>common\net\session</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\session\NDServerSession.h">
+      <Filter>common\net\session</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\session\NDSession.h">
+      <Filter>common\net\session</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\session\NDSessionManager.h">
+      <Filter>common\net\session</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\stream\NDIStream.h">
+      <Filter>common\net\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\stream\NDOStream.h">
+      <Filter>common\net\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\stream\NDProtocol.h">
+      <Filter>common\net\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\stream\NDProtocolPacket.h">
+      <Filter>common\net\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\process\NDDataProcess.h">
+      <Filter>common\net\process</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\process\NDProcess.h">
+      <Filter>common\net\process</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\process\NDServerTask.h">
+      <Filter>common\net\process</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\netio\NDClientNetIO.h">
+      <Filter>common\net\netio</Filter>
+    </ClInclude>
+    <ClInclude Include="common\net\netio\NDServerNetIO.h">
+      <Filter>common\net\netio</Filter>
+    </ClInclude>
+    <ClInclude Include="common\authentic\NDCrypt.h">
+      <Filter>common\authentic</Filter>
+    </ClInclude>
+    <ClInclude Include="common\tinyxml\tinystr.h">
+      <Filter>common\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="common\tinyxml\tinyxml.h">
+      <Filter>common\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDCopyFunctorSlot.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDEventArgs.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDFreeFunctorSlot.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDMemberFunctorSlot.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDPointerFunctorSlot.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDReferenceFunctorSlot.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDReferenceFunctorSlotBinder.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDSlotFunctorBase.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\functor\NDSubFunctorSlot.h">
+      <Filter>common\event\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\timerEvent\NDTimerBoundSlot.h">
+      <Filter>common\event\timerEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\timerEvent\NDTimerEventManager.h">
+      <Filter>common\event\timerEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\event\NDBoundSlot.h">
+      <Filter>common\event\event</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\event\NDEvent.h">
+      <Filter>common\event\event</Filter>
+    </ClInclude>
+    <ClInclude Include="common\event\event\NDEventSet.h">
+      <Filter>common\event\event</Filter>
+    </ClInclude>
+    <ClInclude Include="common\sharememory\NDShareMemory.h">
+      <Filter>common\sharememory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\sharememory\NDShareMemoryAccessObject.h">
+      <Filter>common\sharememory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\sharememory\NDShareMemoryBase.h">
+      <Filter>common\sharememory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\sharememory\NDShareMemoryUnitManager.h">
+      <Filter>common\sharememory</Filter>
+    </ClInclude>
+    <ClInclude Include="common\zlib\zconf.h">
+      <Filter>common\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="common\zlib\zlib.h">
+      <Filter>common\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\base64.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\decimal.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\errmsg.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\keycache.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\m_ctype.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\m_string.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_aes.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_alloc.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_attribute.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_compiler.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_config.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_dbug.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_dir.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_getopt.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_global.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_list.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_net.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_pthread.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_rdtsc.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_sys.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_time.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\my_xml.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql_com.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql_embed.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql_time.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql_version.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysqld_ername.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysqld_error.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\sql_common.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\sql_state.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\sslopt-case.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\sslopt-longopts.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\sslopt-vars.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\typelib.h">
+      <Filter>common\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\client_plugin.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\innodb_priv.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\plugin.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\plugin_audit.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\plugin_auth.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\plugin_auth_common.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\plugin_ftparser.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\service_my_snprintf.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\service_thd_alloc.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\service_thd_wait.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\service_thread_scheduler.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\services.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\thread_pool_priv.h">
+      <Filter>common\mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\psi\mysql_file.h">
+      <Filter>common\mysql\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\psi\mysql_thread.h">
+      <Filter>common\mysql\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\psi\psi.h">
+      <Filter>common\mysql\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\psi\psi_abi_v1.h">
+      <Filter>common\mysql\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="common\mysql\mysql\psi\psi_abi_v2.h">
+      <Filter>common\mysql\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="common\lua\lauxlib.h">
+      <Filter>common\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="common\lua\lua.h">
+      <Filter>common\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="common\lua\lua.hpp">
+      <Filter>common\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="common\lua\luaconf.h">
+      <Filter>common\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="common\lua\lualib.h">
+      <Filter>common\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\LuaBridge.h">
+      <Filter>common\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\RefCountedObject.h">
+      <Filter>common\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\RefCountedPtr.h">
+      <Filter>common\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\CFunctions.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\ClassInfo.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\Constructor.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\dump.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\FuncTraits.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\Iterator.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\LuaException.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\LuaHelpers.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\LuaRef.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\Namespace.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\Stack.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\TypeList.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\TypeTraits.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="common\luabridge\detail\Userdata.h">
+      <Filter>common\luabridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\thread\NDConditionImpl.h">
+      <Filter>commonImpl\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\memory\NDByteBufferImpl.h">
+      <Filter>commonImpl\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\file\NDCFileImpl.h">
+      <Filter>commonImpl\file</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\net\session\NDSessionManagerImpl.h">
+      <Filter>commonImpl\net\session</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\net\stream\NDIStreamImpl.h">
+      <Filter>commonImpl\net\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\net\stream\NDOStreamImpl.h">
+      <Filter>commonImpl\net\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\crc32.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\deflate.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\gzguts.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\inffast.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\inffixed.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\inflate.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\inftrees.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\trees.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\zlib\zutil.h">
+      <Filter>commonImpl\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lapi.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lcode.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lctype.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\ldebug.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\ldo.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lfunc.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lgc.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\llex.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\llimits.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lmem.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lobject.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lopcodes.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lparser.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lprefix.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lstate.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lstring.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\ltable.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\ltm.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lundump.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lvm.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commonImpl\lua\lzio.h">
+      <Filter>commonImpl\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\NDWindowsCommon.h">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\thread\NDWindowsConditionImpl.h">
+      <Filter>windows\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\thread\NDWindowsMutexLockImpl.h">
+      <Filter>windows\thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="commonImpl\NDShareBaseGlobal.cpp">
+      <Filter>commonImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDCondition.cpp">
+      <Filter>commonImpl\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDDBThread.cpp">
+      <Filter>commonImpl\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDMutex.cpp">
+      <Filter>commonImpl\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\thread\NDThread.cpp">
+      <Filter>commonImpl\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDBufferPool.cpp">
+      <Filter>commonImpl\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDByteBuffer.cpp">
+      <Filter>commonImpl\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDByteBufferImpl.cpp">
+      <Filter>commonImpl\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\NDByteBufferPool.cpp">
+      <Filter>commonImpl\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\memory\object\NDMemoryPoolExManager.cpp">
+      <Filter>commonImpl\memory\object</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDConsoleCMDManager.cpp">
+      <Filter>commonImpl\function</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDDistributeID.cpp">
+      <Filter>commonImpl\function</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDStatWatcher.cpp">
+      <Filter>commonImpl\function</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDWordFilter.cpp">
+      <Filter>commonImpl\function</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\math\NDRectangle.cpp">
+      <Filter>commonImpl\math</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDCFile.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDCFileImpl.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDCLogFile.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDConfig.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDConsoleLog.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDExcelFile.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDIniFile.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDShareMemroyLogFile.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDXmlConfigBase.cpp">
+      <Filter>commonImpl\file</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDField.cpp">
+      <Filter>commonImpl\database</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDMysqlBase.cpp">
+      <Filter>commonImpl\database</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDMysqlBaseOp.cpp">
+      <Filter>commonImpl\database</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDSelectTableBase.cpp">
+      <Filter>commonImpl\database</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\database\NDTableBase.cpp">
+      <Filter>commonImpl\database</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDClientSocket.cpp">
+      <Filter>commonImpl\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSelect.cpp">
+      <Filter>commonImpl\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSocket.cpp">
+      <Filter>commonImpl\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSocketAcceptor.cpp">
+      <Filter>commonImpl\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSocketEnv.cpp">
+      <Filter>commonImpl\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\socket\NDSockOps.cpp">
+      <Filter>commonImpl\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDClientSession.cpp">
+      <Filter>commonImpl\net\session</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDServerSession.cpp">
+      <Filter>commonImpl\net\session</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDSession.cpp">
+      <Filter>commonImpl\net\session</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDSessionManager.cpp">
+      <Filter>commonImpl\net\session</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\session\NDSessionManagerImpl.cpp">
+      <Filter>commonImpl\net\session</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\stream\NDIStreamImpl.cpp">
+      <Filter>commonImpl\net\stream</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\stream\NDOStreamImpl.cpp">
+      <Filter>commonImpl\net\stream</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\stream\NDProtocolPacket.cpp">
+      <Filter>commonImpl\net\stream</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\process\NDDataProcess.cpp">
+      <Filter>commonImpl\net\process</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\process\NDServerTask.cpp">
+      <Filter>commonImpl\net\process</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\netio\NDClientNetIO.cpp">
+      <Filter>commonImpl\net\netio</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\net\netio\NDServerNetIO.cpp">
+      <Filter>commonImpl\net\netio</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\authentic\NDCrypt.cpp">
+      <Filter>commonImpl\authentic</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinystr.cpp">
+      <Filter>commonImpl\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinyxml.cpp">
+      <Filter>commonImpl\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinyxmlerror.cpp">
+      <Filter>commonImpl\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\tinyxml\tinyxmlparser.cpp">
+      <Filter>commonImpl\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\timerEvent\NDTimerBoundSlot.cpp">
+      <Filter>commonImpl\event\timerEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\timerEvent\NDTimerEventManager.cpp">
+      <Filter>commonImpl\event\timerEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\event\NDBoundSlot.cpp">
+      <Filter>commonImpl\event\event</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\event\NDEvent.cpp">
+      <Filter>commonImpl\event\event</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\event\event\NDEventSet.cpp">
+      <Filter>commonImpl\event\event</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\sharememory\NDShareMemory.cpp">
+      <Filter>commonImpl\sharememory</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\sharememory\NDShareMemoryAccessObject.cpp">
+      <Filter>commonImpl\sharememory</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\adler32.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\compress.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\crc32.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\deflate.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\gzclose.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\gzlib.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\gzread.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\gzwrite.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\infback.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\inffast.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\inflate.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\inftrees.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\trees.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\uncompr.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\zlib\zutil.c">
+      <Filter>commonImpl\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lapi.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lauxlib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lbaselib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lbitlib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lcode.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lcorolib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lctype.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ldblib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ldebug.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ldo.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ldump.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lfunc.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lgc.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\linit.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\liolib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\llex.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lmathlib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lmem.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\loadlib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lobject.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lopcodes.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\loslib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lparser.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lstate.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lstring.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lstrlib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ltable.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ltablib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\ltm.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lua.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\luac.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lundump.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lutf8lib.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lvm.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\lua\lzio.c">
+      <Filter>commonImpl\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="linux\NDShareBaseLinuxAll.cpp">
+      <Filter>linux</Filter>
+    </ClCompile>
+    <ClCompile Include="linux\thread\NDLinuxConditionImpl.cpp">
+      <Filter>linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="linux\net\socket\NDLinuxEpoll.cpp">
+      <Filter>linux\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\NDShareBaseWindowsAll.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\thread\NDWindowsConditionImpl.cpp">
+      <Filter>windows\thread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="linux\NDLinuxCommon.h">
+      <Filter>linux</Filter>
+    </CustomBuild>
+    <CustomBuild Include="linux\thread\NDLinuxConditionImpl.h">
+      <Filter>linux\thread</Filter>
+    </CustomBuild>
+    <CustomBuild Include="linux\thread\NDLinuxMutexLockImpl.h">
+      <Filter>linux\thread</Filter>
+    </CustomBuild>
+    <CustomBuild Include="linux\net\socket\NDLinuxEpoll.h">
+      <Filter>linux\net\socket</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

@@ -62,6 +62,7 @@ public:
 	
 	NDBool	init( const char* szLogPath, const char* szLogBaseName, NDUint32 nLogMaxSize=DEFAULT_LOG_FILE_MAX_SIZE );
 	NDBool	write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, ... );
+	NDBool	write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, va_list ap );
 
 	//将缓存日志内存数据写入文件;
 	NDBool	flush();
@@ -82,17 +83,17 @@ extern NDCLogManager* g_pFileLogManager;
 #define SET_NDFILE_LOG_MGR(pFileLogManager) \
 	g_pFileLogManager = pFileLogManager;
 
-#define NDFILE_LOG_INFO( info )	\
+#define NDFILE_LOG_INFO( info, ... )\
 	if(NULL != g_pFileLogManager)	\
-	{ g_pFileLogManager->write( APLOG_MARK, APLOG_INFO, info ); }
+	{ g_pFileLogManager->write( APLOG_MARK, APLOG_INFO, info, ##__VA_ARGS__ ); }
 
-#define NDFILE_LOG_WARNGING( info ) \
+#define NDFILE_LOG_WARNING( info, ... ) \
 	if(NULL != g_pFileLogManager)	\
-	{ g_pFileLogManager->write( APLOG_MARK, APLOG_WARNING, info ); }
+	{ g_pFileLogManager->write( APLOG_MARK, APLOG_WARNING, info, ##__VA_ARGS__ ); }
 
-#define NDFILE_LOG_ERROR( info ) \
+#define NDFILE_LOG_ERROR( info, ... ) \
 	if(NULL != g_pFileLogManager)\
-	{ g_pFileLogManager->write( APLOG_MARK, APLOG_ERR, info ); }
+	{ g_pFileLogManager->write( APLOG_MARK, APLOG_ERR, info, ##__VA_ARGS__ ); }
 
 _NDSHAREBASE_END
 #endif

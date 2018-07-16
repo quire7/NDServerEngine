@@ -19,10 +19,15 @@
 #include "net/netio/NDServerNetIO.h"
 
 #include "special/NDSpecialProtocol.h"
+#include "NDCmdProtocolC2S.h"
+#include "NDCmdProtocolS2C.h"
+#include "protocol/NDCmdProtocolS2S.h"
 
 #include "local/NDServerInfo.h"
 #include "local/NDLocalServer.h"
 
+#include "remote/NDRemoteServerInfo.h"
+#include "remote/NDRemoteServerManager.h"
 
 
 using NDShareBase::NDGuardLock;
@@ -95,11 +100,9 @@ NDBool NDServerManager::startServer( NDLocalServer* pLocalServer, NDBool bConnOt
 	NDBool bRet = m_pListenNetIO->startServer( pListenServerInfo->getServerIP(), pListenServerInfo->getServerPort() );//这是监听服务器;
 	if ( NDFalse == bRet )
 	{
-		char szErrBuf[BUF_LEN_128] = {0};
-		ND_SNPRINTF( szErrBuf, sizeof(szErrBuf) - 1, " %s [%s:%u] start failed! ",  pListenServerInfo->getServerName(), 
-																					pListenServerInfo->getServerIP(), 
-																					pListenServerInfo->getServerPort() );
-		NDLOG_ERROR( szErrBuf )
+		NDLOG_ERROR( " %s [%s:%u] start failed! ", pListenServerInfo->getServerName(),
+													pListenServerInfo->getServerIP(), 
+													pListenServerInfo->getServerPort() );
 
 		return NDFalse;
 	}
@@ -108,18 +111,11 @@ NDBool NDServerManager::startServer( NDLocalServer* pLocalServer, NDBool bConnOt
 	m_pListenNetIO->setProcessor( process );
 	m_pListenNetIO->setCommonDisconnectNtyProtocol( new NDDisconnectNtyProtocol );
 
-	setDisposeProtocol();
+	setDisposeSessionProtocol();
 
 	//m_pListenNetIO->SetCheckSessionTimer();
 
-	ostringstream& oStr = m_pListenServer->getostringstream();
-	oStr		<< " " << pListenServerInfo->getServerName() << " [" << pListenServerInfo->getServerIP() << ":" << pListenServerInfo->getServerPort() << "] listening ...";
-
-	string strString( oStr.str() );
-	const char* szStr = strString.c_str();
-	NDLOG_INFO( szStr )
-	oStr.clear();
-	oStr.str("");
+	NDLOG_INFO( " %s [%s:%d] listening ...", pListenServerInfo->getServerName(), pListenServerInfo->getServerIP(), pListenServerInfo->getServerPort() )
 
 	if ( NDTrue == bConnOtherServer )
 	{
@@ -236,7 +232,7 @@ NDBool NDServerManager::connectServerDisponse( NDServerInfo* pServerInfo, NDConn
 			if ( NULL == pClientNetIO )
 			{
 				pClientNetIO = new NDClientNetIO;
-				pClientNetIO->setPingProtocol( new NDPingProtocol );
+				pClientNetIO->setPingProtocol( new NDPingReqProtocol );
 			}
 			
 			if ( pClientNetIO->connect( pServerInfo->getServerIP(), pServerInfo->getServerPort() ) )
@@ -251,11 +247,10 @@ NDBool NDServerManager::connectServerDisponse( NDServerInfo* pServerInfo, NDConn
 					m_connServerInstance.insert( std::make_pair( nSessionID, pClientNetIO ) );
 				} while (0);
 
-				char szBuf[BUF_LEN_128] = {0};
-				ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " connect %s [%s:%u] success! ",	pServerInfo->getServerName(),
-																						pServerInfo->getServerIP(),
-																						pServerInfo->getServerPort() );
-				NDLOG_INFO( szBuf )
+				
+				NDLOG_INFO( " connect %s [%s:%u] success! ", pServerInfo->getServerName(),
+															pServerInfo->getServerIP(),
+															pServerInfo->getServerPort() );
 
 				if ( NULL != pConnecter )
 				{
@@ -271,11 +266,9 @@ NDBool NDServerManager::connectServerDisponse( NDServerInfo* pServerInfo, NDConn
 				
 				if ( ( NDLocalServer::eServState_Stopping > m_pListenServer->getState() ) && ( NULL != pServerInfo ) )
 				{
-					char szBuf[BUF_LEN_128] = {0};
-					ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " connect %s [%s:%u] error! ",	pServerInfo->getServerName(),
-																							pServerInfo->getServerIP(),
-																							pServerInfo->getServerPort() );
-					NDLOG_ERROR( szBuf )
+					NDLOG_ERROR( " connect %s [%s:%u] error! ", pServerInfo->getServerName(),
+																pServerInfo->getServerIP(),
+																pServerInfo->getServerPort() );
 				}
 
 				if ( NULL != pConnecter )
@@ -390,6 +383,23 @@ const NDServerInfo* NDServerManager::getConnServerInfo( NDUint32 nSessionID )
 	return NULL;
 }
 
+const NDServerInfo* NDServerManager::getConnServerInfo(SERVERTYPE servType, NDUint32 nServerID)
+{
+	NDGuardLock	cstLocker( *m_pCSTMutex );
+	ConnServerTableIter iterBegin = m_connServerTable.begin();
+	ConnServerTableIter iterEnd   = m_connServerTable.end();
+	for ( ; iterBegin != iterEnd; ++iterBegin )
+	{
+		NDServerInfo* pServerInfo = *iterBegin;
+		if ( ( servType == pServerInfo->getServerType() ) && ( nServerID == pServerInfo->getServerID() ) )
+		{
+			return pServerInfo;
+		}
+	}
+
+	return NULL;
+}
+
 
 NDBool NDServerManager::removeConnServer( NDUint32 nSessionID )
 {
@@ -447,11 +457,9 @@ NDBool NDServerManager::setConnServerDisconnectState( NDUint32 nSessionID )
 		{
 			pServerInfo->setConnState( NDServerInfo::eConnState_DisConnected );
 
-			char szBuf[BUF_LEN_128] = {0};
-			ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " disconnect %s [%s:%u]. ",	pServerInfo->getServerName(),
-																				pServerInfo->getServerIP(),
-																				pServerInfo->getServerPort() );
-			NDLOG_ERROR( szBuf )
+			NDLOG_ERROR( " disconnect %s [%s:%u]. ", pServerInfo->getServerName(),
+													pServerInfo->getServerIP(),
+													pServerInfo->getServerPort() );
 
 
 			bRet = NDTrue;
@@ -570,13 +578,7 @@ NDBool NDServerManager::mainLoop()
 	NDConnectProcess* pConnecter = m_pListenServer->connectProcess();
 	if ( !m_connServerTable.empty() && NULL == pConnecter )
 	{
-		ostringstream& oStr = m_pListenServer->getostringstream();
-		oStr << " NDServerManager::mainLoop pConnecter is NULL! ListenServerType = " << pListenServerInfo->getServerName();
-		string oStrTemp( oStr.str() );
-		NDLOG_ERROR( oStrTemp.c_str() )
-		oStr.clear();	//clear()清除当前错误控制状态;
-		oStr.str("");	//str("")将缓冲区清零,清除脏数据;
-
+		NDLOG_ERROR(" NDServerManager::mainLoop pConnecter is NULL! ListenServerType =[%s].", pListenServerInfo->getServerName())
 		return NDFalse;
 	}
 
@@ -624,44 +626,65 @@ NDBool NDServerManager::mainLoop()
 	return true;
 }
 
-NDBool NDServerManager::setSessionProtocolType( NDUint32 nSessionID, NDSessionProtocolType sessionProtocolType )
+NDBool NDServerManager::setServerSessionProtocolType(NDUint32 nSessionID, NDUint8 nSessionProtocolType)
 {
-	if ( NULL == m_pListenNetIO )
-	{
-		return NDFalse;
-	}
-
-	return m_pListenNetIO->setSessionProtocolType( nSessionID, (NDUint8)sessionProtocolType );
+	return NDSessionManager::getInstance()->setServerSessionProtocolType( nSessionID, nSessionProtocolType );
 }
 
-void NDServerManager::setDisposeProtocol()
+NDBool NDServerManager::setClientSessionProtocolType(NDUint32 nSessionID, NDUint8 nSessionProtocolType)
 {
-	if ( NULL == m_pListenNetIO )
-	{
-		return;
-	}
+	return NDSessionManager::getInstance()->setClientSessionProtocolType( nSessionID, nSessionProtocolType );
+}
 
-	////客户端到服务器LOGIN类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_CLIENT2L, CMD_NDClient2L_Start, CMD_NDClient2L_End );
-	////客户端到服务器GATE类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_CLIENT2GT, CMD_NDClient2Gate_Start, CMD_NDClient2Gate_End );
-	////服务器GATE到服务器CENTER类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_GT2CS, CMD_NDG2CS_Start, CMD_NDG2CS_End );
-	////服务器GATE到服务器MAP类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_GT2M, CMD_NDG2M_Start, CMD_NDG2M_End );
-	////服务器MAP到服务器CENTER类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_M2CS, CMD_NDM2CS_Start, CMD_NDM2CS_End );
-	////服务器MAP到服务器GAMEDB类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_M2GDB, CMD_NDM2GDB_Start, CMD_NDM2GDB_End );
-	////服务器CENTER到服务器LOGIN类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_CS2L, CMD_NDCS2L_Start, CMD_NDCS2L_End );
-	////服务器CENTER到服务器GAMEDB类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_CS2GDB, CMD_NDCS2GDB_Start, CMD_NDCS2GDB_End );
-	////服务器LOGIN到服务器ACCOUNTDB类型;
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_L2ADB, CMD_NDL2A_Start, CMD_NDL2A_End );
+void NDServerManager::setDisposeSessionProtocol()
+{
+	NDSessionManager::getInstance()->setMaxSessionType( NDSessionProtocolType_MAX );
+	NDSessionManager::getInstance()->setSpecialProtocol( CMDP_Special_Start, CMDP_Special_End );
 
-	////服务器GATE到服务器MAP类型;(这条是客户端发送给GATESERVER,转化给MAPSERVER的);
-	//m_pListenNetIO->SetDisposeProtocol( NDSessionProtocolType_GT2M, CMD_NDClient2Gate_Start, CMD_NDClient2Gate_End );
+	//客户端到服务器LOGIN类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_C2LS, CMDP_NDC2LS_Start, CMDP_NDC2LS_End );
+	//客户端到服务器GATEWAY类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_C2GTWS, CMDP_NDC2GTWS_Start, CMDP_NDC2GTWS_End );
+	//服务器WORLD到服务器LOGIN类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_WS2LS, CMDP_NDWS2LS_Start, CMDP_NDWS2LS_End );
+	//服务器ROOM到服务器WORLD类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_RS2WS, CMDP_NDRS2WS_Start, CMDP_NDRS2WS_End );
+	//服务器ROOM到服务器GAME类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_RS2GS, CMDP_NDRS2GS_Start, CMDP_NDRS2GS_End );
+	//服务器GATEWAY到服务器GAME类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GTWS2GS, CMDP_NDGWS2GS_Start, CMDP_NDGWS2GS_End );
+	//服务器GATEWAY到服务器ROOM类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GTWS2RS, CMDP_NDGWS2RS_Start, CMDP_NDGWS2RS_End );
+	////服务器GATEWAY到服务器MESSAGE类型;
+	//NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GTWS2MSGS, CMDP_NDGWS2MSGS_Start, CMDP_NDGWS2MSGS_End );
+	//服务器GAME到服务器DATA类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GS2DS, CMDP_NDGS2DS_Start, CMDP_NDGS2DS_End );
+	//服务器GMAE到服务器WORLD类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GS2WS, CMDP_NDGS2WS_Start, CMDP_NDGS2WS_End );
+
+
+
+	//服务器DATA到服务器GAME类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_DS2GS, CMDP_NDDS2GS_Start, CMDP_NDDS2GS_End );
+	//服务器WORLD到服务器GAME类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_WS2GS, CMDP_NDWS2GS_Start, CMDP_NDWS2GS_End );
+	//服务器WORLD到服务器ROOM类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_WS2RS, CMDP_NDWS2RS_Start, CMDP_NDWS2RS_End );
+	//服务器GAME到服务器ROOM类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GS2RS, CMDP_NDGS2RS_Start, CMDP_NDGS2RS_End );
+	//服务器ROOM到服务器GATEWAY类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_RS2GTWS, CMDP_NDRS2GTWS_Start, CMDP_NDRS2GTWS_End );
+	//服务器GAME到服务器GATEWAY类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GS2GTWS, CMDP_NDGS2GTWS_Start, CMDP_NDGS2GTWS_End );
+	////服务器MESSAGE到服务器GATEWAY类型;
+	//NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_MSGS2GTWS, CMDP_NDMSGS2GTWS_Start, CMDP_NDMSGS2GTWS_End );
+	//服务器LOGIN到服务器WORLD类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_LS2WS, CMDP_NDLS2WS_Start, CMDP_NDLS2WS_End );
+	//服务器LOGIN到客户端类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_LS2C, CMDP_NDLS2C_Start, CMDP_NDLS2C_End );
+	//服务器LOGIN到客户端类型;
+	NDSessionManager::getInstance()->setDisposeSessionProtocol( NDSessionProtocolType_GTWS2C, CMDP_NDGTWS2C_Start, CMDP_NDGTWS2C_End );
+
 }
 
 NDBool NDServerManager::pingProtocolCommonDispose( NDUint32 nSessionID )
@@ -674,8 +697,128 @@ NDBool NDServerManager::pingProtocolCommonDispose( NDUint32 nSessionID )
 
 	pServerSession->setLastPingSecondTime( NDShareBase::NDShareBaseGlobal::getCurSecondTimeOfUTC() );
 
+	NDPingResProtocol pingResProtocol;
+	sendToClient( pingResProtocol, nSessionID );
+
 	return NDTrue;
 }
+
+
+
+NDBool NDServerManager::disconnectNotifyCommonDispose( NDUint32 nSessionID, NDUint8 nDisconnectionType, NDRemoteServerManager* pRemoteServerManager )
+{
+	if ( NULL == pRemoteServerManager )
+	{
+		return NDFalse;
+	}
+
+	NDRemoteServerInfo* pRemoteServerInfo = pRemoteServerManager->getRemoteServerInfoBySessionID( nSessionID );
+	if ( NULL == pRemoteServerInfo )
+	{
+		return NDFalse;
+	}
+
+
+	if ( nDisconnectionType > ESessionDisconnectionType_SEND_PASSIVE )
+	{
+		NDLOG_ERROR( " ESessionDisconnectionType is error, code=%u. ", nDisconnectionType );
+		return NDFalse;
+	}
+
+	//dispose NDRemoteServer offline;
+	//NDRemoteGameServerCommonInfo* pGameServerInfo	= dynamic_cast<NDRemoteGameServerCommonInfo*>(pRemoteServerInfo);
+	const NDSocketAddress& rNetAddress	= pRemoteServerInfo->getNetAddress();
+
+	NDLOG_ERROR( " %s [%s:%u] [ServerID:%u] offline. DisconnectionType:[%s]. ", pRemoteServerInfo->getServerName(),
+																				rNetAddress.getIP(),
+																				rNetAddress.getPort(),
+																				pRemoteServerInfo->getServerID(),
+																				getDisconnectionTypeStr( nDisconnectionType ) );
+
+
+	pRemoteServerManager->removeRemoteServer( nSessionID );
+
+	return NDTrue;
+}
+
+void NDServerManager::disconnectNotifyCommonErrorDispose(NDUint32 nSessionID, NDUint8 nDisconnectionType, const char* szServerName )
+{
+	NDLOG_ERROR( " [%s::disconnectNotifyDispose] connect error link. sessionID:%u. DisconnectionType:[%s]. ", szServerName,
+																											nSessionID, 
+																											getDisconnectionTypeStr( nDisconnectionType ) );
+}
+
+#define NDSAMEVALUE_STR(v)	(#v)
+
+const char* NDServerManager::getDisconnectionTypeStr( NDUint8 nDisconnectionType )
+{
+	if ( nDisconnectionType == ESessionDisconnectionType_NULL )
+	{
+		return NDSAMEVALUE_STR( ESessionDisconnectionType_NULL ) ;
+	}
+	else if ( nDisconnectionType == ESessionDisconnectionType_PACKET_ERROR_ACTIVE )
+	{
+		return NDSAMEVALUE_STR( ESessionDisconnectionType_PACKET_ERROR_ACTIVE );
+	}
+	else if ( nDisconnectionType == ESessionDisconnectionType_PING_BEYOND_TIME_ACTIVE )
+	{
+		return NDSAMEVALUE_STR( ESessionDisconnectionType_PING_BEYOND_TIME_ACTIVE );
+	}
+	else if ( nDisconnectionType == ESessionDisconnectionType_READ_PASSIVE )
+	{
+		return NDSAMEVALUE_STR( ESessionDisconnectionType_READ_PASSIVE );
+	}
+	else if ( nDisconnectionType == ESessionDisconnectionType_SEND_PASSIVE )
+	{
+		return NDSAMEVALUE_STR( ESessionDisconnectionType_SEND_PASSIVE );
+	}
+
+	return NULL;
+}
+
+NDBool NDServerManager::pingResProtocolCommonDispose(NDUint32 nSessionID)
+{
+	const NDServerInfo* pServerInfo = getConnServerInfo( nSessionID );
+	if ( NULL == pServerInfo )
+	{
+		NDLOG_ERROR( " [NDServerManager::pingResProtocolCommonDispose] pServerInfo is NULL!" )
+		return NDFalse;
+	}
+
+	NDLOG_INFO( " ping %s [%s:%u] return response success. ", pServerInfo->getServerName(),
+															pServerInfo->getServerIP(),
+															pServerInfo->getServerPort() );
+
+	return NDTrue;
+}
+
+NDBool NDServerManager::registerResCommonDispose(NDUint32 nSessionID, NDUint32 nResCode)
+{
+	const NDServerInfo* pServerInfo = getConnServerInfo( nSessionID );
+	if ( NULL == pServerInfo )
+	{
+		NDLOG_ERROR( " [NDServerManager::registerResCommonDispose] pServerInfo is NULL!" )
+		return NDFalse;
+	}
+
+	if ( eND_SRS_OK == nResCode )
+	{
+		NDLOG_INFO( " register %s [%s:%u] return response success.", pServerInfo->getServerName(),
+																	pServerInfo->getServerIP(),
+																	pServerInfo->getServerPort() );
+	}
+	else
+	{
+		NDLOG_ERROR( " register %s [%s:%u] return response failed. nErrorCode=%u.", pServerInfo->getServerName(),
+																					pServerInfo->getServerIP(),
+																					pServerInfo->getServerPort(),
+																					nResCode );
+	}
+
+	return NDTrue;
+}
+
+
 
 
 

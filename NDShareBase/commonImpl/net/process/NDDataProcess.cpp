@@ -20,15 +20,13 @@ NDDataProcess::~NDDataProcess(void)
 	m_CallBackMap.clear();
 }
 
-void NDDataProcess::registerCallBack( NDUint32 nProtocolID, NDProtocolCallBack *pNDCallBack )
+void NDDataProcess::registerCallBack( NDUint16 nProtocolID, NDProtocolCallBack *pNDCallBack )
 {
 #ifdef _DEBUG
 	CallBackMapIter iterFind = m_CallBackMap.find( nProtocolID );
 	if ( iterFind != m_CallBackMap.end() )
 	{
-		char szBuf[BUF_LEN_64] = {0};
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " MessageID: [%u] has registered!", nProtocolID );
-		NDLOG_ERROR( szBuf )
+		NDLOG_ERROR( " MessageID: [%u] has registered!", nProtocolID);
 
 		return;
 	}
@@ -49,7 +47,8 @@ void NDDataProcess::registerCallBack( NDUint32 nProtocolID, NDProtocolCallBack *
 NDBool NDDataProcess::process( NDIStream &rIStream )
 {
 	NDProtocolHeader protocolHeader;
-	rIStream.read( &protocolHeader, sizeof(NDProtocolHeader) );
+	rIStream.read( &protocolHeader.m_nSessionID, sizeof(protocolHeader.m_nSessionID) );
+	rIStream.read( &protocolHeader.m_nProtocolID, sizeof(protocolHeader.m_nProtocolID) );
 
 	return process( rIStream, protocolHeader );
 }
@@ -74,15 +73,11 @@ NDBool NDDataProcess::process( NDIStream &rIStream, NDProtocolHeader& protocolHe
 			{
 				string& strName = nameIter->second;
 
-				char szBuf[BUF_LEN_128] = {0};
-				ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " MessageName:[%s],MessageID:[%u] has registered, but no register dispose event!", strName.c_str(), protocolHeader.m_nProtocolID );
-				NDLOG_ERROR( szBuf )
+				NDLOG_ERROR( " MessageName:[%s],MessageID:[%u] has registered, but no register dispose event!", strName.c_str(), protocolHeader.m_nProtocolID );
 			}
 			else
 			{
-				char szBuf[BUF_LEN_128] = {0};
-				ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " MessageID:[%u] has registered, but no register dispose event!", protocolHeader.m_nProtocolID );
-				NDLOG_ERROR( szBuf )
+				NDLOG_ERROR( " MessageID:[%u] has registered, but no register dispose event!", protocolHeader.m_nProtocolID );
 			}
 			
 		}
@@ -98,15 +93,11 @@ NDBool NDDataProcess::process( NDIStream &rIStream, NDProtocolHeader& protocolHe
 			{
 				string& strName = nameIter->second;
 
-				char szBuf[BUF_LEN_128] = {0};
-				ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " MessageName:[%s],MessageID:[%u] has registered, but no register dispose event!", strName.c_str(), protocolHeader.m_nProtocolID );
-				NDLOG_ERROR( szBuf )
+				NDLOG_ERROR( " MessageName:[%s],MessageID:[%u] has registered, but no register dispose event!", strName.c_str(), protocolHeader.m_nProtocolID );
 			}
 			else
 			{
-				char szBuf[BUF_LEN_128] = {0};
-				ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " MessageID:[%u] has registered, but no register dispose event!", protocolHeader.m_nProtocolID );
-				NDLOG_ERROR( szBuf )
+				NDLOG_ERROR( " MessageID:[%u] has registered, but no register dispose event!", protocolHeader.m_nProtocolID );
 			}
 		}
 	}
@@ -115,7 +106,7 @@ NDBool NDDataProcess::process( NDIStream &rIStream, NDProtocolHeader& protocolHe
 	return bRet;
 }
 
-void NDDataProcess::registerProtocolIDName( NDUint32 nProtocolID, string strProtocolIDName )
+void NDDataProcess::registerProtocolIDName( NDUint16 nProtocolID, string strProtocolIDName )
 {
 #ifdef _DEBUG
 	ProtocolIDNameMapIter iterFind = m_ProtocolIDNameMap.find( nProtocolID );
@@ -123,9 +114,7 @@ void NDDataProcess::registerProtocolIDName( NDUint32 nProtocolID, string strProt
 	{
 		string& strName = iterFind->second;
 
-		char szBuf[BUF_LEN_128] = {0};
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " MessageName:[%s],MessageID:[%u] has registered!", strName.c_str(), nProtocolID );
-		NDLOG_ERROR( szBuf )
+		NDLOG_ERROR( " MessageName:[%s],MessageID:[%u] has registered!", strName.c_str(), nProtocolID );
 
 		return;
 	}

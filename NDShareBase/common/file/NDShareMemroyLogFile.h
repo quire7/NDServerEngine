@@ -31,14 +31,14 @@ public:
 		memset( m_szLogBuf, 0, sizeof(m_szLogBuf) );
 	}
 
-	//锁定这个单元为nOwnType拥有;
-	NDBool		tryLock( NDUint8 nOwnType );
-	//解锁这个单元为nOwnType拥有;
-	NDBool		tryUnlock( NDUint8 nOwnType );
+	//锁定这个单元为nLockType拥有;
+	NDBool		tryLock( NDUint16 nLockType );
+	//解锁nUnlockType拥有这个单元;
+	NDBool		tryUnlock( NDUint16 nUnlockType );
 
 	//设置和获得锁定这个单元的nOwnType类型(设置函数只能特定进程调用);
-	void		setOwnType( NDUint8 nOwnType )			{ m_NDSMUHead.m_nOwnType = nOwnType; }
-	NDUint8		getOwnType() const						{ return m_NDSMUHead.m_nOwnType; }
+	void		setOwnType( NDUint16 nOwnType )			{ m_NDSMUHead.m_nOwnType = nOwnType; }
+	NDUint16	getOwnType() const						{ return m_NDSMUHead.m_nOwnType; }
 
 	void		setPoolID( NDUint32 nPoolID )			{ m_NDSMUHead.m_nPoolID = nPoolID; }
 	NDUint32	getPoolID() const						{ return m_NDSMUHead.m_nPoolID; }
@@ -110,9 +110,10 @@ class NDShareMemoryUnitPool;
 class NDShareMemoryLogManager
 {
 private:
-	char*					m_pszLogPath;			//log路径名;
-	char*					m_pszLogBaseName;		//log文件基本名称;
-	NDUint32				m_nLogMaxSize;			//每个LOG文件的最大尺寸;
+	char*					m_pszLogPath;					//log路径名;
+	char*					m_pszLogBaseName;				//log文件基本名称;
+	NDUint32				m_nLogMaxSize;					//每个LOG文件的最大尺寸;
+	NDShareLogCacheSMU*		m_pStandbyShareLogCacheSMU;		//备用的共享内存指针;
 	NDShareMemoryLogFile*	m_pNDShareMemoryLogFile;
 
 	NDShareMemoryUnitPool<NDShareLogCacheSMU>	*m_pNDShareLogCacheSMUPool;
@@ -123,12 +124,15 @@ public:
 
 	NDBool		init(  NDSM_KEY nKey, NDUint32 nUnitMax, NDUint8 nPoolType, const char* szLogPath, const char* szLogBaseName, NDUint32 nLogMaxSize=DEFAULT_LOG_FILE_MAX_SIZE );
 	NDBool		write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, ... );
+	NDBool		write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, va_list ap );
 
 private:
 	NDShareMemoryLogManager(const NDShareMemoryLogManager&);
 	NDShareMemoryLogManager& operator = (const NDShareMemoryLogManager&);
 
 	NDBool		initFile( NDShareLogCacheSMU* pNDShareLogCacheSMU );
+	NDBool		setLogNameInfo( NDShareLogCacheSMU* pNDShareLogCacheSMU );
+	NDBool		getStandbyShareLogCacheSMU();
 };
 
 
@@ -137,17 +141,17 @@ extern NDShareMemoryLogManager* g_pSMLogManager;
 #define SET_NDSM_LOG_MGR(pSMLogManager) \
 		g_pSMLogManager = pSMLogManager;
 
-#define NDSM_LOG_INFO( info ) \
+#define NDSM_LOG_INFO( info, ... ) \
 	if( NULL != g_pSMLogManager )\
-	{ g_pSMLogManager->write( APLOG_MARK, APLOG_INFO, info ); }
+	{ g_pSMLogManager->write( APLOG_MARK, APLOG_INFO, info, ##__VA_ARGS__ ); }
 
-#define NDSM_LOG_WARNGING( info ) \
+#define NDSM_LOG_WARNING( info, ... ) \
 	if( NULL != g_pSMLogManager ) \
-	{ g_pSMLogManager->write( APLOG_MARK, APLOG_WARNING, info ); }
+	{ g_pSMLogManager->write( APLOG_MARK, APLOG_WARNING, info, ##__VA_ARGS__ ); }
 
-#define NDSM_LOG_ERROR( info ) \
+#define NDSM_LOG_ERROR( info, ... ) \
 	if( NULL != g_pSMLogManager )\
-	{ g_pSMLogManager->write( APLOG_MARK, APLOG_ERR, info ); }
+	{ g_pSMLogManager->write( APLOG_MARK, APLOG_ERR, info, ##__VA_ARGS__ ); }
 
 _NDSHAREBASE_END
 

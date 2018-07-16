@@ -54,8 +54,14 @@ public:
 	//修改循环事件下次执行的时间;
 	void	modifyFireEventTimes();
 
-	//获得执行的时间;
+	//获得事件执行的时间;
 	NDTime	getFireEventTimes() const;
+
+	//获得执行事件的时间间隔;
+	NDTime	getFireEventIntervalTimes() const;
+
+	//获得执行事件的名称;
+	const char* getFireEventName() const;
 
 	//执行超时的事件;
 	NDBool	fireTimerEvent();

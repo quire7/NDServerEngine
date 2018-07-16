@@ -106,28 +106,8 @@ NDBool NDS2SRegisterCallBack::ls2wsRegisterResDispose( NDIStream& rIStream, NDPr
 		return NDFalse;
 	}
 
-	const NDServerInfo* pLoginServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pLoginServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::ls2wsRegisterResDispose] pLoginServerInfo is NULL!" )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_uiErrCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pLoginServerInfo->getServerName(),
-																									pLoginServerInfo->getServerIP(),
-																									pLoginServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. ",	pLoginServerInfo->getServerName(),
-																								pLoginServerInfo->getServerIP(),
-																								pLoginServerInfo->getServerPort() );
-		NDLOG_ERROR( szBuf )
-	}
+	//LS»Ø¸´WS×¢²áÏûÏ¢;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_uiErrCode );
 
 	return NDTrue;
 }
@@ -164,17 +144,15 @@ NDBool NDS2SRegisterCallBack::rs2wsRegisterReqDispose( NDIStream& rIStream, NDPr
 
 	pRoomServerMgr->addRemoteServer( pRoomServerInfo );
 
-	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GT2CS );
+	NDServerManager::getSingleton().setServerSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_RS2WS );
 
 	const NDSocketAddress& rNetAddress = pRoomServerInfo->getNetAddress();
 
-	char szBuf[BUF_LEN_128] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [RoomServerID:%u] connected. ",	pRoomServerInfo->getServerName(),
-																						rNetAddress.getIP(),
-																						rNetAddress.getPort(),
-																						pRoomServerInfo->getServerID() );
-	NDLOG_INFO( szBuf )
-
+	NDLOG_INFO( " %s [%s:%u] [RoomServerID:%u] connected. ", pRoomServerInfo->getServerName(),
+															rNetAddress.getIP(),
+															rNetAddress.getPort(),
+															pRoomServerInfo->getServerID() );
+	
 
 	NDRS2WS_Register_Res	registerRes;
 	registerRes.m_nErrorCode = eND_SRS_OK;
@@ -206,18 +184,14 @@ NDBool NDS2SRegisterCallBack::gs2wsRegisterReqDispose( NDIStream& rIStream, NDPr
 
 	sNDWorldServer.gameServerManager()->addRemoteServer( pMapServerInfo );
 
-	//sNDCenterServer.gateServerManager()->sendMapInfo( pMapServerInfo );
-
-	//NDServerManager::getSingleton().SetSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_M2CS );
+	NDServerManager::getSingleton().setServerSessionProtocolType( header.m_nSessionID, NDSessionProtocolType_GS2WS );
 
 	const NDSocketAddress& rNetAddress = pMapServerInfo->getNetAddress();
 
-	char szBuf[BUF_LEN_128] = {0};
-	ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " %s [%s:%u] [GameServerID:%u] connected. ", pMapServerInfo->getServerName(),
-																						rNetAddress.getIP(),
-																						rNetAddress.getPort(),
-																						pMapServerInfo->getServerID() );
-	NDLOG_INFO( szBuf )
+	NDLOG_INFO( " %s [%s:%u] [GameServerID:%u] connected. ", pMapServerInfo->getServerName(),
+															rNetAddress.getIP(),
+															rNetAddress.getPort(),
+															pMapServerInfo->getServerID() );
 
 	NDGS2WS_Register_Res	gs2wsRegisterRes;
 	gs2wsRegisterRes.m_nErrorCode	= eND_SRS_OK;

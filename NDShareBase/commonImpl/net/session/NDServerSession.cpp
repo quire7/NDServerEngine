@@ -20,18 +20,7 @@ NDServerSession::~NDServerSession()
 
 void NDServerSession::destroy()
 {
-	////NDUint32 nDisconnectNty		= CMD_DISCONNECT_NOTIFY;
-	//NDUint32 nDisconnectNty		= 0;
-	//NDByteBuffer* pDisMsgBuf	= NDByteBufferPool::getInstance()->createByteBuffer();
-	//if ( NULL != pDisMsgBuf )
-	//{
-	//	pDisMsgBuf->WriteBuffer( (const char*)&m_nSessionID, sizeof(m_nSessionID) );
-	//	pDisMsgBuf->WriteBuffer( (const char*)&nDisconnectNty, sizeof(nDisconnectNty) );
-	//	//put msg into  msg dispose deque
-	//	//NDServerTask::getInstance()->PutQueue( pDisMsgBuf );
-	//}
-
-	NDSessionManager::getInstance()->popCommonDisconnectNtyProtocol( m_nSessionID );
+	NDSessionManager::getInstance()->popCommonDisconnectNtyProtocol( m_nSessionID, m_nDisconnectionType );
 
 	NDSessionManager::getInstance()->releaseServerSession( m_nSessionID );	
 }

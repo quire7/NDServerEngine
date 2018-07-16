@@ -61,7 +61,7 @@ typedef struct stWheel {
 #define WHEEL_MASK2 (WHEEL_SIZE2 - 1)
 #define WHEEL_NUM	(5)
 
-class NDTimerManager
+class NDTimerEventManager
 {
 private:
 	NDTime						m_nStartMSTime;			//开启的时间;
@@ -69,11 +69,11 @@ private:
 	SWheel*						m_wheels[WHEEL_NUM];	//时间轮;
 
 
-	static NDTimerManager*		s_pNDTimerManager;
+	static NDTimerEventManager*	s_pNDTimerEventManager;
 public:
-	~NDTimerManager();
+	~NDTimerEventManager();
 
-	static	NDTimerManager*		getInstance();
+	static	NDTimerEventManager*getInstance();
 	static	void				releaseInstance();
 
 	//add timer;
@@ -82,7 +82,7 @@ public:
 	void						detectTimerList();
 
 	//打印时间轮内的所有timer;
-	void						printTimerList();
+	NDBool						printTimerList( const NDEventArgs& );
 
 private:
 	void						addTimerNode( NDTime nMillSeconds, STimerNode* node );
@@ -96,9 +96,9 @@ private:
 	NDUint32					cascade( NDUint32 nWheelIndex );
 	
 private:
-	NDTimerManager();
-	NDTimerManager( const NDTimerManager& other );
-	NDTimerManager& operator=( const NDTimerManager& other );
+	NDTimerEventManager();
+	NDTimerEventManager( const NDTimerEventManager& other );
+	NDTimerEventManager& operator=( const NDTimerEventManager& other );
 };
 
 

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\special">
+      <UniqueIdentifier>{ce986738-0036-468d-b301-4577c29cd067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\NDClientToNDLogin">
+      <UniqueIdentifier>{bff3ecbc-b162-4dbf-a102-42a7d8042961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\NDClientToNDGateway">
+      <UniqueIdentifier>{cb31466c-b4e5-4b38-80ec-e45cd1b308c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDProtocolBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\NDCmdProtocolC2S.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDCmdProtocolS2C.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDProtocolBase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDProtocolCommonEnums.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDProtocolCommonMacros.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\special\NDSpecialProtocol.h">
+      <Filter>include\special</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NDClientToNDLogin\NDC2LS_Protocol.h">
+      <Filter>include\NDClientToNDLogin</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

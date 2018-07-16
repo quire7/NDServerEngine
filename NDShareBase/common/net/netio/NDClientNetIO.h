@@ -39,7 +39,7 @@ public:
 	
 	NDUint32	getSessionID() const;
 
-	NDBool		setProtocolType( NDUint8 sessionProtocolType );
+	NDBool		setSessionProtocolType( NDUint8 sessionProtocolType );
 
 	//…Ë÷√ping–≠“È;
 	NDBool		setPingProtocol( NDProtocol* pPingProtocol );

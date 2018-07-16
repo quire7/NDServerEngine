@@ -1093,60 +1093,16 @@ NDBool NDShareBaseGlobal::float64ToStr( NDFloat64 nValue, char* szStr, NDUint32 
 	return NDTrue;
 }
 
-NDBool NDShareBaseGlobal::sm_try_lock( NDUint8& refUnitOwnType, NDUint8 nSetType )
+NDBool NDShareBaseGlobal::sm_try_lock(NDUint16* pUnitOwnType, NDUint16 nLockType)
 {
-	NDUint8 nLockCount	= 0;
-	NDBool	bRet		= NDFalse;
-	do 
-	{	//eNDSMU_OWN_TYPE_FREE == 0;
-		if ( 0 == refUnitOwnType )
-		{
-			refUnitOwnType = nSetType;
-			if ( refUnitOwnType == nSetType )
-			{
-				bRet = NDTrue;
-				break;
-			}
-		}
-
-		++nLockCount;
-		sleep2(1);
-		if ( nLockCount > ND_SMU_LOCK_LOOP_MAX )
-		{
-			bRet = NDFalse;
-			break;
-		}
-	} while (1);
-
-	return bRet;
+	NDUint16 nOld = 0; //eNDSMU_OWN_TYPE_FREE == 0;
+	return spin_lock_unlock(pUnitOwnType, nOld, nLockType);
 }
 
-NDBool NDShareBaseGlobal::sm_try_unlock( NDUint8& refUnitOwnType, NDUint8 nSetType )
+NDBool NDShareBaseGlobal::sm_try_unlock(NDUint16* pUnitOwnType, NDUint16 nUnlockType)
 {
-	NDUint8 nLockCount	= 0;
-	NDBool	bRet		= NDFalse;
-	do 
-	{	//eNDSMU_OWN_TYPE_FREE == 0;
-		if ( refUnitOwnType == nSetType )
-		{
-			refUnitOwnType = 0;
-		}
-		if ( 0 == refUnitOwnType )
-		{
-			bRet = NDTrue;
-			break;
-		}
-
-		++nLockCount;
-		sleep2(1);
-		if ( nLockCount > ND_SMU_LOCK_LOOP_MAX )
-		{
-			bRet = NDFalse;
-			break;
-		}
-	} while (1);
-
-	return bRet;
+	NDUint16 nSetType = 0; //eNDSMU_OWN_TYPE_FREE == 0;
+	return spin_lock_unlock(pUnitOwnType, nUnlockType, nSetType);
 }
 
 const char* NDShareBaseGlobal::getLogTypeName( NDInt32 nLogLevel )

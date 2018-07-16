@@ -17,7 +17,7 @@ typedef unsigned long	NDSM_KEY;
 //Sharememory内存区域头的结构;
 struct NDSMHead
 {
-	NDUint8			m_nOwnType;			//进程拥有者标记;
+	NDUint16		m_nOwnType;			//进程拥有者标记;
 	NDSM_KEY		m_nKey;				//键值;
 	NDUint32		m_nSize;			//总大小;
 	NDUint32		m_nHeadVer;			//最后存盘版本;
@@ -44,8 +44,8 @@ enum eNDSMU_USE_STATE
 //Sharememory单元头的结构;
 struct NDSMUHead
 {
-	NDUint8			m_nOwnType;			//进程拥有者标记;
 	NDUint8			m_nUseStatus;		//该单元当前使用状态;
+	NDUint16		m_nOwnType;			//进程拥有者标记;
 	NDUint32		m_nPoolID;			//单元池中的ID;
 	NDTime			m_nSaveTime;		//存储时间(绝对时间(UTC),精确到秒);
 };

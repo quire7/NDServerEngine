@@ -47,7 +47,7 @@ public:
 
 
 	
-	NDBool		setSessionProtocolType( NDUint32 nSessionID, NDUint8 sessionProtocolType );
+	NDBool		setSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
 
 
 	//设置处理函数;
@@ -57,8 +57,6 @@ public:
 
 	static	NDBool		checkSessionTimerFunction();
 
-	//设置服务器要处理的协议类型;
-	static	NDBool		setDisposeProtocol( NDUint8 eType, NDUint32 nBeginProtocol, NDUint32 nEndProtocol );
 };
 
 

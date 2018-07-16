@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\main">
+      <UniqueIdentifier>{b6b45d97-40b5-490d-ac04-ad983ccd5b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\local">
+      <UniqueIdentifier>{eaf1444d-03dc-426d-b254-a021ee02240e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\remote">
+      <UniqueIdentifier>{3a573529-cd9b-4595-b459-0a3c79e8d37e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main\data">
+      <UniqueIdentifier>{e475fcd5-3c4a-4048-b266-1d86ca4aae2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\message">
+      <UniqueIdentifier>{3ffb4e1f-9613-411d-8765-06e78fd650ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\main">
+      <UniqueIdentifier>{b1a68e83-7b5c-4a01-bc9d-9b30344e2612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\local">
+      <UniqueIdentifier>{7431a829-a286-4255-9107-e2d079ec114d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\remote">
+      <UniqueIdentifier>{70249362-5021-4e59-b089-f0568fc210a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\main\data">
+      <UniqueIdentifier>{f253e085-55d7-42ba-8177-ee37c6185f07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\message">
+      <UniqueIdentifier>{d09df616-c51a-4973-9079-ae7189141b44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\NDGameServer_all.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDGameCallBack.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDGameConnectProcess.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDGameServer.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\local\NDPreCompiler.cpp">
+      <Filter>src\main\local</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDGSPlayer.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\data\NDGSPlayerManager.cpp">
+      <Filter>src\main\data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDDS2GSCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message\NDS2SRegisterCallBack.cpp">
+      <Filter>src\message</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\main\local\NDGameCallBack.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDGameConnectProcess.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDGameServer.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\local\NDPreCompiler.h">
+      <Filter>include\main\local</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDGSPlayer.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main\data\NDGSPlayerManager.h">
+      <Filter>include\main\data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDDS2GSCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\message\NDS2SRegisterCallBack.h">
+      <Filter>include\message</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

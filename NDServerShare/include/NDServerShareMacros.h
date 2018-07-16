@@ -1,0 +1,19 @@
+#ifndef __SERVERSHARE_ND_SERVER_SHARE_MACROS_H__
+#define __SERVERSHARE_ND_SERVER_SHARE_MACROS_H__
+
+
+#ifndef NDACCOUNT_TABLE_ACCOUNT_LEN
+#define NDACCOUNT_TABLE_ACCOUNT_LEN				(64)			//real use 64 byte;
+#endif
+
+#ifndef NDACCOUNT_TABLE_PASSWORD_LEN
+#define NDACCOUNT_TABLE_PASSWORD_LEN			(16)			//real use 16 byte;
+#endif
+
+
+#ifndef NDPLAYERMAIN_TABLE_PLAYERNAME_LEN
+#define NDPLAYERMAIN_TABLE_PLAYERNAME_LEN			(32)			//real use 32 byte;
+#endif
+
+
+#endif

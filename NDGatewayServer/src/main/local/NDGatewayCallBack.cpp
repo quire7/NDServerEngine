@@ -1,12 +1,14 @@
 #include "main/local/NDGatewayCallBack.h"
 
+#include "special/NDSpecialProtocol.h"
 
 #include "main/local/NDGatewayServer.h"
 
 
 NDGatewayCallBack::NDGatewayCallBack(void)
 {
-	NDRegisterCallBackMACRO( sNDGatewayServer.dataProcess(), CMDP_PING, this )
+	NDRegisterCallBackMACRO( sNDGatewayServer.dataProcess(), CMDP_PING_Req, this )
+	NDRegisterCallBackMACRO( sNDGatewayServer.dataProcess(), CMDP_PING_Res, this )
 	NDRegisterCallBackMACRO( sNDGatewayServer.dataProcess(), CMDP_DISCONNECT_NOTIFY, this )
 	//NDRegisterCallBackMACRO( sNDWorldServer.dataProcess(), CMD_TIMER_NOTIFY, this )
 }
@@ -27,9 +29,14 @@ NDBool NDGatewayCallBack::process( NDIStream& rIStream, NDProtocolHeader& protoc
 
 	switch (protocolHeader.m_nProtocolID)
 	{
-	case CMDP_PING:
+	case CMDP_PING_Req:
 		{
 			bRet = pingProtocolDispose( rIStream, protocolHeader );
+		}
+		break;
+	case CMDP_PING_Res:
+		{
+			bRet = pingResProtocolDispose( rIStream, protocolHeader );
 		}
 		break;
 	case CMDP_DISCONNECT_NOTIFY:
@@ -55,6 +62,19 @@ NDBool NDGatewayCallBack::process( NDIStream& rIStream, NDProtocolHeader& protoc
 NDBool NDGatewayCallBack::disconnectNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )
 {	
 	return NDTrue;
+}
+
+NDBool NDGatewayCallBack::pingResProtocolDispose(NDIStream& rIStream, NDProtocolHeader& protocolHeader)
+{
+	NDPingResProtocol pingRes;
+	if ( NDFalse == pingRes.deserialize(rIStream) ) 
+	{
+		NDLOG_ERROR( " [NDGatewayCallBack::pingResProtocolDispose] NDPingResProtocol deserialize failed!" )
+		return NDFalse;
+	}
+
+	//pServerInfo is NDRoomServer or NDGameServer;
+	return NDServerManager::getSingleton().pingResProtocolCommonDispose( protocolHeader.m_nSessionID );	
 }
 
 //NDBool NDWorldCallBack::timerNotifyDispose( NDIStream& rIStream, NDProtocolHeader& protocolHeader )

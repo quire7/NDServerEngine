@@ -86,20 +86,32 @@ private:
 	NDServerCfgSytemInfo	m_serverCfgSystemInfo;				//开启服务器系统配置;
 	char					m_szDumpFilePath[MAX_PATH_LEN];		//dump文件的路径;
 	ostringstream*			m_postringstream;
+
+#ifdef _DEBUG
+	NDTimerBoundSlotConn	m_timerPrintTimerListConn;			//printTimerList定时器的关联器;
+	static	const char*		s_szTimerPrintTimerList;			//printTimerList定时器的名称;
+#endif
+	
+
 public:
 	virtual ~NDLocalServer();
 
 	virtual	void				run();
 
 	//初始化;
-	NDBool						initialize( SERVERTYPE eType, NDUint32 nServerID, const char* szXmlConfig );
+	virtual NDBool				initialize( SERVERTYPE eType, NDUint32 nServerID, const char* szXmlConfig );
+	//释放;
+	virtual void				release();
 
-	//add timer;
+	//add timer event;
 	NDTimerBoundSlotConn		addTimer( const NDSubFunctorSlot& refSubFunctorSlot, const NDTimerEventArgs& refTimerEventArgs );
 
 	eServState_Types			getState() const;
 
 	void						setState( const eServState_Types& _eState );
+
+	//获得当前服务器的SERVERID;
+	NDUint32					getLocalServerID();
 
 	//服务器信息;
 	NDLocalServerInfo*			getLocalServerInfo();

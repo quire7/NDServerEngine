@@ -314,6 +314,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="NDClientToNDLogin"
+				>
+				<File
+					RelativePath=".\include\NDClientToNDLogin\NDC2LS_Protocol.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="NDClientToNDGateway"
+				>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

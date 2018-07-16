@@ -20,15 +20,16 @@ class NDIStream;
 class NDProtocol
 {
 public:
-	const NDUint32 m_unProtocolID;
+	const NDUint16 m_unProtocolID;
 public:
-	NDProtocol( NDUint32 unProtocolID ) : m_unProtocolID( unProtocolID ) {}
+	NDProtocol( NDUint16 unProtocolID ) : m_unProtocolID( unProtocolID ) {}
 
 	virtual ~NDProtocol(){}
-	virtual NDBool serialize( NDOStream& rOStream ) = 0;
-	virtual NDBool deserialize( NDIStream& rIStream ) = 0;
+	virtual NDBool		serialize( NDOStream& rOStream ) = 0;
+	virtual NDBool		deserialize( NDIStream& rIStream ) = 0;
 
-	virtual void   clear() {};								// whether must have or not
+	virtual NDUint16	getSize() const = 0;					// 定长协议为固定大小,变长为最大大小;
+	virtual void		clear() {};								// whether must have or not;
 
 private:
 	NDProtocol(const NDProtocol& other);

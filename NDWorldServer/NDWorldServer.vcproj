@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -195,7 +195,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../NDShareBase/common;../NDServerShare/include;../NDProtocol/include;include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -403,6 +403,66 @@
 					Name="remote"
 					>
 				</Filter>
+				<Filter
+					Name="thread"
+					>
+					<File
+						RelativePath=".\src\main\thread\NDWSDBThread.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\main\thread\NDWSDBThreadManager.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="table"
+					>
+					<File
+						RelativePath=".\src\main\table\NDPlayerMainSelectAllTable.cpp"
+						>
+						<FileConfiguration
+							Name="UnityDebug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\src\main\data\NDWSDataManager.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\main\data\NDWSPlayer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\main\data\NDWSPlayerManager.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="message"
@@ -452,6 +512,46 @@
 				<Filter
 					Name="remote"
 					>
+				</Filter>
+				<Filter
+					Name="thread"
+					>
+					<File
+						RelativePath=".\include\main\thread\NDWSDBThread.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\thread\NDWSDBThreadManager.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="table"
+					>
+					<File
+						RelativePath=".\include\main\table\NDPlayerMainSelectAllTable.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="data"
+					>
+					<File
+						RelativePath=".\include\main\data\NDWSDataManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDWSDataStructs.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDWSPlayer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\main\data\NDWSPlayerManager.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter

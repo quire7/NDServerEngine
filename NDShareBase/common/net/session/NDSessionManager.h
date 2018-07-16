@@ -44,8 +44,8 @@ public:
 	NDSession*	findServerSession( NDUint32 nSessionID );
 	NDSession*	findClientSession( NDUint32 nSessionID );
 
-	NDBool		sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise );
-	NDBool		sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint8 nProDataHeadBitWise );
+	NDBool		sendToServer( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise );
+	NDBool		sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, NDUint16 nProDataHeadBitWise );
 
 	void		releaseServerSession( NDUint32 nSessionID );
 	void		releaseClientSession( NDUint32 nSessionID );
@@ -69,14 +69,21 @@ public:
 
 	//设置通用客户端断开连接时的内部向上层抛出的DisconnectNtyProtocol;
 	NDBool		setCommonDisconnectNtyProtocol( NDProtocol* pDisconnectNtyProtocol );
-	NDBool		popCommonDisconnectNtyProtocol( NDUint32 nSessionID );
+	NDBool		popCommonDisconnectNtyProtocol( NDUint32 nSessionID, NDUint8 nDisconnectionType );
 
 	//设置Session接收的数据包的解析函数;
 	void		setSessionParsePacketFun( PParsePacketFun parsePacketFun );
 
-	//是否要处理的协议;
-	//NDBool		isSessionTypeProtocol( NDInt8 sessionProtocolType, NDUint32 nProtocolID );
-	//void			setSessionTypeProtocol( NDSessionProtocolType eType, NDUint32 nBeginProtocol, NDUint32 nEndProtocol );
+	//设置Session的协议类型;
+	NDBool		setServerSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
+	NDBool		setClientSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType );
+
+	//设置SessionProtocolType类型总数;
+	void		setMaxSessionType( NDUint8 nMaxSessionType );
+	//设置SessionProtocolType类型要处理的特殊协议号起始ID;
+	void		setSpecialProtocol( NDUint16 nSpecialProtocolStart, NDUint16 nSpecialProtocolEnd );
+	//设置SessionProtocolType类型要处理的协议号起始ID;
+	NDBool		setDisposeSessionProtocol( NDUint8 nSessionType, NDUint16 nProtocolStart, NDUint16 nProtocolEnd );
 
 protected:
 	NDSessionManager(void);

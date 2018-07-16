@@ -52,29 +52,8 @@ NDBool NDS2SRegisterCallBack::gws2gsRegisterResDispose( NDIStream& rIStream, NDP
 		return NDFalse;
 	}
 
-	const NDServerInfo* pGameServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pGameServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::gws2gsRegisterResDispose] pWorldServerInfo is NULL!" )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_nErrorCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pGameServerInfo->getServerName(),
-																									pGameServerInfo->getServerIP(),
-																									pGameServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. nErrorCode=%u. ",	pGameServerInfo->getServerName(),
-																												pGameServerInfo->getServerIP(),
-																												pGameServerInfo->getServerPort(),
-																												registerRes.m_nErrorCode );
-		NDLOG_ERROR( szBuf )
-	}
+	//GS回复GTWS注册消息;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_nErrorCode );
 
 	return NDTrue;
 }
@@ -88,29 +67,8 @@ NDBool NDS2SRegisterCallBack::gws2rsRegisterResDispose( NDIStream& rIStream, NDP
 		return NDFalse;
 	}
 
-	const NDServerInfo* pRoomServerInfo = NDServerManager::getSingleton().getConnServerInfo( header.m_nSessionID );
-	if ( NULL == pRoomServerInfo )
-	{
-		NDLOG_ERROR( " [NDS2SRegisterCallBack::gws2rsRegisterResDispose] pRoomServerInfo is NULL!" )
-		return NDFalse;
-	}
-
-	char szBuf[BUF_LEN_128] = {0};
-	if ( eND_SRS_OK == registerRes.m_nErrorCode )
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response success. ",	pRoomServerInfo->getServerName(),
-																									pRoomServerInfo->getServerIP(),
-																									pRoomServerInfo->getServerPort() );
-		NDLOG_INFO( szBuf )
-	}
-	else
-	{
-		ND_SNPRINTF( szBuf, sizeof(szBuf) - 1, " register %s [%s:%u] return response failed. nErrorCode=%u. ",	pRoomServerInfo->getServerName(),
-																												pRoomServerInfo->getServerIP(),
-																												pRoomServerInfo->getServerPort(),
-																												registerRes.m_nErrorCode );
-		NDLOG_ERROR( szBuf )
-	}
+	//RS回复GTWS注册消息;
+	NDServerManager::getSingleton().registerResCommonDispose( header.m_nSessionID, registerRes.m_nErrorCode );
 
 	return NDTrue;
 }

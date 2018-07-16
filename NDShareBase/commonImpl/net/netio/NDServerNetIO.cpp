@@ -77,7 +77,7 @@ NDBool NDServerNetIO::sendToClient( NDProtocol& rProtocol, NDUint32 nSessionID, 
 {
 	if ( NULL == m_pNDSocketAcceptor )	return NDFalse;
 
-	NDUint8 nProDataHeadBitWise = 0;
+	NDUint16 nProDataHeadBitWise = 0;
 	if ( bCompression )	nProDataHeadBitWise |= ND_PDHMSG_COMPRESSION;
 	if ( bEncrypt )		nProDataHeadBitWise |= ND_PDHMSG_ENCRYPT;
 	if ( bCrc )			nProDataHeadBitWise |= ND_PDHMSG_CRC32;
@@ -121,27 +121,9 @@ NDBool NDServerNetIO::getClientAddress( NDUint32 nSessionID, NDSocketAddress& re
 
 
 
-NDBool NDServerNetIO::setSessionProtocolType( NDUint32 nSessionID, NDUint8 sessionProtocolType )
+NDBool NDServerNetIO::setSessionProtocolType( NDUint32 nSessionID, NDUint8 nSessionProtocolType )
 {
-	//相对于客户端的连接,但是实质是服务器的Session;
-	NDSession* pSession = NDSessionManager::getInstance()->findServerSession( nSessionID );
-	if ( NULL == pSession )
-	{
-		return NDFalse;
-	}
-
-	pSession->setProtocolType( sessionProtocolType );
-
-	return NDTrue;
-}
-
-NDBool NDServerNetIO::setDisposeProtocol( NDUint8 eType, NDUint32 nBeginProtocol, NDUint32 nEndProtocol )
-{
-	//NDSessionManager::getInstance()->setSessionTypeProtocol( eType, nBeginProtocol, nEndProtocol );
-	eType;
-	nBeginProtocol;
-	nEndProtocol;
-	return NDTrue;
+	return NDSessionManager::getInstance()->setServerSessionProtocolType( nSessionID, nSessionProtocolType );
 }
 
 
