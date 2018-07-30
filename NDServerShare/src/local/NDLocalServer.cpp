@@ -158,8 +158,10 @@ NDBool NDLocalServer::InitLogMgr()
 		return NDFalse;
 	}
 
+	//这个地方byOwnType设计要主要的问题是:不同进程不能用了同一个byOwnType,保证byOwnType唯一性;
 	NDUint32 nServerType= m_pLocalServerInfo->getServerType();
-	NDUint8  byOwnType	= (NDUint8)( ( ( nServerType & MANAGE_SERVER ) >> 12 ) + eNDSMU_OWN_TYPE_SELF );
+	NDUint32 nServerID	= m_pLocalServerInfo->getServerID();
+	NDUint16 byOwnType	= (NDUint16)( ( nServerType & MANAGE_SERVER ) + ( nServerID & 0xFFF ) );
 
 	if ( NDFalse == m_pSMLogManager->init( eNDSMKEY_LOG, ND_LOG_SMU_MAX, byOwnType, pszLogPath, m_pLocalServerInfo->getServerName() ) )
 	{

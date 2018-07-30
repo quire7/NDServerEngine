@@ -51,7 +51,7 @@ public:
 		}
 	}
 
-	NDBool		init( NDSM_KEY nKey, NDUint32 nUnitMax, NDUint8 nPoolType )
+	NDBool		init( NDSM_KEY nKey, NDUint32 nUnitMax, NDUint16 nPoolType )
 	{
 		if ( nPoolType <= 0 )
 		{

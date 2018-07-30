@@ -122,7 +122,7 @@ public:
 	NDShareMemoryLogManager();
 	~NDShareMemoryLogManager();
 
-	NDBool		init(  NDSM_KEY nKey, NDUint32 nUnitMax, NDUint8 nPoolType, const char* szLogPath, const char* szLogBaseName, NDUint32 nLogMaxSize=DEFAULT_LOG_FILE_MAX_SIZE );
+	NDBool		init(  NDSM_KEY nKey, NDUint32 nUnitMax, NDUint16 nPoolType, const char* szLogPath, const char* szLogBaseName, NDUint32 nLogMaxSize=DEFAULT_LOG_FILE_MAX_SIZE );
 	NDBool		write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, ... );
 	NDBool		write( const char* pFile, NDInt32 nLine, NDInt32 nLevel, const char* pFormat, va_list ap );
 

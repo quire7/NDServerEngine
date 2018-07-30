@@ -218,7 +218,7 @@ NDShareMemoryLogManager::~NDShareMemoryLogManager()
 	}
 }
 
-NDBool NDShareMemoryLogManager::init(  NDSM_KEY nKey, NDUint32 nUnitMax, NDUint8 nPoolType, const char* szLogPath, const char* szLogBaseName, NDUint32 nLogMaxSize )
+NDBool NDShareMemoryLogManager::init(  NDSM_KEY nKey, NDUint32 nUnitMax, NDUint16 nPoolType, const char* szLogPath, const char* szLogBaseName, NDUint32 nLogMaxSize )
 {
 	if ( ( NULL == szLogPath ) || ( '\0' == szLogPath ) || ( NULL == szLogBaseName ) || ( '\0' == szLogBaseName ) )
 	{
