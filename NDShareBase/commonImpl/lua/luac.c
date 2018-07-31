@@ -1,5 +1,5 @@
 /*
-** $Id: luac.c,v 1.72 2015/01/06 03:09:13 lhf Exp $
+** $Id: luac.c,v 1.76 2018/06/19 01:32:02 lhf Exp $
 ** Lua compiler (saves bytecodes to files; also lists bytecodes)
 ** See Copyright Notice in lua.h
 */
@@ -189,6 +189,7 @@ static int pmain(lua_State* L)
  return 0;
 }
 
+#if 0
 int main(int argc, char* argv[])
 {
  lua_State* L;
@@ -204,9 +205,10 @@ int main(int argc, char* argv[])
  lua_close(L);
  return EXIT_SUCCESS;
 }
+#endif
 
 /*
-** $Id: print.c,v 1.76 2015/01/05 16:12:50 lhf Exp $
+** $Id: luac.c,v 1.76 2018/06/19 01:32:02 lhf Exp $
 ** print bytecodes
 ** See Copyright Notice in lua.h
 */
@@ -226,7 +228,7 @@ int main(int argc, char* argv[])
 static void PrintString(const TString* ts)
 {
  const char* s=getstr(ts);
- size_t i,n=ts->len;
+ size_t i,n=tsslen(ts);
  printf("%c",'"');
  for (i=0; i<n; i++)
  {
@@ -348,6 +350,7 @@ static void PrintCode(const Proto* f)
    case OP_ADD:
    case OP_SUB:
    case OP_MUL:
+   case OP_MOD:
    case OP_POW:
    case OP_DIV:
    case OP_IDIV:
