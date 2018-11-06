@@ -783,6 +783,9 @@
     <ClInclude Include="windows\thread\NDWindowsMutexLockImpl.h">
       <Filter>windows\thread</Filter>
     </ClInclude>
+    <ClInclude Include="common\function\NDDynamicLoad.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="commonImpl\NDShareBaseGlobal.cpp">
@@ -1126,6 +1129,9 @@
     </ClCompile>
     <ClCompile Include="windows\thread\NDWindowsConditionImpl.cpp">
       <Filter>windows\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\function\NDDynamicLoad.cpp">
+      <Filter>commonImpl\function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

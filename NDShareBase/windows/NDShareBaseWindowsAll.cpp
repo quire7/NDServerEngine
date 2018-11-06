@@ -65,6 +65,7 @@
 #include "function/NDWordFilter.cpp"
 #include "function/NDConsoleCMDManager.cpp"
 #include "function/NDStatWatcher.cpp"
+#include "function/NDDynamicLoad.cpp"
 
 
 //math file;

@@ -138,6 +138,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="common\function\NDDynamicLoad.h" />
     <ClInclude Include="common\NDCLibFun.h" />
     <ClInclude Include="common\NDCPUCfg.h" />
     <ClInclude Include="common\NDShareBaseEnums.h" />
@@ -359,6 +360,9 @@
     <ClInclude Include="windows\thread\NDWindowsMutexLockImpl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="commonImpl\function\NDDynamicLoad.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="commonImpl\NDShareBaseGlobal.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
