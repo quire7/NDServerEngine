@@ -63,8 +63,8 @@ public:
 	NDBool		eventLoop();
 
 	//优化注册事件,在需要发送的时候才注册WRITE_EVENT;
-	NDBool		registerWriteEvent( SOCKET fd );
-	NDBool		unregisterWriteEvent( SOCKET fd );
+	NDBool		registerWriteEvent( SOCKET fd, NDSession* pSession );
+	NDBool		unregisterWriteEvent( SOCKET fd, NDSession* pSession );
 
 
 	//设置通用客户端断开连接时的内部向上层抛出的DisconnectNtyProtocol;

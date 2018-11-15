@@ -1,5 +1,7 @@
 #include "NDLinuxEpoll.h"
 
+#include "net/session/NDSession.h"
+
 _NDSHAREBASE_BEGIN
 
 NDLinuxEpoll::NDLinuxEpoll()
@@ -69,6 +71,22 @@ NDBool NDLinuxEpoll::run( NDUint32& refNum )
 	{
 		refNum = 0;
 		return NDFalse;
+	}
+
+	for ( int i = 0; i < nFDS; ++i )
+	{
+		if ( m_epollEvents[i].events&EPOLLIN ) //接收到数据,读socket;
+		{
+			NDSession* pSession = (NDSession*)m_epollEvents[i].data.ptr;
+			if (NULL != pSession)
+				pSession->handleRead();
+		}
+		if ( m_epollEvents[i].events&EPOLLOUT ) //有数据待发送,写socket;
+		{
+			NDSession* pSession = (NDSession*)m_epollEvents[i].data.ptr;
+			if (NULL != pSession)
+				pSession->handleWrite();
+		}
 	}
 
 	refNum = nFDS;

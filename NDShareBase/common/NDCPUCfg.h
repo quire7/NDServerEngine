@@ -2,10 +2,15 @@
 #define __SHARE_BASE_ND_CPU_CFG_H__
 
 //编译时一定要注意LONG是4个字节,还是8字节(sizeof(long));
+#ifndef ND_SIZEOF_LONG_8
 #define ND_SIZEOF_LONG_4 1
+#endif
 
+//long long is exist or not;
+#ifndef ND_NO_LONG_LONG
 #ifndef HAVE_LONG_LONG
 #define	HAVE_LONG_LONG	1
+#endif
 #endif
 
 #ifndef ND_AF_INET6

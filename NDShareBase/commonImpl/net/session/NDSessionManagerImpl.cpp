@@ -16,6 +16,12 @@
 #include "net/session/NDClientSession.h"
 #include "net/session/NDServerSession.h"
 
+#ifdef ND_USE_EPOLL
+#include "linux/net/socket/NDLinuxEpoll.h"
+#else
+#include "net/socket/NDSelect.h"
+#endif
+
 
 _NDSHAREBASE_BEGIN
 
@@ -37,6 +43,12 @@ NDSessionManagerImpl::NDSessionManagerImpl(void) :	m_generateID( 0 ), m_nCreateN
 	m_createClientSessionDeque.clear();
 
 	m_pDisconnectNtyProtocol = NULL;
+
+#ifdef ND_USE_EPOLL
+	m_pEpoll = new NDLinuxEpoll();
+#else
+	m_pSelect= new NDSelect();
+#endif
 
 	NDSession::setParsePacketFun( NDProtocolPacket::parsePacket );
 
@@ -151,6 +163,12 @@ NDSessionManagerImpl::~NDSessionManagerImpl(void)
 	SAFE_DELETE( m_pRSSMapMutex );
 
 	SAFE_DELETE( m_pDisconnectNtyProtocol )
+
+#ifdef ND_USE_EPOLL
+	SAFE_DELETE(m_pEpoll)
+#else
+	SAFE_DELETE(m_pSelect)
+#endif
 }
 
 
@@ -262,10 +280,17 @@ NDBool NDSessionManagerImpl::addWorkServerSession( NDSession* pServerSession )
 	//pServerSession->SetInitPingANSISecondTime();
 
 	SOCKET fd = pServerSession->getSOCKET();
-	if ( NDFalse == m_select.registerReadWriteEvent( fd ) )
+#ifdef ND_USE_EPOLL
+	if ( NDFalse == m_pEpoll->registerReadWriteEvent( fd, (void*)pServerSession ) )
 	{
 		return NDFalse;
 	}
+#else
+	if ( NDFalse == m_pSelect->registerReadWriteEvent( fd ) )
+	{
+		return NDFalse;
+	}
+#endif
 
 	m_serverSessionMap.insert( std::make_pair( pServerSession->getSessionID(), pServerSession ) );
 	m_allWorkSessionMap.insert( std::make_pair( fd, pServerSession ) );
@@ -286,10 +311,17 @@ NDBool NDSessionManagerImpl::addWorkClientSession( NDSession* pClientSession )
 	//pClientSession->SetInitPingANSISecondTime();
 
 	SOCKET fd = pClientSession->getSOCKET();
-	if ( NDFalse == m_select.registerReadWriteEvent( fd ) )
+#ifdef ND_USE_EPOLL
+	if ( NDFalse == m_pEpoll->registerReadWriteEvent( fd, (void*)pServerSession ) )
+	{
+		return NDFalse;
+	}
+#else
+	if ( NDFalse == m_pSelect->registerReadWriteEvent( fd ) )
 	{
 		return NDFalse;	
 	}
+#endif
 
 	m_clientSessionMap.insert( std::make_pair( pClientSession->getSessionID(), pClientSession ) );
 	m_allWorkSessionMap.insert( std::make_pair( fd, pClientSession ) );
@@ -510,7 +542,11 @@ void NDSessionManagerImpl::updateServerSessionMap()
 NDBool NDSessionManagerImpl::eventLoop()
 {
 	NDUint32 nRet = 0;
-	if ( NDFalse == m_select.run( nRet ) )
+
+#ifdef ND_USE_EPOLL
+	return m_pEpoll->run( nRet );
+#else
+	if ( NDFalse == m_pSelect->run( nRet ) )
 	{
 		return NDFalse;
 	}
@@ -519,39 +555,6 @@ NDBool NDSessionManagerImpl::eventLoop()
 	{	//超时;
 		return NDTrue;
 	}
-
-	////原始代码;
-	//NDUint32 nDispose = 0;
-	//
-	//SessionSOCKETMapIter	iter	= m_allWorkSessionMap.begin();
-	//SessionSOCKETMapIter	iterEnd	= m_allWorkSessionMap.end();
-	//for ( ; iter != iterEnd; ++iter )
-	//{
-	//	SOCKET s			= iter->first;
-	//	NDSession* pSession	= iter->second;
-	//	if ( s == INVALID_SOCKET || NULL == pSession )
-	//	{
-	//		continue;
-	//	}
-
-	//	if ( m_select.isReadEvent( s ) )
-	//	{
-	//		pSession->handleRead();
-
-	//		++nDispose;
-	//	}
-	//	if ( m_select.isWriteEvent( s ) )
-	//	{
-	//		pSession->handleWrite();
-
-	//		++nDispose;
-	//	}
-
-	//	if ( nDispose >= nRet )
-	//	{
-	//		break;
-	//	}
-	//}
 
 	////优化后代码;
 	if ( !m_allWorkSessionMap.empty() )
@@ -571,13 +574,13 @@ NDBool NDSessionManagerImpl::eventLoop()
 				continue;
 			}
 
-			if ( m_select.isReadEvent( s ) )
+			if ( m_pSelect->isReadEvent( s ) )
 			{
 				pSession->handleRead();
 
 				++nDispose;
 			}
-			if ( m_select.isWriteEvent( s ) )
+			if ( m_pSelect->isWriteEvent( s ) )
 			{
 				pSession->handleWrite();
 
@@ -588,6 +591,7 @@ NDBool NDSessionManagerImpl::eventLoop()
 
 		} while ( ( ( nDispose < nRet ) && ( iter != iterEnd ) ) );
 	}
+#endif
 
 	return NDTrue;
 }
@@ -614,10 +618,11 @@ void NDSessionManagerImpl::closeInvalidWorkSession()
 			continue;
 		}
 
+		NDSession* pSession = NULL;
 		SessionSOCKETMapIter invalidSessionIterFind = m_allWorkSessionMap.find( s );
 		if ( invalidSessionIterFind != m_allWorkSessionMap.end() )
 		{
-			NDSession* pSession = invalidSessionIterFind->second;
+			pSession = invalidSessionIterFind->second;
 			if ( NULL != pSession )
 			{
 				pSession->destroy();
@@ -625,26 +630,39 @@ void NDSessionManagerImpl::closeInvalidWorkSession()
 
 			m_allWorkSessionMap.erase( invalidSessionIterFind );
 		}
-
-		m_select.unregisterReadWriteEvent( s );
+#ifdef ND_USE_EPOLL
+		m_pEpoll->unregisterReadWriteEvent( s, pSession );
+#else
+		m_pSelect->unregisterReadWriteEvent( s );
+#endif
 	}
 	m_invalidSessionDeque.clear();
 
+#ifdef ND_USE_EPOLL
+#else
 	if ( !m_allWorkSessionMap.empty() )
 	{	//重新设置最大SOCKET句柄;
-		m_select.setMaxFD( m_allWorkSessionMap.rbegin()->first );
+		m_pSelect->setMaxFD( m_allWorkSessionMap.rbegin()->first );
 	}
-	
+#endif
 }
 
-NDBool NDSessionManagerImpl::registerWriteEvent( SOCKET fd )
+NDBool NDSessionManagerImpl::registerWriteEvent( SOCKET fd, NDSession* pSession )
 {
-	return m_select.registerWriteEvent( fd );
+#ifdef ND_USE_EPOLL
+	return m_pEpoll->registerWriteEvent( fd, (void*)pSession );
+#else
+	return m_pSelect->registerWriteEvent( fd );
+#endif
 }
 
-NDBool NDSessionManagerImpl::unregisterWriteEvent( SOCKET fd )
+NDBool NDSessionManagerImpl::unregisterWriteEvent( SOCKET fd, NDSession* pSession )
 {
-	return m_select.unregisterWriteEvent( fd );
+#ifdef ND_USE_EPOLL
+	return m_pEpoll->unregisterWriteEvent( fd, (void*)pSession );
+#else
+	return m_pSelect->unregisterWriteEvent( fd );
+#endif
 }
 
 NDBool NDSessionManagerImpl::setCommonDisconnectNtyProtocol( NDProtocol* pDisconnectNtyProtocol )

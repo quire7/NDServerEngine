@@ -448,7 +448,7 @@ NDBool NDSession::registerWriteEvent()
 	{
 		m_nEventFlag |= EIOEventType_Write;
 
-		NDSessionManager::getInstance()->registerWriteEvent( m_pSocket->getSOCKETRef() );
+		NDSessionManager::getInstance()->registerWriteEvent( m_pSocket->getSOCKETRef(), this );
 	}
 
 	return NDTrue;
@@ -466,7 +466,7 @@ NDBool NDSession::unregisterWriteEvent()
 
 	m_nEventFlag &= (~EIOEventType_Write);
 
-	NDSessionManager::getInstance()->unregisterWriteEvent( m_pSocket->getSOCKETRef() );
+	NDSessionManager::getInstance()->unregisterWriteEvent( m_pSocket->getSOCKETRef(), this );
 
 	return NDTrue;
 }

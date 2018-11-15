@@ -115,18 +115,18 @@ void NDSessionManager::closeInvalidWorkSession()
 	return m_pSessionManagerImpl->closeInvalidWorkSession();
 }
 
-NDBool NDSessionManager::registerWriteEvent( SOCKET fd )
+NDBool NDSessionManager::registerWriteEvent( SOCKET fd, NDSession* pSession )
 {
 	if ( INVALID_SOCKET == fd )	return NDFalse;
 
-	return m_pSessionManagerImpl->registerWriteEvent( fd );
+	return m_pSessionManagerImpl->registerWriteEvent( fd, pSession );
 }
 
-NDBool NDSessionManager::unregisterWriteEvent( SOCKET fd )
+NDBool NDSessionManager::unregisterWriteEvent( SOCKET fd, NDSession* pSession )
 {
 	if ( INVALID_SOCKET == fd )	return NDFalse;
 
-	return m_pSessionManagerImpl->unregisterWriteEvent( fd ); 
+	return m_pSessionManagerImpl->unregisterWriteEvent( fd, pSession ); 
 }
 
 NDBool NDSessionManager::setCommonDisconnectNtyProtocol( NDProtocol* pDisconnectNtyProtocol )

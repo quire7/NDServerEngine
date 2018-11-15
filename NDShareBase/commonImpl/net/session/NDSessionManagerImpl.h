@@ -10,7 +10,7 @@
 #include "NDShareBaseMacros.h"
 #include "memory/object/NDObjectPool.h"
 #include "memory/NDByteBuffer.h"
-#include "net/socket/NDSelect.h"
+
 
 
 #ifndef CREATE_SESSION_NUM
@@ -32,6 +32,12 @@ _NDSHAREBASE_BEGIN
 class NDSession;
 class NDSysLock;
 class NDProtocol;
+
+#ifdef ND_USE_EPOLL
+class NDLinuxEpoll;
+#else
+class NDSelect;
+#endif
 
 class NDSessionManagerImpl
 {
@@ -75,7 +81,14 @@ private:
 	NDProtocol*			m_pDisconnectNtyProtocol;		// server session disconnect pop DisconnectNtyProtocol(客户端断开连接时服务器端相应SESSION向上层抛出的协议);
 
 private:
-	NDSelect			m_select;						// select事件的句柄;
+
+#ifdef ND_USE_EPOLL
+	NDLinuxEpoll*		m_pEpoll;						// epoll event handle;
+#else
+	NDSelect*			m_pSelect;						// select事件的句柄;
+#endif
+
+	
 
 	SessionSOCKETMap	m_allWorkSessionMap;			// client and server session map; (key : SOCKET);
 	SOCKETDeque			m_invalidSessionDeque;			// invalid SOCKET deque;
@@ -114,8 +127,8 @@ public:
 	NDBool		eventLoop();
 
 	//优化注册事件,在需要发送的时候才注册WRITE_EVENT;
-	NDBool		registerWriteEvent( SOCKET fd );
-	NDBool		unregisterWriteEvent( SOCKET fd );		
+	NDBool		registerWriteEvent( SOCKET fd, NDSession* pSession );
+	NDBool		unregisterWriteEvent( SOCKET fd, NDSession* pSession );
 
 
 	//设置通用客户端断开连接时的内部向上层抛出的DisconnectNtyProtocol;
