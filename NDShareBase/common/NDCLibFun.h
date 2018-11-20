@@ -6,7 +6,7 @@
 //#define	_CRT_SECURE_NO_DEPRECATE
 //#endif
 
-#include <stdlib.h>
+#include <stdio.h>
 
 //#if defined(_MSC_VER) && (_MSC_VER >= 1400 )
 //	// Microsoft visual studio, version 2005 and higher.

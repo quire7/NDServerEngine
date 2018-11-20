@@ -10,6 +10,8 @@
 #ifndef __SHARE_BASE_ND_STAT_WATCHER_H__
 #define __SHARE_BASE_ND_STAT_WATCHER_H__
 
+#include <string.h>
+
 #include <iosfwd>
 using std::stringstream;
 

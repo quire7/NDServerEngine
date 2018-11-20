@@ -477,13 +477,13 @@ public:
 								: "memory", "cc");
 				return prev;
 			case 4:
-				asm volatile ("lock; cmpxchgl %1, %2"
+				asm volatile ("lock; cmpxchg %1, %2"
 								: "=a" (prev)
 								: "r" (set), "m" (*pLock), "0"(old)
 								: "memory", "cc");
 				return prev;
 			case 8:
-				asm volatile ("lock; cmpxchgq %1, %2"
+				asm volatile ("lock; cmpxchg %1, %2"
 								: "=a" (prev)
 								: "r" (set), "m" (*pLock), "0"(old)
 								: "memory", "cc");

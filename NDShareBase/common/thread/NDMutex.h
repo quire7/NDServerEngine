@@ -11,6 +11,7 @@
 #define __SHARE_BASE_ND_MUTEX_H__
 
 #include "NDTypes.h"
+#include "NDShareBaseGlobal.h"
 #include "thread/NDAtomicInt32.h"
 
 _NDSHAREBASE_BEGIN
@@ -38,11 +39,7 @@ public:
 	{
 		while( m_nAtomicInt32.compareAndSet(0, 1) == 1 )
 		{
-#ifdef WIN32
-			Sleep(0);
-#else
-			usleep(0);
-#endif
+			NDShareBaseGlobal::sleep2(0);
 		}
 	}
 	void unlock()
