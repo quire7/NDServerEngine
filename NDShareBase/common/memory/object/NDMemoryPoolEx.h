@@ -12,7 +12,7 @@
 #ifndef __SHARE_BASE_ND_MEMORYPOOL_EX_H__
 #define __SHARE_BASE_ND_MEMORYPOOL_EX_H__
 
-#include "NDtypes.h"
+#include "NDTypes.h"
 
 #include <new>
 #include <list>
