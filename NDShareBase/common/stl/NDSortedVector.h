@@ -10,6 +10,7 @@
 #ifndef __SHARE_BASE_ND_SORTED_VECTOR_H__
 #define __SHARE_BASE_ND_SORTED_VECTOR_H__
 
+#include <stddef.h>
 #include <vector>
 using std::vector;
 

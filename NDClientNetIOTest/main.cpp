@@ -1,8 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 
-#include <Windows.h>
-
 #include <time.h>
 
 using namespace std;
@@ -113,9 +111,9 @@ int main(int argc, char ** argv)
 
 	NDUint32 nCurSeconds2	= mktime( localTM );
 
-	SYSTEMTIME sys; 
-	GetLocalTime( &sys ); 
-	printf( "%4d/%02d/%02d %02d:%02d:%02d.%03d ÐÇÆÚ%1d\n",sys.wYear,sys.wMonth,sys.wDay,sys.wHour,sys.wMinute, sys.wSecond,sys.wMilliseconds,sys.wDayOfWeek);
+	char szCurTimeBuf[32] = {0};
+	NDShareBaseGlobal::getLocalSecondTimeStr(szCurTimeBuf, sizeof(szCurTimeBuf));
+	printf("%s\n", szCurTimeBuf);
 
 	string strMoudle = NDShareBaseGlobal::getMoudlePath();
 	strMoudle += "/NDClientNetIOTest.conf";
@@ -175,7 +173,7 @@ int main(int argc, char ** argv)
 
 			NDShareBase::NDTimerEventManager::getInstance()->detectTimerList();
 
-			Sleep( 100 );
+			NDShareBaseGlobal::sleep(100);
 		}
 	}
 	else

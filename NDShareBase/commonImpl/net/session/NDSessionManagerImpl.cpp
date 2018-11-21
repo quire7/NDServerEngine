@@ -17,7 +17,7 @@
 #include "net/session/NDServerSession.h"
 
 #ifdef ND_USE_EPOLL
-#include "linux/net/socket/NDLinuxEpoll.h"
+#include "net/socket/NDLinuxEpoll.h"
 #else
 #include "net/socket/NDSelect.h"
 #endif
@@ -312,7 +312,7 @@ NDBool NDSessionManagerImpl::addWorkClientSession( NDSession* pClientSession )
 
 	SOCKET fd = pClientSession->getSOCKET();
 #ifdef ND_USE_EPOLL
-	if ( NDFalse == m_pEpoll->registerReadWriteEvent( fd, (void*)pServerSession ) )
+	if ( NDFalse == m_pEpoll->registerReadWriteEvent( fd, (void*)pClientSession ) )
 	{
 		return NDFalse;
 	}

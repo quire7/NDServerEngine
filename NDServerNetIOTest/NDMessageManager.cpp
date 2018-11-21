@@ -2,7 +2,7 @@
 
 #include "NDProtocolCommonEnums.h"
 
-#include ".\ndmessagemanager.h"
+#include "NDMessageManager.h"
 
 
 

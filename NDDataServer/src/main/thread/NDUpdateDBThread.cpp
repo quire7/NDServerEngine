@@ -84,7 +84,7 @@ NDBool NDUpdateDBThread::disposeOperateData()
 			pData = NULL;
 		}
 	}
-	return TRUE;
+	return NDTrue;
 }
 
 NDBool NDUpdateDBThread::isOperateDataEmpty()

@@ -3,6 +3,7 @@
 
 using namespace std;
 
+#include <stdio.h>
 #include <sys/timeb.h>
 
 #include "NDShareBaseGlobal.h"

@@ -6,6 +6,11 @@
 //message cpp;
 #include "message/NDS2SRegisterCallBack.cpp"
 
+//data cpp file;
+#include "main/data/NDWSPlayer.cpp"
+#include "main/data/NDWSPlayerManager.cpp"
+#include "main/data/NDWSDataManager.cpp"
+
 //table cpp file;
 #include "main/table/NDPlayerMainSelectAllTable.cpp"
 

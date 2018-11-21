@@ -1,5 +1,5 @@
 #include "net/process/NDDataProcess.h"
-#include ".\ndmessagemanager.h"
+#include "NDMessageManager.h"
 
 NDMessageManager* NDMessageManager::m_pNDMessageManager = NULL;
 

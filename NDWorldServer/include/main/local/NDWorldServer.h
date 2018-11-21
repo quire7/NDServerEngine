@@ -3,7 +3,7 @@
 
 #include "main/data/NDWSPlayerManager.h"
 #include "main/data/NDWSDataManager.h"
-#include "main/thread/NDWSDBThreadManager.h "
+#include "main/thread/NDWSDBThreadManager.h"
 
 #include "NDWorldCallBack.h"
 #include "NDWorldConnectProcess.h"

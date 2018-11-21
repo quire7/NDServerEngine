@@ -266,6 +266,7 @@ typedef unsigned short	NDWord;
 typedef unsigned long	NDDword;
 #endif
 
+#include <stdlib.h>
 #include <string.h>
 #include <string>
 using std::string;
