@@ -1,6 +1,8 @@
 #ifndef __SHARE_BASE_ND_SHARE_MEMORY_LOG_FILE_H__
 #define __SHARE_BASE_ND_SHARE_MEMORY_LOG_FILE_H__
 
+#include <stdarg.h>
+
 #include <vector>
 using std::vector;
 
