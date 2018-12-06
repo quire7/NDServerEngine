@@ -23,6 +23,11 @@ int main(int argc, char ** argv)
 {
 	NDShareBaseGlobal::init( 1, 1 );
 
+	printf(" sizeof(long)=%d. \n", sizeof(long));
+	printf(" sizeof(long long)=%d. \n", sizeof(long long));
+	printf(" sizeof(NDInt64)=%d. \n", sizeof(NDInt64));
+	printf(" sizeof(NDUint64)=%d. \n", sizeof(NDUint64));
+
 	NDInt64 nInt64 = 0x10;
 	printf(" nInt64 = %lld. \n", nInt64 );
 

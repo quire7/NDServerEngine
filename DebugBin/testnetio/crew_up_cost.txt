@@ -1,5 +1,0 @@
-int	int	int
-ID	level	up_cost
-ID	等级	升级所需经验
-1	0	17
-2	1	65

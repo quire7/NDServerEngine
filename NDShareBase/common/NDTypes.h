@@ -168,7 +168,7 @@ typedef long NDInt32;
 ************************************************************************/
 #ifdef HAVE_LONG_LONG
 
-#if ND_BYTES_PER_LONG == 8
+#if ND_BYTES_PER_LONG == 8 && !defined(__APPLE__)
 #ifndef	NDInt64
 typedef long NDInt64;
 #endif

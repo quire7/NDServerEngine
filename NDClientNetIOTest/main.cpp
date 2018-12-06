@@ -50,16 +50,19 @@ int main(int argc, char ** argv)
 	//NDCLogManager logManager( strPath.c_str() );
 
 	char* pszTime = NDShareBaseGlobal::getLocalSecondTimeStrForSingleThread();
+	printf( " getLocalSecondTimeStrForSingleThread:%s\n", pszTime );
 
 	NDUint32 nDayofweek = NDShareBaseGlobal::getdayofweek( 2012, 11, 4 );
+	printf( " 2012-11-4 is ÐÇÆÚ:%d.\n", nDayofweek);
 
 	char szBuf[64] = {0};
 
 	NDShareBaseGlobal::getLocalSecondTimeStr( szBuf, 64 );
 	memset( szBuf, 0, sizeof(szBuf) );
 
+	string strAFile = strPath + "a.txt";
 	NDCFile file;
-	if ( NDFalse == file.open( "a.txt", "a" ) )
+	if (NDFalse == file.open( strAFile.c_str(), "a"))
 	{
 		return 1;
 	}
@@ -92,8 +95,9 @@ int main(int argc, char ** argv)
 		printf( "pCorps->m_nMemNum = %d.\n", pCorps->m_nMemNum );
 	}
 	
+	string str_crew_up_cost_path = strPath + "crew_up_cost.txt";
 	NDExcelFile excelFile;
-	if ( NDFalse == excelFile.open("crew_up_cost.txt") )
+	if (NDFalse == excelFile.open(str_crew_up_cost_path.c_str()))
 	{
 		return 1;
 	}
@@ -109,7 +113,9 @@ int main(int argc, char ** argv)
 	
 	struct tm* localTM = localtime( &nCurSeconds );
 
-	NDUint32 nCurSeconds2	= mktime( localTM );
+	NDUint32 nCurSeconds2 = (NDUint32)mktime(localTM);
+
+	printf(" nCurMSSeconds:%lld, nCurSeconds:%lld, nCurSeconds2:%u. \n", nCurMSSeconds, nCurSeconds, nCurSeconds2);
 
 	char szCurTimeBuf[32] = {0};
 	NDShareBaseGlobal::getLocalSecondTimeStr(szCurTimeBuf, sizeof(szCurTimeBuf));
