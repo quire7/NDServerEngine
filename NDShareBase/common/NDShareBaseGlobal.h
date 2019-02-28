@@ -160,9 +160,19 @@ public:
 	**	return NDTrue or NDFalse.
 	**	sample: 
 		if  szFilePath="E:\vs.net\NDServer\DebugBin\server.ini";
-		invoke isFileExist get  szFileName="server.ini";
+		invoke extractFileName get  szFileName="server.ini";
 	************************************************************************/
 	static NDBool		extractFileName( const char* szFilePath, char* szFileName, NDUint32 nFileNameSize );
+
+	/************************************************************************
+	** function DESCRIPTION:
+	**	return NDTrue or NDFalse.
+	**	sample:
+	if  szFilePath="E:\vs.net\NDServer\DebugBin\server.ini";
+	invoke extractFileDirectory get  szFileName="server.ini";
+	************************************************************************/
+	static NDBool		extractFileDirectory(const char* szFilePath, char* szFileDirectory, NDUint32 nFileDirectorySize);
+
 
 	/************************************************************************
 	** function DESCRIPTION:

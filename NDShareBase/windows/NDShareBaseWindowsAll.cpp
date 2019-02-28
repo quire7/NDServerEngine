@@ -82,6 +82,7 @@
 #include "file/NDXmlConfigBase.cpp"
 #include "file/NDIniFile.cpp"
 #include "file/NDExcelFile.cpp"
+#include "file/NDWriteFixedFormatFile.cpp"
 
 
 
@@ -111,7 +112,7 @@
 #include "net/socket/NDClientSocket.cpp"
 #include "net/socket/NDSocketAcceptor.cpp"
 #include "net/socket/NDSelect.cpp"
-
+#include "net/socket/NDWindowsIOCP.cpp"
 
 //network environment and operation file,session file;
 #include "net/session/NDSession.cpp"

@@ -32,6 +32,12 @@ NDBool NDUpdateDBThread::disposeOperateData()
 			continue;
 		}
 
+		//超过某个数值就返回吧,防止大量数据出现while时间过长;
+		if (nOperatorDataCount > 1000)
+		{
+			break;
+		}
+
 		NDTableBase *pData = NULL;
 		{
 			NDGuardLock autolock( m_DataLock );
@@ -41,13 +47,6 @@ NDBool NDUpdateDBThread::disposeOperateData()
 			}
 			pData = m_TableProducelist.front();
 			m_TableProducelist.pop_front();
-		}
-
-		//超过某个数值就返回吧,防止大量数据出现while时间过长;	
-		nOperatorDataCount++;
-		if ( nOperatorDataCount > 1000 )
-		{
-			break;
 		}
 
 		if ( NULL == pData )
@@ -83,6 +82,8 @@ NDBool NDUpdateDBThread::disposeOperateData()
 			NDMemoryPoolExManager::getInstance()->freeMemory( pData );
 			pData = NULL;
 		}
+
+		nOperatorDataCount++;
 	}
 	return NDTrue;
 }

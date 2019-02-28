@@ -27,7 +27,7 @@ public:
 	NDUint32	write( const void* pWriteBuf, NDUint32 nSize );
 	NDUint32	size();
 	void		close();
-	NDInt32		flush();	//如果成功刷新,flush返回0;
+	NDBool		flush();	//如果成功刷新,flush返回0;
 
 };
 

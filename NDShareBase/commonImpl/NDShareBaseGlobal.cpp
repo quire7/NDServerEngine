@@ -399,6 +399,44 @@ NDBool NDShareBaseGlobal::extractFileName( const char* szFilePath, char* szFileN
 }
 
 
+NDBool NDShareBase::NDShareBaseGlobal::extractFileDirectory(const char* szFilePath, char* szFileDirectory, NDUint32 nFileDirectorySize)
+{
+	if (NULL == szFilePath || '\0' == szFilePath[0] || NULL == szFileDirectory || nFileDirectorySize == 0)
+	{
+		return NDFalse;
+	}
+
+	NDBool	bRet = NDFalse;
+
+	NDUint32 nFileNamePath = (NDUint32)strlen(szFilePath);
+	NDUint32 nFindIndex = nFileNamePath;
+	do
+	{
+		--nFindIndex;
+		if ('/' == szFilePath[nFindIndex] || '\\' == szFilePath[nFindIndex])
+		{
+			bRet = NDTrue;
+			break;
+		}
+	} while (nFindIndex > 0);
+
+	if (NDTrue == bRet)
+	{
+		NDUint32 nCopySize = (nFindIndex + 1);
+		if (nCopySize < nFileDirectorySize)
+		{
+			memcpy( szFileDirectory, szFilePath, nCopySize );
+			szFileDirectory[nCopySize] = '\0';
+		}
+		else
+		{
+			bRet = NDFalse;
+		}
+	}
+
+	return bRet;
+}
+
 string NDShareBaseGlobal::getLocalDayTimeStr() 
 {
 	//纯C实现方式;

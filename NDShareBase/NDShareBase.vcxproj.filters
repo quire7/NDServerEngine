@@ -64,9 +64,6 @@
     <Filter Include="common\event\event">
       <UniqueIdentifier>{a4be867f-346b-4891-9f59-f7bb1fd6d685}</UniqueIdentifier>
     </Filter>
-    <Filter Include="common\sharememory">
-      <UniqueIdentifier>{4713e20b-4d5b-4fbe-b3f4-0176e45178c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="common\zlib">
       <UniqueIdentifier>{7fa81597-224a-47b6-a292-0803e624e2e3}</UniqueIdentifier>
     </Filter>
@@ -171,6 +168,15 @@
     </Filter>
     <Filter Include="windows\thread">
       <UniqueIdentifier>{dff3c29c-d0a8-41d5-9dbe-1fd9a1793697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net\sharememory">
+      <UniqueIdentifier>{4713e20b-4d5b-4fbe-b3f4-0176e45178c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windows\net">
+      <UniqueIdentifier>{e6542206-4e10-4857-8f40-33192c0e64db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windows\net\socket">
+      <UniqueIdentifier>{b746315f-79d5-4e5f-84db-b3561b4169e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -424,16 +430,16 @@
       <Filter>common\event\event</Filter>
     </ClInclude>
     <ClInclude Include="common\sharememory\NDShareMemory.h">
-      <Filter>common\sharememory</Filter>
+      <Filter>common\net\sharememory</Filter>
     </ClInclude>
     <ClInclude Include="common\sharememory\NDShareMemoryAccessObject.h">
-      <Filter>common\sharememory</Filter>
+      <Filter>common\net\sharememory</Filter>
     </ClInclude>
     <ClInclude Include="common\sharememory\NDShareMemoryBase.h">
-      <Filter>common\sharememory</Filter>
+      <Filter>common\net\sharememory</Filter>
     </ClInclude>
     <ClInclude Include="common\sharememory\NDShareMemoryUnitManager.h">
-      <Filter>common\sharememory</Filter>
+      <Filter>common\net\sharememory</Filter>
     </ClInclude>
     <ClInclude Include="common\zlib\zconf.h">
       <Filter>common\zlib</Filter>
@@ -786,6 +792,12 @@
     <ClInclude Include="common\function\NDDynamicLoad.h">
       <Filter>common\function</Filter>
     </ClInclude>
+    <ClInclude Include="windows\net\socket\NDWindowsIOCP.h">
+      <Filter>windows\net\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="common\file\NDWriteFixedFormatFile.h">
+      <Filter>common\file</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="commonImpl\NDShareBaseGlobal.cpp">
@@ -1132,6 +1144,12 @@
     </ClCompile>
     <ClCompile Include="commonImpl\function\NDDynamicLoad.cpp">
       <Filter>commonImpl\function</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\net\socket\NDWindowsIOCP.cpp">
+      <Filter>windows\net\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="commonImpl\file\NDWriteFixedFormatFile.cpp">
+      <Filter>commonImpl\file</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

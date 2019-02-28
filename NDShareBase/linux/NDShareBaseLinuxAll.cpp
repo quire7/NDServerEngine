@@ -82,6 +82,7 @@
 #include "file/NDXmlConfigBase.cpp"
 #include "file/NDIniFile.cpp"
 #include "file/NDExcelFile.cpp"
+#include "file/NDWriteFixedFormatFile.cpp"
 
 
 

@@ -25,7 +25,7 @@ NDBool NDCFileImpl::isopen() const
 
 NDBool NDCFileImpl::open( const char* pFileName, const char* pOpenFlag )
 {
-	if ( NULL != m_pFile || NULL == pFileName ) return NDFalse;
+	if ( NULL != m_pFile || NULL == pFileName || ( NULL == pOpenFlag ) ) return NDFalse;
 
 	if ( NULL == (m_pFile = fopen( pFileName, pOpenFlag )) )
 	{
@@ -102,10 +102,10 @@ void NDCFileImpl::close()
 	}
 }
 
-NDInt32	NDCFileImpl::flush()
+NDBool	NDCFileImpl::flush()
 {
-	if ( NULL == m_pFile ) return 1;
-	return ::fflush( m_pFile );
+	if ( NULL == m_pFile ) return NDFalse;
+	return ( 0 == ::fflush( m_pFile ) );
 }
 
 NDBool NDCFileImpl::readline( void* pReadBuf, NDUint32 nSize )

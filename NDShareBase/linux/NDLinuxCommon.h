@@ -10,6 +10,7 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include "NDTypes.h"
 
 #endif
 

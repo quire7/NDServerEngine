@@ -152,6 +152,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="common\file\NDWriteFixedFormatFile.h" />
     <ClInclude Include="common\function\NDDynamicLoad.h" />
     <ClInclude Include="common\NDCLibFun.h" />
     <ClInclude Include="common\NDCPUCfg.h" />
@@ -378,10 +379,15 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>
     </CustomBuild>
     <ClInclude Include="windows\NDWindowsCommon.h" />
+    <ClInclude Include="windows\net\socket\NDWindowsIOCP.h" />
     <ClInclude Include="windows\thread\NDWindowsConditionImpl.h" />
     <ClInclude Include="windows\thread\NDWindowsMutexLockImpl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="commonImpl\file\NDWriteFixedFormatFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="commonImpl\function\NDDynamicLoad.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>
@@ -694,6 +700,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="windows\net\socket\NDWindowsIOCP.cpp" />
     <ClCompile Include="windows\thread\NDWindowsConditionImpl.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>

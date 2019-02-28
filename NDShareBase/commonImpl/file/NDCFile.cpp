@@ -60,9 +60,9 @@ void NDCFile::close()
 	m_pNDCFileImpl->close();
 }
 
-NDInt32	NDCFile::flush()
+NDBool	NDCFile::flush()
 {
-	if ( NULL == m_pNDCFileImpl )	return 1;
+	if ( NULL == m_pNDCFileImpl )	return NDFalse;
 
 	return m_pNDCFileImpl->flush();
 }
