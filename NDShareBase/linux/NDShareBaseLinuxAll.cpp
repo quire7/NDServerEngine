@@ -19,6 +19,7 @@
 
 //c and global function's file;
 #include "NDShareBaseGlobal.cpp"
+#include "NDShareBaseLinuxGlobal.cpp"
 
 
 //authentic function's file;

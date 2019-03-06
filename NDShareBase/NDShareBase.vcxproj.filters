@@ -1151,6 +1151,12 @@
     <ClCompile Include="commonImpl\file\NDWriteFixedFormatFile.cpp">
       <Filter>commonImpl\file</Filter>
     </ClCompile>
+    <ClCompile Include="windows\NDShareBaseWindowsGlobal.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="linux\NDShareBaseLinuxGlobal.cpp">
+      <Filter>linux</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

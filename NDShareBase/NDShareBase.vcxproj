@@ -684,6 +684,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="linux\NDShareBaseLinuxGlobal.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="linux\thread\NDLinuxConditionImpl.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
@@ -699,6 +705,10 @@
     <ClCompile Include="windows\NDShareBaseWindowsAll.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="windows\NDShareBaseWindowsGlobal.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='UnityRelease|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="windows\net\socket\NDWindowsIOCP.cpp" />
     <ClCompile Include="windows\thread\NDWindowsConditionImpl.cpp">

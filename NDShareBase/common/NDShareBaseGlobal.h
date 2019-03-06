@@ -574,6 +574,18 @@ private:
 	************************************************************************/
 	static void			initGUID( NDUint8 nServerGroup, NDUint8 nServerID );
 
+	/************************************************************************
+	** function DESCRIPTION:
+	**  UTF8 to GBK.
+	************************************************************************/
+	static NDBool		utf8ToGBK( char *inbuf, NDUint32 inlen, char *outbuf, NDUint32 outlen );
+
+	/************************************************************************
+	** function DESCRIPTION:
+	** GBK to UTF8.
+	************************************************************************/
+	static NDBool		gbkToUTF8( char *inbuf, NDUint32 inlen, char *outbuf, NDUint32 outlen );
+
 };
 
 
