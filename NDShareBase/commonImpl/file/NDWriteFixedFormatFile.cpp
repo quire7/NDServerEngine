@@ -47,7 +47,7 @@ NDBool NDShareBase::NDWriteFixedFormatFile::writeHeader(const char* szWriteBuf, 
 
 	m_nSize = nSize;
 
-	return ( nSize == (NDUint32)fprintf( m_pFile, "%s", szWriteBuf ) );
+	return ( 1 == fwrite( szWriteBuf, nSize, 1, m_pFile ) );
 }
 
 NDBool NDShareBase::NDWriteFixedFormatFile::writeContent( const char* szFormat, ... )
@@ -57,11 +57,20 @@ NDBool NDShareBase::NDWriteFixedFormatFile::writeContent( const char* szFormat, 
 		return NDFalse;
 	}
 
+	int nSize = 0;
+	char szBuf[1024] = { 0 };
+
 	va_list ap;
 	va_start(ap, szFormat);
-	m_nSize += fprintf(m_pFile, szFormat, ap);
+	nSize = vsnprintf( szBuf, sizeof(szBuf)-1, szFormat, ap );
 	va_end(ap);
-	return NDTrue;
+
+	if ( 1 == fwrite(szBuf, nSize, 1, m_pFile) )
+	{
+		m_nSize += nSize;
+		return NDTrue;
+	}
+	return NDFalse;
 }
 
 NDUint32 NDShareBase::NDWriteFixedFormatFile::size()
